@@ -1,4 +1,4 @@
-# my_flutter_test
+# Inke
 
 A new Flutter application.
 
