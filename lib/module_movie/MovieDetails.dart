@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../Api.dart';
-import '../page/WebPage.dart';
+import '../page/Web.dart';
 import 'dart:async';
 import '../util/DioUtil.dart';
 import '../bean/moviedetails.dart';
@@ -99,7 +99,7 @@ class _MovieDetailsState extends State<MovieDetailsPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => WebPage(url: details.mobileUrl)));
+                      builder: (context) => Web(title:details.title,url: details.mobileUrl)));
             },
           ),
         ],
@@ -322,7 +322,7 @@ class _MovieDetailsState extends State<MovieDetailsPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            WebPage(url: data[position].alt)));
+                            Web(title:data[position].name,url: data[position].alt)));
               },
             ),
           );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../page/WebPage.dart';
+import '../../page/Web.dart';
 import '../../bean/news_data.dart';
 import '../../config/AppConfig.dart';
 import '../../components/LoadingView.dart';
@@ -8,40 +8,43 @@ import '../../Api.dart';
 import 'dart:async';
 
 class NewsList extends StatelessWidget {
-
   String value;
+
   NewsList({Key key, @required this.value}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     print(value);
-    return FutureBuilder<newsData>(
-      future: _requestData(value),
-      builder: (BuildContext context, AsyncSnapshot<newsData> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-          case ConnectionState.waiting:
-            return LoadingView();
-            break;
-          default:
-            if (snapshot.hasError) {
-              return Text('错误:${snapshot.error.toString()}');
-            } else {
-              if (snapshot.data.result == null) {
-                return Center(
-                  child: Text('请求条数已使用完'),
-                );
-              } else {
-                return ListView.builder(
-                    itemCount: snapshot.data.result.data.length,
-                    itemBuilder: (context, index) {
-                      return _buildItem(context, snapshot.data.result.data[index]);
-                    });
-              }
+    return RefreshIndicator(
+        child: FutureBuilder<newsData>(
+          future: _requestData(value),
+          builder: (BuildContext context, AsyncSnapshot<newsData> snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.waiting:
+                return LoadingView();
+                break;
+              default:
+                if (snapshot.hasError) {
+                  return Text('错误:${snapshot.error.toString()}');
+                } else {
+                  if (snapshot.data.result == null) {
+                    return Center(
+                      child: Text('请求条数已使用完'),
+                    );
+                  } else {
+                    return ListView.builder(
+                        itemCount: snapshot.data.result.data.length,
+                        itemBuilder: (context, index) {
+                          return _buildItem(
+                              context, snapshot.data.result.data[index]);
+                        });
+                  }
+                }
             }
-        }
-      },
-    );
+          },
+        ),
+        onRefresh: () => _requestData(value));
   }
 
   Future<newsData> _requestData(String type) async {
@@ -56,10 +59,13 @@ class NewsList extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => WebPage(url: itemData.url)));
+                builder: (context) => Web(title:itemData.title,url: itemData.url)));
       },
       child: Container(
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
@@ -97,13 +103,13 @@ class NewsList extends StatelessWidget {
                               Text(
                                 '来源:${itemData.authorName}',
                                 style: const TextStyle(
-                                    color: Colors.grey, fontSize: 15.0),
+                                    color: Colors.grey, fontSize: 12.0),
                               ),
                               Text(
                                 itemData.date,
                                 style: const TextStyle(
                                   color: Colors.grey,
-                                  fontSize: 13.0,
+                                  fontSize: 10.0,
                                 ),
                               ),
                             ],

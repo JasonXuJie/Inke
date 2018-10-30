@@ -93,21 +93,6 @@ class _ActionState extends State<ActionFragment> with SingleTickerProviderStateM
             controller: _controller,
         )
     );
-//      return Scaffold(
-//        appBar: AppBar(
-//          title: Text('同城活动'),
-//          centerTitle: true,
-//          automaticallyImplyLeading: false,
-//          bottom: TabBar(
-//              controller: _controller,
-//              indicatorColor: Theme.of(context).primaryColor,
-//              isScrollable: true,
-//              tabs: _buildTabs()),
-//        ),
-//        body: TabBarView(
-//            controller: _controller,
-//            children: _buildTabViews()),
-//      );
   }
 
 

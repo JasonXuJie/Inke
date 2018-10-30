@@ -4,6 +4,7 @@ import '../../config/AppConfig.dart';
 import '../MovieDetails.dart';
 
 class MoreHotMoviesList extends StatelessWidget {
+
   List<Subjects> data;
 
   MoreHotMoviesList({Key key, @required this.data}) : super(key: key);
@@ -19,17 +20,21 @@ class MoreHotMoviesList extends StatelessWidget {
 
   _buildItem(context, Subjects data) {
     var casts = List.generate(data.casts.length, (index){
-      //Material(borderRadius: BorderRadius.all(100.0),),
-      return Padding(
-        padding: const EdgeInsets.only(left: 5.0),
-        child: FadeInImage.assetNetwork(
-            placeholder: AppImgPath.mainPath+'app_icon.png',
-            image: data.casts[index].avatars.medium,
-            width: 50.0,
-            height: 50.0,
-            fit: BoxFit.cover,
-        )
-      );
+      var cast = data.casts[index];
+      if(cast.avatars!=null){
+        return Padding(
+            padding: const EdgeInsets.only(left: 5.0),
+            child: FadeInImage.assetNetwork(
+              placeholder: AppImgPath.mainPath+'app_icon.png',
+              image: cast.avatars.medium,
+              width: 50.0,
+              height: 50.0,
+              fit: BoxFit.cover,
+            )
+        );
+      }else{
+        return Padding(padding: const EdgeInsets.only());
+      }
     });
     return Card(
       margin: const EdgeInsets.only(left: 15.0,right: 15.0,top: 10.0),

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import '../../util/SharedUtil.dart';
 import '../../Api.dart';
 import '../../bean/event.dart';
-import '../../page/WebPage.dart';
+import '../../page/Web.dart';
 import 'dart:async';
 import '../../util/DioUtil.dart';
 import 'package:event_bus/event_bus.dart';
 import '../../event/CityChangedEvent.dart';
 import '../../util/EventUtil.dart';
+import '../../components/LoadingView.dart';
 class EventList extends StatefulWidget{
 
   String tag;
@@ -80,7 +80,7 @@ class _EventListState extends State<EventList>{
       );
     }else{
       return Center(
-        child: CupertinoActivityIndicator(),
+        child: LoadingView()
       );
     }
   }
@@ -163,7 +163,7 @@ class _EventListState extends State<EventList>{
       child: InkWell(
         child: item,
         onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>WebPage(url: event.adaptUrl)));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Web(title:event.title,url: event.adaptUrl)));
         },
       ),
     );

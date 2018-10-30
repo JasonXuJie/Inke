@@ -70,7 +70,6 @@ flutter:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
   assets:
-   - images/lake.jpg
    - images/app_icon.png
    - images/img_scan.png
    - images/img_header.png
@@ -93,7 +92,6 @@ flutter:
    - images/nav_action.png
    - images/nav_music.png
    - images/nav_my.png
-   - images/drawer_header.jpg
    - images/qq_area.png
    - images/qq_friend.png
    - images/weixin_friendcycle.png
