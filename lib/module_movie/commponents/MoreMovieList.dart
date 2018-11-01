@@ -3,38 +3,37 @@ import '../../bean/movie.dart';
 import '../MovieDetails.dart';
 
 
-class MoreMovieList extends StatelessWidget{
+class MoreMovieList extends StatelessWidget {
 
   List movieList;
 
 
-  MoreMovieList({Key key,@required this.movieList}):super(key:key);
+  MoreMovieList({Key key, @required this.movieList}) :super(key: key);
 
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+    return SliverGrid(
+        delegate: SliverChildBuilderDelegate((BuildContext ctx, int index) {
+          return _buildItem(context, movieList[index]);
+        },
+            childCount: movieList.length),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisSpacing: 5.0,
-          mainAxisSpacing: 5.0,
           crossAxisCount: 2,
-        ),
-        scrollDirection: Axis.vertical,
-        itemCount: movieList.length == 0 ? 0 : movieList.length,
-        itemBuilder: (BuildContext context, int position) {
-          return _buildItem(context,movieList[position]);
-        });
+          mainAxisSpacing: 5.0,
+          crossAxisSpacing: 5.0,
+        )
+    );
   }
 
-
-  _buildItem(context,Subjects subject) {
+  _buildItem(context, Subjects subject) {
     var item = Container(
-      padding: EdgeInsets.all(10.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      padding: const EdgeInsets.only(top: 10.0, bottom: 5.0),
+      child: Wrap(
+        direction: Axis.vertical,
+        runAlignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: 5.0,
         children: <Widget>[
           Image.network(
             subject.images.medium,
@@ -43,10 +42,14 @@ class MoreMovieList extends StatelessWidget{
             fit: BoxFit.cover,
           ),
           Text(subject.title),
+          Text('评分:${subject.rating.average}', style: const TextStyle(
+              color: Colors.orangeAccent
+          ),),
         ],
       ),
     );
     return Card(
+      margin: const EdgeInsets.all(0.0),
       elevation: 5.0,
       child: InkWell(
         child: item,
@@ -54,9 +57,10 @@ class MoreMovieList extends StatelessWidget{
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => MovieDetailsPage(
-                    id: subject.id,
-                  )));
+                  builder: (context) =>
+                      MovieDetailsPage(
+                        id: subject.id,
+                      )));
         },
       ),
     );

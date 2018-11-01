@@ -52,7 +52,6 @@ class _MyIndexState extends State<MyIndex> {
       return Container(
         color: Colors.blue,
         width: MediaQuery.of(context).size.width,
-        height: 160.0,
         padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 15.0),
         child: Wrap(
           direction: Axis.vertical,
@@ -64,9 +63,15 @@ class _MyIndexState extends State<MyIndex> {
             GestureDetector(
               child: _header==null?Image.asset(
                 AppImgPath.mainPath + 'img_header.png',
-                width: 60.0,
-                height: 60.0,
-              ):Image.file(_header,width: 60.0,height: 60.0,),
+                width: 100.0,
+                height: 100.0,
+              ):ClipOval(
+                child: SizedBox(
+                  width: 100.0,
+                  height: 100.0,
+                  child: Image.file(_header,fit: BoxFit.fill,),
+                ),
+              ),
               onTap: () {
                 _showModifyHeader(context);
               },

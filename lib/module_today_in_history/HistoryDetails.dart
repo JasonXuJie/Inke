@@ -23,31 +23,29 @@ class _DetailsState extends State<HistoryDetailsPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          centerTitle: true,
-        ),
-        body: RefreshIndicator(
-            child: FutureBuilder<historydetails>(
-              future: _requesetDetails(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<historydetails> snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                  case ConnectionState.waiting:
-                    return LoadingView();
-                    break;
-                  default:
-                    if (snapshot.hasError) {
-                      return Text('${snapshot.error}');
-                    } else {
-                      return _buildContent(snapshot.data.result[0]);
-                    }
-                }
-              },
-            ),
-            onRefresh: _requesetDetails));
+    return FutureBuilder<historydetails>(
+      future: _requesetDetails(),
+      builder: (BuildContext context, AsyncSnapshot<historydetails> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+            return Scaffold(
+              appBar: AppBar(
+                title: Text(widget.title),
+                centerTitle: true,
+              ),
+              body: LoadingView(),
+            );
+            break;
+          default:
+            if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            } else {
+              return _buildContent(snapshot.data.result[0]);
+            }
+        }
+      },
+    );
   }
 
   Future<historydetails> _requesetDetails() async {
@@ -62,36 +60,47 @@ class _DetailsState extends State<HistoryDetailsPage>
     if (data.picUrl.length <= 1) {
       isVisible = true;
     }
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          Container(
-              height: 500.0,
-              child: Stack(
-                children: <Widget>[
-                  TabBarView(
-                    controller: _controller,
-                    children: _buildImages(data),
+    return Scaffold(
+        body: CustomScrollView(
+      slivers: <Widget>[
+        SliverAppBar(
+          title: Text(widget.title),
+          centerTitle: true,
+          floating: true,
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: 550.0,
+            child: Stack(
+              children: <Widget>[
+                TabBarView(
+                  controller: _controller,
+                  children: _buildImages(data),
+                ),
+                Offstage(
+                  offstage: isVisible,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: TabPageSelector(
+                        controller: _controller,
+                        color: Colors.white,
+                        selectedColor: Colors.blue,
+                        indicatorSize: 13.0,
+                      ),
+                    ),
                   ),
-                  Offstage(
-                      offstage: isVisible,
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child: TabPageSelector(
-                              controller: _controller,
-                              color: Colors.white,
-                              selectedColor: Colors.blue,
-                              indicatorSize: 13.0,
-                            )),
-                      )),
-                ],
-              )),
-          Text(data.content)
-        ],
-      ),
-    );
+                )
+              ],
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Text(data.content),
+        )
+      ],
+    ));
   }
 
   _buildImages(Result data) {

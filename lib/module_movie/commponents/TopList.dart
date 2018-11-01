@@ -70,7 +70,7 @@ class TopList extends StatelessWidget {
                 '类型:'+genres,
                 style: const TextStyle(
                   color: Colors.black,
-                  fontSize: 16.0,
+                  fontSize: 14.0,
                 ),
               ),
             ),
@@ -87,7 +87,7 @@ class TopList extends StatelessWidget {
                 '评分:${itemData.rating.average}',
                 style: const TextStyle(
                   color: Colors.red,
-                  fontSize: 15.0,
+                  fontSize: 14.0,
                 ),
               ),
             ),

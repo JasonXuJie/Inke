@@ -64,34 +64,22 @@ class _ActionState extends State<ActionFragment> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    return NestedScrollView(
-        headerSliverBuilder: (BuildContext context,bool innerBoxIsScrolled){
-          return <Widget>[
-            SliverAppBar(
-              title: Text('同城活动'),
-              centerTitle: true,
-              automaticallyImplyLeading: false,
-              pinned: true,
-              floating: true,
-              bottom: PreferredSize(
-                  preferredSize: Size(double.infinity, 50.0),
-                  child: Container(
-                    height: 50.0,
-                    child: TabBar(
-                        isScrollable: true,
-                        controller: _controller,
-                        indicatorColor: Theme.of(context).primaryColor,
-                        tabs: _buildTabs()
-                    ),
-                  )
-              ),
-            )
-          ];
-        },
-        body: TabBarView(
-            children: _buildTabViews(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('同城活动'),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        bottom: TabBar(
+            isScrollable: true,
             controller: _controller,
-        )
+            indicatorColor: Theme.of(context).primaryColor,
+            tabs: _buildTabs()
+        ),
+      ),
+      body: TabBarView(
+        children: _buildTabViews(),
+        controller: _controller,
+      )
     );
   }
 

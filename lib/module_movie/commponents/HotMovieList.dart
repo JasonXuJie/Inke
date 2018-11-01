@@ -4,36 +4,55 @@ import '../MovieDetails.dart';
 
 class HotMovieList extends StatelessWidget {
   List<dynamic> movieList;
+
   HotMovieList({Key key, @required this.movieList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: movieList.length == 0 ? 0 : movieList.length,
-        itemBuilder: (BuildContext context, int position) {
-          return _buildItem(context, movieList[position]);
-        });
+    return Container(
+        height: 200.0,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: movieList.length == 0 ? 0 : movieList.length,
+            itemBuilder: (BuildContext context, int position) {
+              return _buildItem(context, movieList[position]);
+            }));
   }
 
   _buildItem(context, Subjects subjects) {
     var _item = Container(
-      padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-      width: 130.0,
+      padding: const EdgeInsets.only(top: 10.0, left: 15.0),
+      width: 150.0,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Image.network(
-            subjects.images.medium,
-            width: 80.0,
-            height: 120.0,
-            fit: BoxFit.fill,
+          SizedBox(
+            height: 140.0,
+            child: Stack(
+              children: <Widget>[
+                Image.network(
+                  subjects.images.medium,
+                  width: 120.0,
+                  height: 140.0,
+                  fit: BoxFit.fill,
+                ),
+                Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 3.0, bottom: 3.0),
+                        child: Text(
+                          '豆瓣评分:${subjects.rating.average}',
+                          style: const TextStyle(
+                              color: Colors.orangeAccent, fontSize: 13.0),
+                        ))),
+              ],
+            ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10.0),
+            padding: const EdgeInsets.only(top: 5.0),
             child: Text(
               subjects.title,
-              style: TextStyle(color: Colors.black, fontSize: 14.0),
+              style: const TextStyle(color: Colors.black, fontSize: 14.0),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -43,7 +62,7 @@ class HotMovieList extends StatelessWidget {
     );
     return Card(
       elevation: 5.0,
-      margin: EdgeInsets.all(10.0),
+      margin: const EdgeInsets.all(5.0),
       child: InkWell(
         child: _item,
         onTap: () {

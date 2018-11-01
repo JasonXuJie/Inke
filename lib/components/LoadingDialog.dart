@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'dart:io';
 
 class LoadingView extends Dialog{
 
@@ -26,12 +28,12 @@ class LoadingView extends Dialog{
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                   CircularProgressIndicator(),
+                   Platform.isIOS?CupertinoActivityIndicator():CircularProgressIndicator(),
                    Padding(
-                       padding:EdgeInsets.only(top: 20.0),
+                       padding:const EdgeInsets.only(top: 20.0),
                        child: Text(
                          text,
-                         style: TextStyle(fontSize: 13.0),
+                         style: const TextStyle(fontSize: 13.0),
                        ),
                    )
 

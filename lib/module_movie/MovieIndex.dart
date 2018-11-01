@@ -6,10 +6,13 @@ import '../util/SharedUtil.dart';
 import '../util/DioUtil.dart';
 import '../bean/movie.dart';
 import 'commponents/HotMovieList.dart';
-import 'commponents/MoreMovieList.dart';
 import 'dart:async';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
+import '../components/LoadingView.dart';
+import 'commponents/MoreMovieList.dart';
+import 'commponents/RedPacketBanner.dart';
+import 'commponents/FunView.dart';
 
 class MovieFragment extends StatefulWidget {
   @override
@@ -17,22 +20,33 @@ class MovieFragment extends StatefulWidget {
 }
 
 class _MovieState extends State<MovieFragment> {
-  List<Subjects> _movieList = [];
+  List<Subjects> _hotMovies = [];
+  List<Subjects> _moreMovies = [];
   var cityName = '';
 
   @override
   void initState() {
     super.initState();
-    _requestMovies();
     _getCityName();
+    _requestHotMovies();
+    _requestMoreMovies();
   }
 
-  _requestMovies({String cityName = '上海'}) async {
+  _requestHotMovies({String cityName = '上海'}) async {
     var response = await DioUtil.getInstance().get(ApiService.GET_MOVIES,
         data: {'city': cityName, 'start': '0', 'count': '15'});
     var json = movie.fromJson(response);
     setState(() {
-      _movieList = json.subjects;
+      _hotMovies = json.subjects;
+    });
+  }
+
+  _requestMoreMovies({String cityName = '上海'}) async {
+    var response = await DioUtil.getInstance().get(ApiService.GET_MOVIES,
+        data: {'city': cityName, 'start': '16', 'count': '25'});
+    var json = movie.fromJson(response);
+    setState(() {
+      _moreMovies = json.subjects;
     });
   }
 
@@ -82,28 +96,35 @@ class _MovieState extends State<MovieFragment> {
   }
 
   _buildBody() {
-    if (_movieList.length != 0) {
-      return ListView(
-        scrollDirection: Axis.vertical,
-        children: <Widget>[
-          BannerView(
-            dataList: _movieList,
+    if (_hotMovies.length != 0) {
+      return CustomScrollView(
+        slivers: <Widget>[
+          SliverToBoxAdapter(
+            child: BannerView(dataList: _hotMovies,),
           ),
-          _buildTitle('热门电影'),
-          Container(
-            height: 200.0,
-            child: HotMovieList(movieList: _movieList),
+          SliverToBoxAdapter(
+           child: RedPacketBanner(),
           ),
-          _buildTitle('更多电影'),
+          SliverToBoxAdapter(
+           child: _buildTitle('热门电影'),
+          ),
+          SliverToBoxAdapter(
+            child: HotMovieList(movieList: _hotMovies),
+          ),
+          FunView(),
+          SliverPadding(
+              padding: const EdgeInsets.only(top: 10.0),
+              sliver:  SliverToBoxAdapter(
+                child: _buildTitle('更多电影'),
+              ),
+          ),
           MoreMovieList(
-            movieList: _movieList,
+            movieList: _moreMovies,
           ),
         ],
       );
     } else {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
+      return LoadingView();
     }
   }
 
@@ -124,7 +145,8 @@ class _MovieState extends State<MovieFragment> {
             Navigator.pushNamed(context, '/City').then((result) {
               setState(() {
                 cityName = result;
-                _requestMovies(cityName: cityName);
+                _requestHotMovies(cityName: cityName);
+                _requestMoreMovies(cityName: cityName);
               });
             });
             break;
@@ -162,9 +184,14 @@ class _MovieState extends State<MovieFragment> {
                 fontWeight: FontWeight.bold),
           ),
           GestureDetector(
-            child: Text(
-              '更多',
-              style: TextStyle(color: Colors.grey[500], fontSize: 13.0),
+            child: Row(
+              children: <Widget>[
+                Text(
+                  '更多',
+                  style: TextStyle(color: Colors.grey[500], fontSize: 13.0),
+                ),
+                Icon(Icons.arrow_right)
+              ],
             ),
             onTap: () {
               switch (label) {
