@@ -28,6 +28,7 @@ class _WebState extends State<Web> {
       if (state.type == WebViewState.finishLoad) {
         setState(() {
           isLoaded = true;
+          print('loaded');
         });
       }
     });
@@ -43,6 +44,7 @@ class _WebState extends State<Web> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.url);
     List<Widget> titleContent = [];
     if (!isLoaded) {
       titleContent.add(CupertinoActivityIndicator());
