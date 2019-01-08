@@ -10,30 +10,49 @@ dependencies:
   cupertino_icons: ^0.1.2
   dio: ^1.0.5
   shared_preferences: ^0.4.2
-  flutter_webview_plugin: ^0.3.0+2
-  webview_flutter: ^0.0.1+1
-  fluttertoast: ^2.1.2
-  #控制状态栏
-  flutter_statusbar_manager: ^1.0.2
+
+
   json_annotation: ^1.0.0
-  flutter_swiper: ^1.0.4
-  #列表左滑右滑删除
-  flutter_slidable: ^0.4.7
+
+
   event_bus: ^1.0.1
   #动态权限请求
   #permission_handler: ^2.0.0
-  #集成ios与android的二维码扫描
-  barcode_scan: ^0.0.7
-  #图片控件
-  image_picker: ^0.4.10
-  #解析html
-  flutter_html: ^0.7.1
+
+
+
   #glide功能
-  cached_network_image: ^0.4.1
   #状态管理
-  flutter_redux: ^0.5.2
+  flutter_redux: ^0.5.3
   #
   pull_to_refresh: ^1.1.5
+
+  #UI
+  #android photoView
+  photo_view: ^0.1.2
+  #bannerView
+  flutter_swiper: ^1.1.4
+  #webview
+  flutter_webview_plugin: ^0.3.0+2
+  webview_flutter: ^0.0.1+1
+  #toast
+  fluttertoast: ^2.1.2
+   #android imagePicker
+  image_picker: ^0.4.10
+  #控制状态栏
+  flutter_statusbar_manager: ^1.0.2
+   #列表左滑右滑删除
+  flutter_slidable: ^0.4.7
+  #集成ios与android的二维码扫描
+  barcode_scan: ^0.0.7
+  #android glide
+  cached_network_image: ^0.5.1
+  #骨架效果
+  shimmer: ^1.0.0
+   #解析html
+  flutter_html: ^0.7.1
+
+
 
 
 
@@ -96,6 +115,9 @@ flutter:
    - images/nav_my_selected.png
    - images/history_bg.jpeg
    - images/banner.jpeg
+   - images/img_loading.jpeg
+   - images/img_loading_error.png
+   - images/img_search.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

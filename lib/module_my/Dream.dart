@@ -4,11 +4,11 @@ import '../bean/dream_data.dart';
 import '../util/DioUtil.dart';
 import '../Api.dart';
 import '../components/LoadingView.dart';
-import 'DreamList.dart';
+import 'package:Inke/module_my/components/DreamList.dart';
 
 class DreamPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _State();
+  _State createState() => _State();
 }
 
 class _State extends State<DreamPage> {

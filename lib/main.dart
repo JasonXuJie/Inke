@@ -2,21 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'config/AppConfig.dart';
-import 'page/Login.dart';
-import 'page/MainPage.dart';
-import 'module_city/CityPage.dart';
+import 'config/RouteConfig.dart';
+
 import 'page/Guide.dart';
+import 'module_login/Login.dart';
+import 'page/Main.dart';
+import 'page/City.dart';
+import 'module_my/Luck.dart';
+
 import 'page/Splash.dart';
 import 'util/SharedUtil.dart';
-import 'page/FeedBack.dart';
+import 'module_my/FeedBack.dart';
 import 'module_my/Setting.dart';
 import 'module_movie/MoreHotMovies.dart';
 import 'module_movie/MoreMovies.dart';
 import 'page/Search.dart';
-import 'module_today_in_history/TodayInHistory.dart';
-import 'module_my/Constellation.dart';
+import 'package:Inke/module_my/TodayInHistory.dart';
 import 'module_movie/MoviesNewBoxOffice.dart';
-import 'module_dream/Dream.dart';
+import 'module_my/Dream.dart';
 void main(){
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,DeviceOrientation.portraitDown]);
   SharedUtil.getInstance().init();
@@ -39,19 +42,19 @@ class MyApp extends StatelessWidget {
       ),
        home:new SplashPage(),
        routes:<String,WidgetBuilder>{
-          '/Guide':(BuildContext context)=> GuidePage(),
-          '/Login':(BuildContext context)=> LoginPage(),
-          '/Main':(BuildContext context)=>  MainPage(),
-          '/City':(BuildContext context)=> CityPage(),
-          '/FeedBack':(BuildContext context)=>FeedBackPage(),
-          '/Setting':(BuildContext context)=>SettingPage(),
+         RouteConfig.GUIDE_PATH:(BuildContext context)=> GuidePage(),
+         RouteConfig.LOGIN_PATH:(BuildContext context)=> LoginPage(),
+         RouteConfig.MAIN_PATH:(BuildContext context)=>  MainPage(),
+         RouteConfig.CITY_PATH:(BuildContext context)=> CityPage(),
+         RouteConfig.FEEDBACK_PATH:(BuildContext context)=>FeedBackPage(),
+         RouteConfig.SETTING_PATH:(BuildContext context)=>SettingPage(),
           '/MoreMovies':(context)=>MoreMoviesPage(),
-          '/Search':(context)=>SearchPage(),
-          '/Today':(context)=>TodayInHistoryPage(),
-          '/Constellation':(context)=>ConstellationPage(),
+          RouteConfig.SEARCH_PATH:(context)=>SearchPage(),
+          RouteConfig.TODAY_PATH:(context)=>TodayInHistoryPage(),
+          RouteConfig.LUCK_PATH:(context)=>LuckPage(),
           '/MoreHotMovies':(context)=>MoreHotMoviesPage(),
-          '/MoviesNewBo':(context)=>MoviesNewBoPage(),
-          '/Dream':(context)=>DreamPage(),
+          RouteConfig.MOVIE_RANKING_PATH:(context)=>MoviesNewBoPage(),
+          RouteConfig.DREAM_PATH:(context)=>DreamPage(),
        } ,
     );
   }

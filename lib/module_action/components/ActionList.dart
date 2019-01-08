@@ -9,6 +9,10 @@ import 'package:event_bus/event_bus.dart';
 import '../../event/CityChangedEvent.dart';
 import '../../util/EventUtil.dart';
 import '../../components/LoadingView.dart';
+import '../../util/JumpUtil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import '../../config/AppConfig.dart';
+
 
 class EventList extends StatefulWidget {
   String tag;
@@ -16,10 +20,10 @@ class EventList extends StatefulWidget {
   EventList(this.tag);
 
   @override
-  State<StatefulWidget> createState() => _EventListState();
+  _State createState() => _State();
 }
 
-class _EventListState extends State<EventList> {
+class _State extends State<EventList> {
   List<Events> events = [];
   EventBus eventBus = EventBus();
   StreamSubscription cityChangedSubscription;
@@ -75,34 +79,13 @@ class _EventListState extends State<EventList> {
   }
 
   _buildItems(Events event) {
-    var icon = Image.network(
-      event.image,
-      width: 100.0,
-      height: 120.0,
-      fit: BoxFit.cover,
-    );
-    List<String> tags = event.tags.split(',');
-    List<Widget> tagsList = [];
-    List.generate(tags.length, (index) {
-      tagsList.add(Container(
-        padding: EdgeInsets.all(3.0),
-        margin: EdgeInsets.only(left: 2.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(3.0),
-          border: Border.all(
-            color: Colors.blue,
-            width: 2.0,
-            style: BorderStyle.solid,
-          ),
-        ),
-        child: Text(
-          tags[index],
-          style: TextStyle(fontSize: 15.0, color: Colors.black),
-        ),
-      ));
-    });
-    var tagsRow = Row(
-      children: tagsList,
+    var icon = CachedNetworkImage(
+        imageUrl: event.image,
+        width: 100.0,
+        height: 120.0,
+        fit: BoxFit.cover,
+        placeholder: Image.asset(AppImgPath.mainPath+'img_loading.jpeg',width: 100.0,height: 120.0,),
+        errorWidget: Image.asset(AppImgPath.mainPath+'img_loading_error.png',width: 100.0,height: 120.0,),
     );
     var info = Container(
       padding: EdgeInsets.only(left: 10.0),
@@ -163,10 +146,6 @@ class _EventListState extends State<EventList> {
             padding: EdgeInsets.only(top: 5.0),
             child: Text('想参加人数:${event.wisherCount}'),
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 5.0),
-            child: tagsRow,
-          ),
         ],
       ),
     );
@@ -188,11 +167,7 @@ class _EventListState extends State<EventList> {
       child: InkWell(
         child: item,
         onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      Web(title: event.title, url: event.adaptUrl)));
+          JumpUtil.push(context, Web(title: event.title, url: event.adaptUrl));
         },
       ),
     );

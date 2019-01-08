@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../bean/dream_data.dart';
+import '../../bean/dream_data.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 class DreamList extends StatelessWidget {

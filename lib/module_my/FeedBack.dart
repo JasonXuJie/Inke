@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 class FeedBackPage extends StatefulWidget {
+
   @override
-  State<StatefulWidget> createState() => _FeedBackState();
+  _State createState() => _State();
 }
 
-class _FeedBackState extends State<FeedBackPage> {
+class _State extends State<FeedBackPage> {
   TextEditingController _controller = TextEditingController();
 
   @override

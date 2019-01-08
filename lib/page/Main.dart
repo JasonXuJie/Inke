@@ -3,13 +3,16 @@ import '../module_movie/MovieIndex.dart';
 import '../module_action/ActionIndex.dart';
 import '../module_my/MyIndex.dart';
 import '../module_news/NewsIndex.dart';
+import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
+import '../config/Colors.dart' as AppColors;
 
 class MainPage extends StatefulWidget {
+
   @override
-  State<StatefulWidget> createState() => _MainState();
+  _State createState() => _State();
 }
 
-class _MainState extends State<MainPage> {
+class _State extends State<MainPage> {
   int _currentIndex = 0;
   final List<String> titles = ['电影', '活动', '资讯', '我的'];
   var tabImages;
@@ -18,6 +21,7 @@ class _MainState extends State<MainPage> {
   void initState() {
     super.initState();
     _init();
+    //setStateBarColor(0);
   }
 
   void _init() {
@@ -109,8 +113,32 @@ class _MainState extends State<MainPage> {
   }
 
   void _onTapped(int index) {
+    //setStateBarColor(index);
     setState(() {
       _currentIndex = index;
     });
   }
+
+
+  void setStateBarColor(int index) async {
+    switch (index) {
+      case 0:
+        await FlutterStatusbarManager.setFullscreen(true);
+        break;
+      case 1:
+        await FlutterStatusbarManager.setColor(Colors.white);
+        await FlutterStatusbarManager.setFullscreen(false);
+        await FlutterStatusbarManager.setTranslucent(false);
+        await FlutterStatusbarManager.setStyle(StatusBarStyle.DARK_CONTENT);
+        break;
+      default:
+        await FlutterStatusbarManager.setColor(Color(AppColors.Colors.C_0099FD));
+        await FlutterStatusbarManager.setFullscreen(false);
+        await FlutterStatusbarManager.setTranslucent(false);
+        await FlutterStatusbarManager.setStyle(StatusBarStyle.LIGHT_CONTENT);
+
+    }
+  }
+
+
 }

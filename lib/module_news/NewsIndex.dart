@@ -8,7 +8,6 @@ class NewsPage extends StatelessWidget {
     initMap();
   }
 
-
   void initMap() {
     map['头条'] = 'top';
     map['社会'] = 'shehui';
@@ -26,9 +25,40 @@ class NewsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('资讯'),
+        title: GestureDetector(
+          onTap: () => Navigator.pushNamed(context, '/Search'),
+          child: Container(
+            alignment: Alignment.center,
+            margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(15.0)),
+            ),
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Icon(
+                    Icons.search,
+                    color: Colors.grey,
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                      child: Text(
+                    '请输入要搜索的内容',
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 13.0,
+                    ),
+                  )),
+                )
+              ],
+            ),
+          ),
+        ),
         centerTitle: true,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
       ),
       body: DefaultTabController(
           length: map.length,
@@ -67,8 +97,9 @@ class NewsPage extends StatelessWidget {
   _buildViews() {
     List<Widget> containers = [];
     map.values.forEach((value) {
-      containers.add(NewsList(value: value,));
-
+      containers.add(NewsList(
+        value: value,
+      ));
     });
     return containers;
   }

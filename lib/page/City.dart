@@ -10,10 +10,10 @@ import '../util/EventUtil.dart';
 class CityPage extends StatefulWidget {
 
   @override
-  State<StatefulWidget> createState() => CityState();
+  _State createState() => _State();
 }
 
-class CityState extends State<CityPage> {
+class _State extends State<CityPage> {
 
   List<Locs> _citys = [];
   EventBus eventBus = EventBus();

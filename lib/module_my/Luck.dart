@@ -6,12 +6,12 @@ import '../util/ToastUtil.dart';
 import '../bean/consellation_data.dart';
 import 'dart:async';
 
-class ConstellationPage extends StatefulWidget {
+class LuckPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _ConstellationState();
+  _State createState() => _State();
 }
 
-class _ConstellationState extends State<ConstellationPage> {
+class _State extends State<LuckPage> {
   String _value;
   var map = {
     '今日运势': false,

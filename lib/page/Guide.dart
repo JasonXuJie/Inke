@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import '../util/JumpUtil.dart';
 import '../config/AppConfig.dart';
+import '../config/RouteConfig.dart';
 
 class GuidePage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _GuideState();
+  _State createState() => _State();
 }
 
-class _GuideState extends State<GuidePage> with SingleTickerProviderStateMixin {
-
+class _State extends State<GuidePage> with SingleTickerProviderStateMixin {
   TabController _tabController;
 
-  _GuideState() {
+  _State() {
     _tabController = TabController(length: 4, initialIndex: 0, vsync: this);
   }
 
@@ -56,14 +57,19 @@ class _GuideState extends State<GuidePage> with SingleTickerProviderStateMixin {
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                margin: EdgeInsets.only(bottom: 60.0),
+                margin: EdgeInsets.only(bottom: 100.0),
                 child: OutlineButton(
-                    child: Text('立即登陆',
-                      style: TextStyle(color: Color(AppColors.colorPrimary)),),
-                    borderSide: BorderSide(
-                        color: Color(AppColors.colorPrimary)),
+                    child: Text(
+                      '立即体验',
+                      style:
+                      const TextStyle(
+                          color: Color(AppColors.colorPrimary), fontSize: 14.0),
+                    ),
+                    borderSide:
+                    BorderSide(color: Color(AppColors.colorPrimary)),
                     onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(context, '/Login', (route)=>route==null);
+                      JumpUtil.pushNameAndRemove(
+                          context, RouteConfig.MAIN_PATH);
                     }),
               ),
             ),

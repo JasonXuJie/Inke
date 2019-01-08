@@ -9,7 +9,7 @@ import '../config/AppConfig.dart';
 
 class TodayInHistoryPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _State();
+  _State createState() => _State();
 }
 
 class _State extends State<TodayInHistoryPage> {

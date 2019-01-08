@@ -2,50 +2,45 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter/material.dart';
 import '../module_movie/MovieDetails.dart';
 import '../bean/movie.dart';
-class BannerView extends StatefulWidget{
+import '../util/JumpUtil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import '../config/AppConfig.dart';
+
+class BannerView extends StatelessWidget {
 
   List<dynamic> dataList;
-
-  BannerView({Key key,this.dataList}):super(key:key);
-
-  @override
-  State<StatefulWidget> createState() => _BannerState();
-
-}
-
-
-class _BannerState extends State<BannerView>{
-
   List<dynamic> data = [];
   var newIndex = 0;
 
-  _disposeData(){
-    for(var i=0;i<widget.dataList.length;i++){
-      data.add(widget.dataList[i]);
-      if(i == 3){
+  BannerView({Key key,this.dataList}):super(key: key);
+
+  _disposeData() {
+    for (var i = 0; i < dataList.length; i++) {
+      data.add(dataList[i]);
+      if (i == 3) {
         break;
       }
     }
   }
 
   @override
-  void initState() {
-    super.initState();
-    _disposeData();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    _disposeData();
     return SizedBox(
-      height: 150.0,
+      height: 250.0,
       child: Swiper(
         itemCount: data.length,
         index: newIndex,
         autoplay: true,
         loop: true,
-        itemBuilder: (context,index)=>_buildItem(data[index]),
-        pagination:SwiperPagination(),
-        onIndexChanged: (index){
+        itemBuilder: (context, index) => _buildItem(context,data[index]),
+        pagination: SwiperPagination(
+          alignment: Alignment.bottomRight,
+          margin: EdgeInsets.all(10.0),
+          builder: SwiperPagination.dots,
+        ),
+        //control: SwiperControl(),
+        onIndexChanged: (index) {
           newIndex = index;
         },
 //        onTap:(int index){
@@ -54,17 +49,22 @@ class _BannerState extends State<BannerView>{
       ),
     );
   }
-  
-  
-  _buildItem(itemData){
-    if(itemData is Subjects){
+
+  _buildItem(context,itemData) {
+    if (itemData is Subjects) {
       return GestureDetector(
-        onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>MovieDetailsPage(id:itemData.id ,)));
+        onTap: () {
+          JumpUtil.push(context, MovieDetailsPage(id: itemData.id,));
         },
-        child: Image.network(itemData.images.medium,fit: BoxFit.fill,),
+        child: CachedNetworkImage(
+          imageUrl: itemData.images.medium,
+          fit: BoxFit.fill,
+          placeholder: Image.asset(
+            AppImgPath.mainPath + 'img_loading.jpeg', fit: BoxFit.fill,),
+          errorWidget: Image.asset(
+            AppImgPath.mainPath + 'img_loading_error.png',fit: BoxFit.fill,),),
       );
     }
   }
-  
+
 }

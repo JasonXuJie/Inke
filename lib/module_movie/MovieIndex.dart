@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../Api.dart';
 import '../components/BannerView.dart';
-import '../components/DrawerLayout.dart';
 import '../util/SharedUtil.dart';
 import '../util/DioUtil.dart';
 import '../bean/movie.dart';
@@ -13,13 +12,16 @@ import '../components/LoadingView.dart';
 import 'commponents/MoreMovieList.dart';
 import 'commponents/RedPacketBanner.dart';
 import 'commponents/FunView.dart';
+import '../config/AppConfig.dart';
+import '../util/JumpUtil.dart';
+import '../config/RouteConfig.dart';
 
 class MovieFragment extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _MovieState();
+  _State createState() => _State();
 }
 
-class _MovieState extends State<MovieFragment> {
+class _State extends State<MovieFragment> {
   List<Subjects> _hotMovies = [];
   List<Subjects> _moreMovies = [];
   var cityName = '';
@@ -53,44 +55,6 @@ class _MovieState extends State<MovieFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: GestureDetector(
-          onTap: () => Navigator.pushNamed(context, '/Search'),
-          child: Container(
-            alignment: Alignment.center,
-            margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(15.0)),
-            ),
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: Icon(
-                    Icons.search,
-                    color: Colors.grey,
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                      child: Text(
-                    '请输入要搜索的内容',
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 13.0,
-                    ),
-                  )),
-                )
-              ],
-            ),
-          ),
-        ),
-        centerTitle: true,
-        automaticallyImplyLeading: true,
-        actions: <Widget>[_buildPopMenu()],
-      ),
-      drawer: DrawerLayout(),
       body: _buildBody(),
     );
   }
@@ -100,23 +64,78 @@ class _MovieState extends State<MovieFragment> {
       return CustomScrollView(
         slivers: <Widget>[
           SliverToBoxAdapter(
-            child: BannerView(dataList: _hotMovies,),
+              child: Stack(
+            children: <Widget>[
+              BannerView(
+                dataList: _hotMovies,
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15.0, 50.0, 0.0, 0.0),
+                  child: GestureDetector(
+                    onTap: (){
+                      JumpUtil.pushNamedForResult(context, RouteConfig.CITY_PATH)
+                      .then((result){
+                        cityName = result;
+                        _requestHotMovies(cityName: cityName);
+                        _requestMoreMovies(cityName: cityName);
+                      });
+                    },
+                    child: Text(
+                      cityName,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14.0,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0, 50.0, 15.0, 0.0),
+                    child: GestureDetector(
+                      onTap: ()=>JumpUtil.pushNamed(context, RouteConfig.SEARCH_PATH),
+                      child: Image.asset(
+                        AppImgPath.mainPath + 'img_search.png',
+                        width: 25.0,
+                        height: 25.0,
+                      ),
+                    ),
+                  )),
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0.0, 50.0, 50.0, 0.0),
+                  child: GestureDetector(
+                    onTap: ()=>scan(),
+                    child: Image.asset(
+                      AppImgPath.mainPath + 'img_scan.png',
+                      width: 25.0,
+                      height: 25.0,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          )),
+          SliverToBoxAdapter(
+            child: RedPacketBanner(),
           ),
           SliverToBoxAdapter(
-           child: RedPacketBanner(),
-          ),
-          SliverToBoxAdapter(
-           child: _buildTitle('热门电影'),
+            child: _buildTitle('热门电影'),
           ),
           SliverToBoxAdapter(
             child: HotMovieList(movieList: _hotMovies),
           ),
           FunView(),
           SliverPadding(
-              padding: const EdgeInsets.only(top: 10.0),
-              sliver:  SliverToBoxAdapter(
-                child: _buildTitle('更多电影'),
-              ),
+            padding: const EdgeInsets.only(top: 10.0),
+            sliver: SliverToBoxAdapter(
+              child: _buildTitle('更多电影'),
+            ),
           ),
           MoreMovieList(
             movieList: _moreMovies,
@@ -133,41 +152,7 @@ class _MovieState extends State<MovieFragment> {
     cityName = name == null ? '上海' : name;
   }
 
-  _buildPopMenu() {
-    return PopupMenuButton<int>(
-      icon: Icon(Icons.more_vert),
-      onSelected: (int value) {
-        switch (value) {
-          case 0:
-            scan();
-            break;
-          case 1:
-            Navigator.pushNamed(context, '/City').then((result) {
-              setState(() {
-                cityName = result;
-                _requestHotMovies(cityName: cityName);
-                _requestMoreMovies(cityName: cityName);
-              });
-            });
-            break;
-        }
-      },
-      itemBuilder: (BuildContext context) => <PopupMenuItem<int>>[
-            PopupMenuItem<int>(
-              value: 0,
-              child: Row(
-                children: <Widget>[Icon(Icons.scanner), Text('扫一扫')],
-              ),
-            ),
-            PopupMenuItem<int>(
-              value: 1,
-              child: Row(
-                children: <Widget>[Icon(Icons.location_city), Text(cityName)],
-              ),
-            ),
-          ],
-    );
-  }
+
 
   _buildTitle(String label) {
     return Padding(

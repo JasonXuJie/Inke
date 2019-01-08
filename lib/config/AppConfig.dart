@@ -5,4 +5,6 @@ class AppColors{
 
 class AppImgPath{
   static const String mainPath = 'images/';
+  static const String loadingPath = 'images/img_loading.jpeg';
+  static const String loadingErrorPath = 'images/img_loading_error.png';
 }
