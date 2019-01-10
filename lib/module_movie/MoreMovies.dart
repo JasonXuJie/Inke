@@ -8,6 +8,7 @@ import 'dart:async';
 import 'commponents/CommingSoonList.dart';
 import 'commponents/TopList.dart';
 import '../config/AppConfig.dart';
+import '../config/SharedKey.dart';
 
 class MoreMoviesPage extends StatefulWidget {
   @override
@@ -20,7 +21,7 @@ class _MoreMoviesState extends State<MoreMoviesPage> with SingleTickerProviderSt
   TabController _controller;
 
   Future<movie> _requestCommingSoon() async {
-    var city = SharedUtil.getInstance().getCity()[SharedUtil.CITY_NAME];
+    var city = SharedUtil.getInstance().get(SharedKey.CITY_NAME,'上海');
     var response =
     await DioUtil.getInstance().get(ApiService.GET_COMMING_SOON, data: {
       'city': city,

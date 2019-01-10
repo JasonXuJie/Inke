@@ -1,9 +1,10 @@
 import 'package:event_bus/event_bus.dart';
+import '../event/CityChangedEvent.dart';
 
-class EventUtil{
+class EventUtil<E>{
 
   static EventUtil _instance;
-  EventBus eventBus;
+  EventBus _eventBus;
 
   static EventUtil getInstance(){
     if(_instance == null){
@@ -13,14 +14,27 @@ class EventUtil{
   }
 
   EventUtil(){
-    eventBus = EventBus();
+    _eventBus = EventBus();
   }
 
   post(event){
-    eventBus.fire(event);
+    _eventBus.fire(event);
   }
 
-  EventBus getEventBus() => eventBus;
+  EventBus getEventBus() => _eventBus;
 
 
+  test(OnEventCallBack callBack){
+    _eventBus.on<E>().listen((event){
+       callBack.callBack(event);
+    });
+  }
+
+
+
+}
+
+abstract class OnEventCallBack{
+
+  void callBack(dynamic event);
 }

@@ -12,6 +12,9 @@ import '../../components/LoadingView.dart';
 import '../../util/JumpUtil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../config/AppConfig.dart';
+import '../../config/SharedKey.dart';
+import '../../event/ScrollTopEvent.dart';
+import '../../event/ChangeTypeEvent.dart';
 
 
 class EventList extends StatefulWidget {
@@ -24,31 +27,48 @@ class EventList extends StatefulWidget {
 }
 
 class _State extends State<EventList> {
-  List<Events> events = [];
+
+  List<Events> events;
+  ScrollController _controller = ScrollController();
   EventBus eventBus = EventBus();
-  StreamSubscription cityChangedSubscription;
+  StreamSubscription mSubscription;
 
   @override
   void initState() {
     super.initState();
     _requestActions(widget.tag);
-    cityChangedSubscription =
-        EventUtil.getInstance().eventBus.on<CityChangedEvent>().listen((event) {
-      _requestActions(widget.tag);
+    mSubscription = EventUtil.getInstance().getEventBus().on().listen((event){
+      if(event.runtimeType == CityChangedEvent){
+        setState(() {
+          events = null;
+        });
+        _requestActions(widget.tag);
+      }else if(event.runtimeType == ScrollTopEvent){
+        if(events!=null){
+         _controller.jumpTo(0.0);
+       }
+      }else if(event.runtimeType == ChangeTypeEvent){
+        setState(() {
+          events = null;
+        });
+        _requestActions(widget.tag,datType:event.day_type);
+      }
     });
   }
 
   @override
   void dispose() {
-    cityChangedSubscription.cancel();
+    mSubscription.cancel();
+    _controller.dispose();
     super.dispose();
   }
 
-  _requestActions(type, {locId = '108296'}) async {
-    var id = SharedUtil.getInstance().getCity()[SharedUtil.CITY_ID];
+  _requestActions(type, {locId = '108296',datType = 'future'}) async {
+    //print(datType);
+    var id = SharedUtil.getInstance().get(SharedKey.CITY_ID,'108296');
     if (id != null) locId = id;
     var response = await DioUtil.getInstance().get(ApiService.GET_EVENTS,
-        data: {'loc': locId, 'day_type': 'future', 'type': type});
+        data: {'loc': locId, 'day_type': datType, 'type': type});
     var json = event.fromJson(response);
     setState(() {
       events = json.events;
@@ -61,10 +81,11 @@ class _State extends State<EventList> {
   }
 
   getBody() {
-    if (events.length != 0) {
+    if (events!= null) {
       return RefreshIndicator(
           child: ListView.builder(
               itemCount: events.length,
+              controller: _controller,
               itemBuilder: (context,position)=>_buildItems(events[position])
           ),
           onRefresh: _refreshData);

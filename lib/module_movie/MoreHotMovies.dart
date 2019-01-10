@@ -6,6 +6,7 @@ import '../bean/movie.dart';
 import 'dart:async';
 import '../components/LoadingView.dart';
 import 'commponents/MoreHotMovieList.dart';
+import '../config/SharedKey.dart';
 
 class MoreHotMoviesPage extends StatefulWidget {
   @override
@@ -14,7 +15,7 @@ class MoreHotMoviesPage extends StatefulWidget {
 
 class _MoreHotMoviesState extends State<MoreHotMoviesPage> {
   Future<movie> _requestData() async {
-    var city = SharedUtil.getInstance().getCity()[SharedUtil.CITY_NAME];
+    var city = SharedUtil.getInstance().get(SharedKey.CITY_NAME,'上海');
     var response =
         await DioUtil.getInstance().get(ApiService.GET_MOVIES, data: {
       'city': city,

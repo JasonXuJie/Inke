@@ -3,6 +3,9 @@ import '../util/ToastUtil.dart';
 import '../components/LoadingDialog.dart';
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
+import '../config/SharedKey.dart';
+import '../util/SharedUtil.dart';
+import '../util/JumpUtil.dart';
 
 class MyInfoSettingPage extends StatefulWidget {
   var name;
@@ -12,10 +15,11 @@ class MyInfoSettingPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _MySettingState();
+  _State createState() => _State();
 }
 
-class _MySettingState extends State<MyInfoSettingPage> {
+class _State extends State<MyInfoSettingPage> {
+
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _mottoController = TextEditingController();
   int _selectIndex = 0;
@@ -74,7 +78,7 @@ class _MySettingState extends State<MyInfoSettingPage> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.fromLTRB(15.0, 30.0, 15.0, 50.0),
+              margin: const EdgeInsets.fromLTRB(15.0, 30.0, 15.0, 0.0),
               padding: const EdgeInsets.only(bottom: 10.0),
               decoration: BoxDecoration(
                   border: Border(
@@ -146,13 +150,14 @@ class _MySettingState extends State<MyInfoSettingPage> {
       ToastUtil.showShortToast('请填写数据');
       return;
     }
-
     _showLoading(context);
+    SharedUtil.getInstance().put(SharedKey.USER_NAME, widget.name);
+    SharedUtil.getInstance().put(SharedKey.USER_MOTTO, widget.motto);
     Future.delayed(Duration(seconds: 2), () {
       Navigator.of(context).pop();
       if (Navigator.canPop(context)) {
         List<String> info = [widget.name, widget.motto];
-        Navigator.of(context).pop(info);
+        JumpUtil.pop(context, info);
       }
     });
   }

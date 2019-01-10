@@ -7,6 +7,7 @@ import '../bean/citys.dart';
 import 'package:event_bus/event_bus.dart';
 import '../event/CityChangedEvent.dart';
 import '../util/EventUtil.dart';
+import '../config/SharedKey.dart';
 class CityPage extends StatefulWidget {
 
   @override
@@ -86,10 +87,10 @@ class _State extends State<CityPage> {
         ),
       ),
       onTap: () {
-        SharedUtil.getInstance().saveCity(city.name, city.id).then((Null){
-          EventUtil.getInstance().post(CityChangedEvent(Locs(city.parent, city.habitable, city.id, city.name, city.uid)));
-          Navigator.of(context).pop(city.name);
-        });
+        SharedUtil.getInstance().put(SharedKey.CITY_NAME, city.name);
+        SharedUtil.getInstance().put(SharedKey.CITY_ID, city.id);
+        EventUtil.getInstance().post(CityChangedEvent(Locs(city.parent, city.habitable, city.id, city.name, city.uid)));
+        Navigator.of(context).pop(city.name);
       },
     );
   }

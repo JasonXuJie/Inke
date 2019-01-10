@@ -1,26 +1,34 @@
 import 'package:flutter/material.dart';
 import 'components/ActionList.dart';
 import '../config/AppConfig.dart';
+import '../util/QrScanUtil.dart';
 import '../config/Colors.dart' as AppColors;
+import '../util/SharedUtil.dart';
+import '../config/SharedKey.dart';
+import '../util/JumpUtil.dart';
+import '../config/RouteConfig.dart';
+import '../event/ScrollTopEvent.dart';
+import '../util/EventUtil.dart';
+import '../event/ChangeTypeEvent.dart';
 
 class ActionFragment extends StatefulWidget {
   @override
   _State createState() => _State();
 }
 
-class _State extends State<ActionFragment>
-    with SingleTickerProviderStateMixin {
+class _State extends State<ActionFragment> with SingleTickerProviderStateMixin {
   final Map<String, Tab> map = Map();
 
   TabController _controller;
-  var _tags = ['将来','本周','周末','今日','明日'];
-  int mValue =0;
-  var cityName = '上海';
+  var _tags = ['将来', '本周', '周末', '今日', '明日'];
+  int mValue = 0;
+  var cityName;
 
   @override
   void initState() {
     super.initState();
     _init();
+    cityName = SharedUtil.getInstance().get(SharedKey.CITY_NAME, '上海');
     _controller = TabController(length: map.length, vsync: this);
   }
 
@@ -84,31 +92,46 @@ class _State extends State<ActionFragment>
             unselectedLabelColor: Colors.black38,
             unselectedLabelStyle: const TextStyle(fontSize: 12.0),
             tabs: _buildTabs()),
-        actions: <Widget>[
-            _renderPopMenu()
-        ],
+        actions: <Widget>[_renderPopMenu()],
       ),
       body: Column(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: 5.0,bottom: 10.0),
+            padding: EdgeInsets.only(top: 5.0, bottom: 10.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List<Widget>.generate(_tags.length,(int index){
+              children: List<Widget>.generate(_tags.length, (int index) {
                 return ChoiceChip(
                   label: Text(_tags[index]),
                   labelStyle: const TextStyle(color: Colors.white),
                   selected: mValue == index,
                   backgroundColor: Colors.black38,
                   selectedColor: Color(AppColors.Colors.C_FF9900),
-                  onSelected: (bool selected){
+                  onSelected: (bool selected) {
                     setState(() {
-                    mValue = selected ? index : null;
-                  });
+                      mValue = selected ? index : null;
+                      switch(index){
+                        case 0:
+                          EventUtil.getInstance().post(ChangeTypeEvent('future'));
+                          break;
+                        case 1:
+                          EventUtil.getInstance().post(ChangeTypeEvent('week'));
+                          break;
+                        case 2:
+                          EventUtil.getInstance().post(ChangeTypeEvent('weekend'));
+                          break;
+                        case 3:
+                          EventUtil.getInstance().post(ChangeTypeEvent('today'));
+                          break;
+                        case 4:
+                          EventUtil.getInstance().post(ChangeTypeEvent('tomorrow'));
+                          break;
+                      }
+                    });
                   },
                 );
-            }),
+              }),
             ),
           ),
           Expanded(
@@ -120,7 +143,9 @@ class _State extends State<ActionFragment>
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          EventUtil.getInstance().post(ScrollTopEvent());
+        },
         backgroundColor: Color(AppColors.Colors.C_FF9900),
         isExtended: true,
         child: Image.asset(
@@ -129,7 +154,6 @@ class _State extends State<ActionFragment>
           height: 25.0,
         ),
       ),
-
     );
   }
 
@@ -151,36 +175,41 @@ class _State extends State<ActionFragment>
 
   _renderPopMenu() {
     return PopupMenuButton<int>(
-      icon: Icon(Icons.more_vert,color: Color(AppColors.Colors.C_FF9900),),
+      icon: Icon(
+        Icons.more_vert,
+        color: Color(AppColors.Colors.C_FF9900),
+      ),
       onSelected: (int value) {
         switch (value) {
           case 0:
-            //scan();
+            QrScanUtil.scan();
             break;
           case 1:
-            Navigator.pushNamed(context, '/City').then((result) {
-              setState(() {
-                cityName = result;
-
-              });
+            JumpUtil.pushNamedForResult(context, RouteConfig.CITY_PATH)
+                .then((result) {
+              if (result != null) {
+                setState(() {
+                  cityName = result;
+                });
+              }
             });
             break;
         }
       },
       itemBuilder: (BuildContext context) => <PopupMenuItem<int>>[
-        PopupMenuItem<int>(
-          value: 0,
-          child: Row(
-            children: <Widget>[Icon(Icons.scanner), Text('扫一扫')],
-          ),
-        ),
-        PopupMenuItem<int>(
-          value: 1,
-          child: Row(
-            children: <Widget>[Icon(Icons.location_city), Text(cityName)],
-          ),
-        ),
-      ],
+            PopupMenuItem<int>(
+              value: 0,
+              child: Row(
+                children: <Widget>[Icon(Icons.scanner), Text('扫一扫')],
+              ),
+            ),
+            PopupMenuItem<int>(
+              value: 1,
+              child: Row(
+                children: <Widget>[Icon(Icons.location_city), Text(cityName)],
+              ),
+            ),
+          ],
     );
   }
 }

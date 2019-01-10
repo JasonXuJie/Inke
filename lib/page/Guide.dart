@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../util/JumpUtil.dart';
 import '../config/AppConfig.dart';
 import '../config/RouteConfig.dart';
+import '../config/SharedKey.dart';
+import '../util/SharedUtil.dart';
 
 class GuidePage extends StatefulWidget {
   @override
@@ -61,13 +63,13 @@ class _State extends State<GuidePage> with SingleTickerProviderStateMixin {
                 child: OutlineButton(
                     child: Text(
                       '立即体验',
-                      style:
-                      const TextStyle(
+                      style: const TextStyle(
                           color: Color(AppColors.colorPrimary), fontSize: 14.0),
                     ),
                     borderSide:
-                    BorderSide(color: Color(AppColors.colorPrimary)),
+                        BorderSide(color: Color(AppColors.colorPrimary)),
                     onPressed: () {
+                      SharedUtil.getInstance().put(SharedKey.IS_FIRST_LOGIN, false);
                       JumpUtil.pushNameAndRemove(
                           context, RouteConfig.MAIN_PATH);
                     }),
@@ -95,8 +97,8 @@ class _State extends State<GuidePage> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
+    return Scaffold(
+      body: Stack(
         children: <Widget>[
           _renderViewPager(),
           _renderSelector(),

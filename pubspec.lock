@@ -140,7 +140,7 @@ packages:
       name: cookie_jar
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.6"
+    version: "0.0.7"
   crypto:
     dependency: transitive
     description:
@@ -175,7 +175,7 @@ packages:
       name: dio
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.5"
+    version: "1.0.13"
   event_bus:
     dependency: "direct main"
     description:
@@ -460,12 +460,19 @@ packages:
     source: hosted
     version: "2.0.1"
   redux:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: redux
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.0"
+  share:
+    dependency: "direct main"
+    description:
+      name: share
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.5.3"
   shared_preferences:
     dependency: "direct main"
     description:

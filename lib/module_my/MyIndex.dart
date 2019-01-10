@@ -11,6 +11,9 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'Pairing.dart';
+import '../util/SharedUtil.dart';
+import '../config/SharedKey.dart';
+import '../page/Redux.dart';
 
 class MyIndex extends StatefulWidget {
   @override
@@ -18,20 +21,12 @@ class MyIndex extends StatefulWidget {
 }
 
 class _State extends State<MyIndex> {
-  static const methodChannel =
+  var methodChannel =
       const MethodChannel('com.jason.myfluttertest/module_my');
-  static const webChannel = const MethodChannel('com.jason.myfluttertest/web');
+  var  webChannel = const MethodChannel('com.jason.myfluttertest/web');
   File _header;
 
-  var titles = [
-    '历史上的今天',
-    '周公解梦',
-    '反馈',
-    '设置',
-    'menu_five',
-    '百度一下',
-    '关于我'
-  ];
+  var titles = ['历史上的今天', '周公解梦', '反馈', '设置', 'menu_five', '百度一下', '关于我'];
 
   var imgPath = [
     AppImgPath.mainPath + 'menu_list_one.png',
@@ -43,8 +38,18 @@ class _State extends State<MyIndex> {
     AppImgPath.mainPath + 'menu_list_seven.png'
   ];
 
-  var name = 'J@son';
-  var motto = 'Talk is cheap!Show me the Code!';
+  var name;
+  var motto;
+  var isLogin;
+
+  @override
+  void initState() {
+    super.initState();
+    isLogin = SharedUtil.getInstance().get(SharedKey.IS_LOGIN, false);
+    name = SharedUtil.getInstance().get(SharedKey.USER_NAME, '');
+    motto = SharedUtil.getInstance().get(SharedKey.USER_MOTTO, 'No motto');
+    //print(motto);
+  }
 
   Container _buildMyInfo() {
     return Container(
@@ -80,12 +85,21 @@ class _State extends State<MyIndex> {
             },
           ),
           Offstage(
-            offstage: false,
+            offstage: isLogin,
             child: Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: GestureDetector(
                 onTap: () =>
-                    JumpUtil.pushNamed(context, RouteConfig.LOGIN_PATH),
+                    JumpUtil.pushNamedForResult(context, RouteConfig.LOGIN_PATH)
+                        .then((result) {
+                      if (result != null) {
+                        setState(() {
+                          name = result;
+                          motto = 'No motto';
+                          isLogin = true;
+                        });
+                      }
+                    }),
                 child: Text(
                   '登陆',
                   style: const TextStyle(
@@ -97,7 +111,7 @@ class _State extends State<MyIndex> {
             ),
           ),
           Offstage(
-            offstage: true,
+            offstage: !isLogin,
             child: Text(
               name,
               style: TextStyle(
@@ -107,7 +121,7 @@ class _State extends State<MyIndex> {
             ),
           ),
           Offstage(
-            offstage: true,
+            offstage: !isLogin,
             child: Text(
               'motto:' + motto,
               style: TextStyle(color: Colors.white, fontSize: 15.0),
@@ -222,6 +236,7 @@ class _State extends State<MyIndex> {
                   break;
                 case 4:
                   JumpUtil.pushNamed(context, RouteConfig.MOVIE_RANKING_PATH);
+                  //JumpUtil.push(context, ReduxPage());
                   break;
                 case 5:
                   go2Web();
@@ -282,17 +297,29 @@ class _State extends State<MyIndex> {
         actions: <Widget>[
           FlatButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return MyInfoSettingPage(
-                    name: name,
-                    motto: motto,
-                  );
-                })).then((result) {
-                  setState(() {
-                    name = result[0];
-                    motto = result[1];
+                if (isLogin) {
+                  JumpUtil.pushForResult(
+                          context, MyInfoSettingPage(name: name, motto: motto))
+                      .then((result) {
+                    if (result != null) {
+                      setState(() {
+                        name = result[0];
+                        motto = result[1];
+                      });
+                    }
                   });
-                });
+                } else {
+                  JumpUtil.pushNamedForResult(context, RouteConfig.LOGIN_PATH)
+                      .then((result) {
+                    if (result != null) {
+                      setState(() {
+                        name = result;
+                        motto = 'No motto';
+                        isLogin = true;
+                      });
+                    }
+                  });
+                }
               },
               child: Text(
                 '设置',

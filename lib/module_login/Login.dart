@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../config/AppConfig.dart';
 import '../util/ToastUtil.dart';
+import '../util/JumpUtil.dart';
+import '../util/SharedUtil.dart';
+import '../config/SharedKey.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -181,8 +184,10 @@ class _LoginState extends State<LoginPage> {
               FlatButton(
                 child: Text('确定'),
                 onPressed: () {
+                  SharedUtil.getInstance().put(SharedKey.USER_NAME, _phone);
+                  SharedUtil.getInstance().put(SharedKey.IS_LOGIN, true);
                   Navigator.of(context).pop();
-                  Navigator.pushNamed(context, '/Main');
+                  JumpUtil.pop(context, _phone);
                 },
               )
             ],

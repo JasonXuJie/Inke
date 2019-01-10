@@ -6,8 +6,6 @@ import '../util/DioUtil.dart';
 import '../bean/movie.dart';
 import 'commponents/HotMovieList.dart';
 import 'dart:async';
-import 'package:barcode_scan/barcode_scan.dart';
-import 'package:flutter/services.dart';
 import '../components/LoadingView.dart';
 import 'commponents/MoreMovieList.dart';
 import 'commponents/RedPacketBanner.dart';
@@ -15,6 +13,8 @@ import 'commponents/FunView.dart';
 import '../config/AppConfig.dart';
 import '../util/JumpUtil.dart';
 import '../config/RouteConfig.dart';
+import '../config/SharedKey.dart';
+import '../util/QrScanUtil.dart';
 
 class MovieFragment extends StatefulWidget {
   @override
@@ -29,7 +29,7 @@ class _State extends State<MovieFragment> {
   @override
   void initState() {
     super.initState();
-    _getCityName();
+    cityName = SharedUtil.getInstance().get(SharedKey.CITY_NAME, '上海');
     _requestHotMovies();
     _requestMoreMovies();
   }
@@ -77,9 +77,13 @@ class _State extends State<MovieFragment> {
                     onTap: (){
                       JumpUtil.pushNamedForResult(context, RouteConfig.CITY_PATH)
                       .then((result){
-                        cityName = result;
-                        _requestHotMovies(cityName: cityName);
-                        _requestMoreMovies(cityName: cityName);
+                        if(result!=null){
+                          setState(() {
+                            cityName = result;
+                            _requestHotMovies(cityName: cityName);
+                            _requestMoreMovies(cityName: cityName);
+                          });
+                        }
                       });
                     },
                     child: Text(
@@ -110,7 +114,7 @@ class _State extends State<MovieFragment> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(0.0, 50.0, 50.0, 0.0),
                   child: GestureDetector(
-                    onTap: ()=>scan(),
+                    onTap: ()=>QrScanUtil.scan(),
                     child: Image.asset(
                       AppImgPath.mainPath + 'img_scan.png',
                       width: 25.0,
@@ -146,13 +150,6 @@ class _State extends State<MovieFragment> {
       return LoadingView();
     }
   }
-
-  _getCityName() {
-    var name = SharedUtil.getInstance().getCity()[SharedUtil.CITY_NAME];
-    cityName = name == null ? '上海' : name;
-  }
-
-
 
   _buildTitle(String label) {
     return Padding(
@@ -194,21 +191,4 @@ class _State extends State<MovieFragment> {
     );
   }
 
-  Future scan() async {
-    try {
-      String result = await BarcodeScanner.scan();
-      print(result);
-    } on PlatformException catch (e) {
-      if (e.code == BarcodeScanner.CameraAccessDenied) {
-        print('The user did not grant the camera permission!');
-      } else {
-        print('Unknown error: $e');
-      }
-    } on FormatException {
-      print(
-          'null (User returned using the "back"-button before scanning anything. Result)');
-    } catch (e) {
-      print('Unknown error: $e');
-    }
-  }
 }

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'dart:async';
+import 'package:share/share.dart';
 
 class Web extends StatefulWidget {
-
   final String url;
   final String title;
 
@@ -44,12 +44,14 @@ class _WebState extends State<Web> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.url);
+    //print(widget.url);
     List<Widget> titleContent = [];
     if (!isLoaded) {
       titleContent.add(CupertinoActivityIndicator());
     }
-    titleContent.add(Expanded(child: Text(widget.title,
+    titleContent.add(Expanded(
+        child: Text(
+      widget.title,
       overflow: TextOverflow.ellipsis,
       softWrap: true,
     )));
@@ -67,6 +69,10 @@ class _WebState extends State<Web> {
             padding: const EdgeInsets.all(4.0),
             child: IconButton(icon: Icon(Icons.refresh), onPressed: _reload),
           ),
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: IconButton(icon: Icon(Icons.share), onPressed: _share),
+          )
         ],
       ),
       withJavascript: true,
@@ -80,5 +86,9 @@ class _WebState extends State<Web> {
       isLoaded = false;
     });
     _flutterWebviewPlugin.reload();
+  }
+
+  _share() {
+    Share.share(widget.url);
   }
 }

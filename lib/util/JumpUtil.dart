@@ -6,7 +6,7 @@ class JumpUtil{
 
   ///跳转新界面
   ///参数：上下文，新界面name
-  static pushNamed(context,routeName){
+  static void pushNamed(context,routeName){
     Navigator.pushNamed(context,routeName);
   }
 
@@ -24,6 +24,15 @@ class JumpUtil{
 
    static Future pushNamedForResult(BuildContext context,String routeName){
     return Navigator.pushNamed(context, routeName);
+  }
+
+  static Future pushForResult(BuildContext context,widget){
+     return Navigator.push(context, MaterialPageRoute(builder: (context)=>widget));
+  }
+
+
+  static pop<T>(BuildContext context,T result){
+     Navigator.of(context).pop(result);
   }
 
 }
