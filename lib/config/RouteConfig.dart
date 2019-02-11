@@ -1,4 +1,7 @@
+
+///Route Path
 class RouteConfig{
+  static const String SPLASH_PATH = '/Splash';
   static const String GUIDE_PATH = '/Guide';
   static const String LOGIN_PATH = '/Login';
   static const String MAIN_PATH = '/Main';

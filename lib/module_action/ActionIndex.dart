@@ -5,7 +5,7 @@ import '../util/QrScanUtil.dart';
 import '../config/Colors.dart' as AppColors;
 import '../util/SharedUtil.dart';
 import '../config/SharedKey.dart';
-import '../util/JumpUtil.dart';
+import '../util/RouteUtil.dart';
 import '../config/RouteConfig.dart';
 import '../event/ScrollTopEvent.dart';
 import '../util/EventUtil.dart';
@@ -185,7 +185,7 @@ class _State extends State<ActionFragment> with SingleTickerProviderStateMixin {
             QrScanUtil.scan();
             break;
           case 1:
-            JumpUtil.pushNamedForResult(context, RouteConfig.CITY_PATH)
+            RouteUtil.pushByNamed(context, RouteConfig.CITY_PATH)
                 .then((result) {
               if (result != null) {
                 setState(() {

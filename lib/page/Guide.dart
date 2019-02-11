@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../util/JumpUtil.dart';
+import '../util/RouteUtil.dart';
 import '../config/AppConfig.dart';
 import '../config/RouteConfig.dart';
 import '../config/SharedKey.dart';
@@ -70,8 +70,7 @@ class _State extends State<GuidePage> with SingleTickerProviderStateMixin {
                         BorderSide(color: Color(AppColors.colorPrimary)),
                     onPressed: () {
                       SharedUtil.getInstance().put(SharedKey.IS_FIRST_LOGIN, false);
-                      JumpUtil.pushNameAndRemove(
-                          context, RouteConfig.MAIN_PATH);
+                      RouteUtil.popAndPushByNamed(context, RouteConfig.MAIN_PATH);
                     }),
               ),
             ),

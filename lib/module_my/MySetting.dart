@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import '../config/SharedKey.dart';
 import '../util/SharedUtil.dart';
-import '../util/JumpUtil.dart';
+import '../util/RouteUtil.dart';
 
 class MyInfoSettingPage extends StatefulWidget {
   var name;
@@ -157,7 +157,7 @@ class _State extends State<MyInfoSettingPage> {
       Navigator.of(context).pop();
       if (Navigator.canPop(context)) {
         List<String> info = [widget.name, widget.motto];
-        JumpUtil.pop(context, info);
+        RouteUtil.pop(context, result: info);
       }
     });
   }

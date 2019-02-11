@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import '../util/JumpUtil.dart';
+import '../util/RouteUtil.dart';
 import '../config/RouteConfig.dart';
-import 'AboutPage.dart';
-import '../components/AnimationPageRoute.dart';
 import '../config/AppConfig.dart';
 import 'MySetting.dart';
 import '../util/PermissionUtil.dart';
@@ -14,6 +12,7 @@ import 'Pairing.dart';
 import '../util/SharedUtil.dart';
 import '../config/SharedKey.dart';
 import '../page/Redux.dart';
+import 'dart:io';
 
 class MyIndex extends StatefulWidget {
   @override
@@ -90,7 +89,7 @@ class _State extends State<MyIndex> {
               padding: const EdgeInsets.only(top: 10.0),
               child: GestureDetector(
                 onTap: () =>
-                    JumpUtil.pushNamedForResult(context, RouteConfig.LOGIN_PATH)
+                    RouteUtil.pushByNamed(context, RouteConfig.LOGIN_PATH)
                         .then((result) {
                       if (result != null) {
                         setState(() {
@@ -153,13 +152,13 @@ class _State extends State<MyIndex> {
       onTap: () {
         switch (label) {
           case '星座运势':
-            JumpUtil.pushNamed(context, RouteConfig.LUCK_PATH);
+            RouteUtil.pushByNamed(context, RouteConfig.LUCK_PATH);
             break;
           case '星座配对':
-            JumpUtil.push(context, PairingPage(flag: true));
+            RouteUtil.pushByWidget(context, PairingPage(flag: true));
             break;
           case '生肖配对':
-            JumpUtil.push(context, PairingPage(flag: false));
+            RouteUtil.pushByWidget(context, PairingPage(flag: false));
             break;
         }
       },
@@ -223,26 +222,29 @@ class _State extends State<MyIndex> {
             onTap: () {
               switch (index) {
                 case 0:
-                  JumpUtil.pushNamed(context, RouteConfig.TODAY_PATH);
+                  RouteUtil.pushByNamed(context, RouteConfig.TODAY_PATH);
                   break;
                 case 1:
-                  JumpUtil.pushNamed(context, RouteConfig.DREAM_PATH);
+                  RouteUtil.pushByNamed(context, RouteConfig.DREAM_PATH);
                   break;
                 case 2:
-                  JumpUtil.pushNamed(context, RouteConfig.FEEDBACK_PATH);
+                  RouteUtil.pushByNamed(context, RouteConfig.FEEDBACK_PATH);
                   break;
                 case 3:
-                  JumpUtil.pushNamed(context, RouteConfig.SETTING_PATH);
+                  RouteUtil.pushByNamed(context, RouteConfig.SETTING_PATH);
                   break;
                 case 4:
-                  JumpUtil.pushNamed(context, RouteConfig.MOVIE_RANKING_PATH);
-                  //JumpUtil.push(context, ReduxPage());
+                  RouteUtil.pushByNamed(context, RouteConfig.MOVIE_RANKING_PATH);
                   break;
                 case 5:
-                  go2Web();
+                  if(Platform.isAndroid){
+                    go2Web();
+                  }
                   break;
                 case 6:
-                  go2AboutMe();
+                  if(Platform.isAndroid){
+                    go2AboutMe();
+                  }
                   break;
                 default:
               }
@@ -298,7 +300,7 @@ class _State extends State<MyIndex> {
           FlatButton(
               onPressed: () {
                 if (isLogin) {
-                  JumpUtil.pushForResult(
+                  RouteUtil.pushByWidget(
                           context, MyInfoSettingPage(name: name, motto: motto))
                       .then((result) {
                     if (result != null) {
@@ -309,7 +311,7 @@ class _State extends State<MyIndex> {
                     }
                   });
                 } else {
-                  JumpUtil.pushNamedForResult(context, RouteConfig.LOGIN_PATH)
+                  RouteUtil.pushByNamed(context, RouteConfig.LOGIN_PATH)
                       .then((result) {
                     if (result != null) {
                       setState(() {

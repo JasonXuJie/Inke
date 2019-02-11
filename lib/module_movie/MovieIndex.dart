@@ -11,7 +11,7 @@ import 'commponents/MoreMovieList.dart';
 import 'commponents/RedPacketBanner.dart';
 import 'commponents/FunView.dart';
 import '../config/AppConfig.dart';
-import '../util/JumpUtil.dart';
+import '../util/RouteUtil.dart';
 import '../config/RouteConfig.dart';
 import '../config/SharedKey.dart';
 import '../util/QrScanUtil.dart';
@@ -75,7 +75,7 @@ class _State extends State<MovieFragment> {
                   padding: const EdgeInsets.fromLTRB(15.0, 50.0, 0.0, 0.0),
                   child: GestureDetector(
                     onTap: (){
-                      JumpUtil.pushNamedForResult(context, RouteConfig.CITY_PATH)
+                      RouteUtil.pushByNamed(context, RouteConfig.CITY_PATH)
                       .then((result){
                         if(result!=null){
                           setState(() {
@@ -101,7 +101,7 @@ class _State extends State<MovieFragment> {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0.0, 50.0, 15.0, 0.0),
                     child: GestureDetector(
-                      onTap: ()=>JumpUtil.pushNamed(context, RouteConfig.SEARCH_PATH),
+                      onTap: ()=>RouteUtil.pushByNamed(context, RouteConfig.SEARCH_PATH),
                       child: Image.asset(
                         AppImgPath.mainPath + 'img_search.png',
                         width: 25.0,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../config/AppConfig.dart';
+import '../components/LogoutDialog.dart';
 
 
 class SettingPage extends StatelessWidget{
@@ -21,8 +22,21 @@ class SettingPage extends StatelessWidget{
                width: 10.0,
                height: 10.0,
              ),
+             onTap: (){
+               _showDialog(context);
+             },
            ),
        )
      );
+  }
+
+  _showDialog(BuildContext context){
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context){
+          return LogoutDialog();
+        }
+    );
   }
 }

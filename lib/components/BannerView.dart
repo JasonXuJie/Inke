@@ -2,7 +2,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter/material.dart';
 import '../module_movie/MovieDetails.dart';
 import '../bean/movie.dart';
-import '../util/JumpUtil.dart';
+import '../util/RouteUtil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../config/AppConfig.dart';
 
@@ -54,7 +54,7 @@ class BannerView extends StatelessWidget {
     if (itemData is Subjects) {
       return GestureDetector(
         onTap: () {
-          JumpUtil.push(context, MovieDetailsPage(id: itemData.id,));
+          RouteUtil.pushByWidget(context, MovieDetailsPage(id: itemData.id,));
         },
         child: CachedNetworkImage(
           imageUrl: itemData.images.medium,

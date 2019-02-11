@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../config/AppConfig.dart';
 import '../util/ToastUtil.dart';
-import '../util/JumpUtil.dart';
+import '../util/RouteUtil.dart';
 import '../util/SharedUtil.dart';
 import '../config/SharedKey.dart';
 
@@ -187,7 +187,7 @@ class _LoginState extends State<LoginPage> {
                   SharedUtil.getInstance().put(SharedKey.USER_NAME, _phone);
                   SharedUtil.getInstance().put(SharedKey.IS_LOGIN, true);
                   Navigator.of(context).pop();
-                  JumpUtil.pop(context, _phone);
+                  RouteUtil.pop(context, result: _phone);
                 },
               )
             ],

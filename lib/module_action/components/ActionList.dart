@@ -9,7 +9,7 @@ import 'package:event_bus/event_bus.dart';
 import '../../event/CityChangedEvent.dart';
 import '../../util/EventUtil.dart';
 import '../../components/LoadingView.dart';
-import '../../util/JumpUtil.dart';
+import '../../util/RouteUtil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../config/AppConfig.dart';
 import '../../config/SharedKey.dart';
@@ -188,7 +188,7 @@ class _State extends State<EventList> {
       child: InkWell(
         child: item,
         onTap: () {
-          JumpUtil.push(context, Web(title: event.title, url: event.adaptUrl));
+          RouteUtil.pushByWidget(context, Web(title: event.title, url: event.adaptUrl));
         },
       ),
     );

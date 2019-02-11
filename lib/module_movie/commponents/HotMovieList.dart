@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../bean/movie.dart';
 import '../MovieDetails.dart';
-import '../../util/JumpUtil.dart';
+import '../../util/RouteUtil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../config/AppConfig.dart';
 
@@ -76,7 +76,7 @@ class HotMovieList extends StatelessWidget {
       child: InkWell(
         child: _item,
         onTap: () {
-          JumpUtil.push(context, MovieDetailsPage(id: subjects.id,));
+          RouteUtil.pushByWidget(context, MovieDetailsPage(id: subjects.id,));
         },
       ),
     );
