@@ -10,6 +10,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:Inke/redux/is_login_reducer.dart';
 import 'package:Inke/redux/user_reducer.dart';
 import 'package:Inke/util/string_util.dart';
+import 'package:Inke/config/route_config.dart';
 
 class LoginPage extends StatefulWidget {
 
@@ -134,7 +135,7 @@ class _State extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      onPressed: () {})),
+                      onPressed: ()=>RouteUtil.pushByNamed(context,RouteConfig.registerName))),
               Expanded(
                   child: Padding(
                 padding: const EdgeInsets.only(bottom: 10.0),

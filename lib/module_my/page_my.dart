@@ -15,12 +15,14 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:Inke/redux/global_state.dart';
 import 'package:Inke/bean/user.dart';
 
+import 'package:Inke/module_my/page_setting.dart';
+
 class MyIndex extends StatefulWidget {
   @override
   _State createState() => _State();
 }
 
-class _State extends State<MyIndex> {
+class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin{
   var methodChannel = const MethodChannel('com.jason.myfluttertest/module_my');
   var webChannel = const MethodChannel('com.jason.myfluttertest/web');
   File _header;
@@ -38,14 +40,17 @@ class _State extends State<MyIndex> {
   ];
 
   var name;
-  var isLogin;
 
   @override
   void initState() {
     super.initState();
-    isLogin = SharedUtil.getInstance().get(SharedKey.isLogin, false);
+    print('My initState');
     name = SharedUtil.getInstance().get(SharedKey.USER_NAME, '');
   }
+
+  @override
+  bool get wantKeepAlive => true;
+
 
   Container _buildMyInfo() {
     return Container(
@@ -196,6 +201,7 @@ class _State extends State<MyIndex> {
             onTap: () {
               switch (index) {
                 case 0:
+
                   RouteUtil.pushByNamed(context, RouteConfig.todayName);
                   break;
                 case 1:
@@ -227,6 +233,50 @@ class _State extends State<MyIndex> {
         divider
       ],
     );
+  }
+
+
+  void jump(context){
+    Navigator.push(context, PageRouteBuilder(pageBuilder:
+        (BuildContext context, Animation animation,
+        Animation secondaryAnimation) {
+      return ScaleTransition(
+          scale: animation,
+          alignment: Alignment.center,
+          child: SettingPage());
+    }));
+  }
+
+
+  void jump2(context){
+    Navigator.push(context, PageRouteBuilder(pageBuilder:
+        (BuildContext context, Animation animation,
+        Animation secondaryAnimation) {
+      return FadeTransition(
+          opacity: animation,
+          child: SettingPage());
+    }));
+  }
+
+  void jump3(context){
+    Navigator.push(context, PageRouteBuilder(pageBuilder:
+        (BuildContext context, Animation animation,
+        Animation secondaryAnimation) {
+      return RotationTransition(
+          alignment: Alignment.center,
+          turns: animation,
+          child: SettingPage());
+    }));
+  }
+
+  void jump4(context){
+    Navigator.push(context, PageRouteBuilder(pageBuilder:
+        (BuildContext context, Animation animation,
+        Animation secondaryAnimation) {
+      return SlideTransition(
+          position: animation,
+          child: SettingPage());
+    }));
   }
 
   _buildMenuList() {
@@ -263,7 +313,8 @@ class _State extends State<MyIndex> {
 
   @override
   Widget build(BuildContext context) {
-    print('MyIndex');
+    super.build(context);
+    print('My build');
     return Scaffold(
       appBar: AppBar(
         title: Text('我的'),
@@ -324,4 +375,8 @@ class _State extends State<MyIndex> {
       });
     });
   }
+
+
+
+
 }

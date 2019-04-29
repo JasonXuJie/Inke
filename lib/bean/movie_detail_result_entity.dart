@@ -164,7 +164,7 @@ class MovieDetailResultRating {
 	MovieDetailResultRating({this.average, this.min, this.max, this.stars});
 
 	MovieDetailResultRating.fromJson(Map<String, dynamic> json) {
-		average = json['average'];
+		average = (json['average'] as num).toDouble();
 		min = json['min'];
 		max = json['max'];
 		stars = json['stars'];

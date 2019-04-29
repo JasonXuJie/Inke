@@ -37,7 +37,7 @@ dependencies:
   shimmer: ^1.0.0
   #WebView方案
   flutter_webview_plugin: ^0.3.3
-  #webview_flutter: ^0.0.1+1
+  #webview_flutter: ^0.3.5+3
   #android photoView
   photo_view: ^0.2.2
   #Banner轮播控件
@@ -47,8 +47,7 @@ dependencies:
 
   #Function
   #网络请求
-  dio: ^1.0.13
-  #dio: ^2.1.0
+  dio: ^2.1.0
   json_annotation: ^1.0.0
   shared_preferences: ^0.5.1+2
   #系统分享

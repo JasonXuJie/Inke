@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/http/dio_util.dart';
 import 'package:Inke/http/api.dart';
 import 'dart:async';
 import 'package:Inke/components/loading_view.dart';
 import 'package:Inke/module_my/history_list_view.dart';
 import 'package:Inke/config/app_config.dart';
 import 'package:Inke/bean/history_list_result_entity.dart';
+
+import 'package:Inke/http/http_manager_jh.dart';
 
 class TodayInHistoryPage extends StatefulWidget {
   @override
@@ -22,9 +23,9 @@ class _State extends State<TodayInHistoryPage> {
         this.data = null;
       });
     }
-    var response = await DioUtil.getJhInstance()
-        .get(ApiService.TODAY_IN_HISTORY, data: {
-      'key': ApiService.HISTORY_KEY,
+    var response = await HttpManager.getInstance()
+        .get(ApiService.getTodayList, params: {
+      'key': ApiService.historyKey,
       'date': '${date.month}/${date.day}'
     });
     var data = HistoryListEntity.fromJson(response);

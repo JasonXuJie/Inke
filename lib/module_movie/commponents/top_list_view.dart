@@ -3,10 +3,10 @@ import 'package:Inke/module_movie//page_movie_details.dart';
 import 'package:Inke/config/app_config.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:Inke/util/route_util.dart';
-import 'package:Inke/http/dio_util.dart';
 import 'package:Inke/http/api.dart';
 import 'package:Inke/components/loading_view.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
+import 'package:Inke/http/http_manager.dart';
 
 class TopList extends StatefulWidget {
   @override
@@ -108,7 +108,7 @@ class _State extends State<TopList> {
 
   Future<MovieListEntity> _requestTop250(int start) async {
     var response =
-        await DioUtil.getInstance().get(ApiService.GET_TOP_250, data: {
+        await HttpManager.getInstance().get(ApiService.getTop250, params: {
       'start': '$start',
       'count': '20',
     });

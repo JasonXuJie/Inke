@@ -33,15 +33,26 @@ class MoreMovieList extends StatelessWidget {
         Expanded(
             child: Stack(
           children: <Widget>[
-            ClipRRect(
-              child: CachedNetworkImage(
-                imageUrl: subject.images.medium,
-                width: MediaQuery.of(context).size.width,
-                fit: BoxFit.cover,
+            Hero(
+              tag: 'photo${subject.id}',
+              child: ClipRRect(
+                child: CachedNetworkImage(
+                  imageUrl: subject.images.medium,
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(4.0),
+                    topRight: Radius.circular(4.0)),
               ),
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(4.0),
-                  topRight: Radius.circular(4.0)),
+              placeholderBuilder: (context,widget){
+                print('placeholderBuilder');
+                return Container(
+                  height: 150.0,
+                  width: 150.0,
+                  color: Colors.red,
+                );
+              },
             ),
             Align(
               alignment: Alignment.bottomLeft,

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:Inke/page/page_web.dart';
 import 'package:Inke/config/app_config.dart';
 import 'package:Inke/components/loading_view.dart';
-import 'package:Inke/http/dio_util.dart';
 import 'package:Inke/http/api.dart';
 import 'dart:async';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/bean/news_result_entity.dart';
+import 'package:Inke/http/http_manager_jh.dart';
 
 class NewsList extends StatefulWidget {
   final String value;
@@ -18,12 +18,16 @@ class NewsList extends StatefulWidget {
 
 }
 
-class _State extends State<NewsList> {
+class _State extends State<NewsList> with AutomaticKeepAliveClientMixin{
 
   var isRefresh = false;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return FutureBuilder<NewsResultEntity>(
       future: _requestData(),
       builder: (BuildContext context, AsyncSnapshot<NewsResultEntity> snapshot) {
@@ -58,8 +62,8 @@ class _State extends State<NewsList> {
   }
 
   Future<NewsResultEntity> _requestData() async {
-    var response = await DioUtil.getJhInstance()
-        .get(ApiService.NEWS, data: {'type': widget.value, 'key': ApiService.NEWS_KEY});
+    var response = await HttpManager.getInstance()
+        .get(ApiService.getNewsList, params: {'type': widget.value, 'key': ApiService.newsKey});
     return NewsResultEntity.fromJson(response);
   }
 
@@ -153,5 +157,7 @@ class _State extends State<NewsList> {
       ),
     );
   }
+
+
 
 }

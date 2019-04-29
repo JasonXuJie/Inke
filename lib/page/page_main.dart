@@ -13,11 +13,13 @@ class MainPage extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<MainPage> with SingleTickerProviderStateMixin{
+class _State extends State<MainPage>{
 
   int _currentIndex = 0;
   final List<String> titles = ['电影', '活动', '资讯', '我的'];
   var tabImages;
+  final _pageController = PageController();
+
 
 
   @override
@@ -86,7 +88,7 @@ class _State extends State<MainPage> with SingleTickerProviderStateMixin{
           type: BottomNavigationBarType.fixed,
           fixedColor: Colors.blue,
           currentIndex: _currentIndex,
-          onTap: _onTapped,
+          onTap: onTap,
           items: [
             BottomNavigationBarItem(
                 icon: _getTabIcon(0), title: _getTabTitle(0)),
@@ -116,21 +118,45 @@ class _State extends State<MainPage> with SingleTickerProviderStateMixin{
 //  }
 
   _buildBody(){
-    switch(_currentIndex){
-      case 0:
-        return MovieFragment();
-        break;
-      case 1:
-        return ActionFragment();
-        break;
-      case 2:
-        return NewsPage();
-        break;
-      case 3:
-        return MyIndex();
-        break;
-    }
+    return PageView(
+      controller: _pageController,
+      onPageChanged: onPageChanged,
+      children: <Widget>[
+        MovieFragment(),
+        ActionFragment(),
+        NewsPage(),
+        MyIndex(),
+      ],
+      physics: NeverScrollableScrollPhysics(),//禁止滑动
+    );
   }
+
+  void onTap(int index){
+    _pageController.jumpToPage(index);
+  }
+
+  void onPageChanged(int index){
+      setState(() {
+        _currentIndex = index;
+      });
+  }
+
+//  _buildBody(){
+//    switch(_currentIndex){
+//      case 0:
+//        return MovieFragment();
+//        break;
+//      case 1:
+//        return ActionFragment();
+//        break;
+//      case 2:
+//        return NewsPage();
+//        break;
+//      case 3:
+//        return MyIndex();
+//        break;
+//    }
+//  }
 
 
 

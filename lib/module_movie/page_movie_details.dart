@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:Inke/http/api.dart';
 import 'package:Inke/page/page_web.dart';
 import 'dart:async';
-import 'package:Inke/http/dio_util.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:async/async.dart';
 import 'package:Inke/components/loading_shimmer.dart';
 import 'package:Inke/bean/movie_detail_result_entity.dart';
+import 'package:Inke/http/http_manager.dart';
 
 class MovieDetailsPage extends StatefulWidget {
-
   final String id;
 
   MovieDetailsPage({Key key, this.id}) : super(key: key);
@@ -19,28 +18,25 @@ class MovieDetailsPage extends StatefulWidget {
 }
 
 class _State extends State<MovieDetailsPage> {
-
-
   AsyncMemoizer<MovieDetailResultEntity> _memoizer = AsyncMemoizer();
 
-
   Future<MovieDetailResultEntity> _requestMovieDetails() async {
-    var response = await DioUtil.getInstance().get(ApiService.GET_MOVIE_DETAILS+widget.id);
+    var response = await HttpManager.getInstance()
+        .get(ApiService.getMovieDetails + widget.id);
     return MovieDetailResultEntity.fromJson(response);
   }
 
-  Future<MovieDetailResultEntity> _requestOnce()async{
-    return _memoizer.runOnce(()async{
+  Future<MovieDetailResultEntity> _requestOnce() async {
+    return _memoizer.runOnce(() async {
       return _requestMovieDetails();
     });
   }
 
-  Future _onRefresh()async{
+  Future _onRefresh() async {
     setState(() {
       _memoizer = AsyncMemoizer();
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -55,20 +51,20 @@ class _State extends State<MovieDetailsPage> {
     );
   }
 
-
-  _buildBody(){
+  _buildBody() {
     return FutureBuilder<MovieDetailResultEntity>(
       future: _requestOnce(),
-      builder: (BuildContext context,AsyncSnapshot<MovieDetailResultEntity> snapshot){
-        switch(snapshot.connectionState){
+      builder: (BuildContext context,
+          AsyncSnapshot<MovieDetailResultEntity> snapshot) {
+        switch (snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
             return ShimmerView();
             break;
           default:
-            if(snapshot.hasError){
+            if (snapshot.hasError) {
               return Text('${snapshot.error.toString()}');
-            }else{
+            } else {
               return RefreshIndicator(
                 onRefresh: _onRefresh,
                 child: SingleChildScrollView(
@@ -90,7 +86,6 @@ class _State extends State<MovieDetailsPage> {
     );
   }
 
-
   _buildMovieInfo(MovieDetailResultEntity details) {
     return Container(
       padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 0.0),
@@ -99,16 +94,20 @@ class _State extends State<MovieDetailsPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           _buildMovieBasic(details),
-          InkWell(
-            child: Image.network(
-              details.images.medium,
-              width: 140.0,
-              height: 160.0,
+          Hero(
+            tag: 'photo${widget.id}',
+            child: InkWell(
+              child: Image.network(
+                details.images.medium,
+                width: 140.0,
+                height: 160.0,
+              ),
+              onTap: () {
+                RouteUtil.pushByWidget(
+                    context, Web(title: details.title, url: details.mobileUrl));
+              },
             ),
-            onTap: () {
-              RouteUtil.pushByWidget(context, Web(title:details.title,url: details.mobileUrl));
-            },
-          ),
+          )
         ],
       ),
     );
@@ -176,7 +175,8 @@ class _State extends State<MovieDetailsPage> {
                     children: <Widget>[
                       Text(
                         '${details.rating.average}',
-                         style: const TextStyle(color: Colors.black, fontSize: 20.0),
+                        style: const TextStyle(
+                            color: Colors.black, fontSize: 20.0),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 10.0),
@@ -224,7 +224,7 @@ class _State extends State<MovieDetailsPage> {
                 children: <Widget>[
                   Text(
                     '${details.reviewsCount}',
-                     style: const TextStyle(color: Colors.black, fontSize: 20.0),
+                    style: const TextStyle(color: Colors.black, fontSize: 20.0),
                   ),
                   Text(
                     '评论个数',
@@ -257,8 +257,8 @@ class _State extends State<MovieDetailsPage> {
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Colors.grey[300],
                     ),
                     width: 170.0,
                     child: Row(
@@ -317,15 +317,20 @@ class _State extends State<MovieDetailsPage> {
                     width: 80.0,
                     height: 100.0,
                   ),
-                  Padding(padding: const EdgeInsets.only(top: 5.0),
-                  child: Text(data[position].name,style: TextStyle(
-                    fontSize: 13.0,
-                  ),),),
-
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Text(
+                      data[position].name,
+                      style: TextStyle(
+                        fontSize: 13.0,
+                      ),
+                    ),
+                  ),
                 ],
               ),
               onTap: () {
-                RouteUtil.pushByWidget(context, Web(title:data[position].name,url: data[position].alt));
+                RouteUtil.pushByWidget(context,
+                    Web(title: data[position].name, url: data[position].alt));
               },
             ),
           );

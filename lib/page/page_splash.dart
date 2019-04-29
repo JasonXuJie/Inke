@@ -7,10 +7,12 @@ import 'package:Inke/util/shared_util.dart';
 import 'package:Inke/config/shared_key.dart';
 import 'package:shimmer/shimmer.dart';
 
+import 'package:Inke/components/widget_icon.dart';
+
 class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    jump2Guide(context);
+    //jump2Guide(context);
     return Container(
       color: Color(AppColors.colorPrimary),
       child: Center(
@@ -18,10 +20,17 @@ class SplashPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(
-              AppImgPath.mainPath + 'app_icon.png',
-              width: 100.0,
-              height: 100.0,
+            IconWidget(
+              callBack: () {
+                bool isFirst =
+                    SharedUtil.getInstance().get(SharedKey.isFirst, true);
+                if (isFirst) {
+                  RouteUtil.popAndPushByNamed(context, RouteConfig.guideName);
+                } else {
+                  RouteUtil.popAndPushByNamed(context, RouteConfig.mainName);
+                }
+
+              },
             ),
             Padding(
               padding: const EdgeInsets.only(top: 15.0),

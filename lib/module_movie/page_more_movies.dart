@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/http/dio_util.dart';
 import 'package:Inke/components/loading_view.dart';
 import 'package:Inke/http/api.dart';
 import 'dart:async';
@@ -9,6 +8,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:Inke/redux/global_state.dart';
 import 'package:Inke/bean/city.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
+import 'package:Inke/http/http_manager.dart';
 
 class MoreMoviesPage extends StatefulWidget {
   @override
@@ -21,7 +21,7 @@ class _State extends State<MoreMoviesPage> with SingleTickerProviderStateMixin {
 
   Future<MovieListEntity> _requestCommingSoon(cityName) async {
     var response =
-        await DioUtil.getInstance().get(ApiService.GET_COMMING_SOON, data: {
+        await HttpManager.getInstance().get(ApiService.getCommingSoonMovie, params: {
       'city': cityName,
       'start': '0',
       'count': '20',
@@ -50,7 +50,6 @@ class _State extends State<MoreMoviesPage> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print('更多电影');
     return Scaffold(
         backgroundColor: Colors.white,
         body: NestedScrollView(

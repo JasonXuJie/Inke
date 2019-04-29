@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/http/dio_util.dart';
 import 'package:Inke/http/api.dart';
 import 'package:Inke/components/loading_view.dart';
 import 'package:Inke/config/app_config.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:Inke/bean/history_detail_result_entity.dart';
+import 'package:Inke/http/http_manager_jh.dart';
 
 class HistoryDetailsPage extends StatefulWidget {
   final String e_id;
@@ -30,8 +30,8 @@ class _State extends State<HistoryDetailsPage> with TickerProviderStateMixin {
   }
 
   void _requestData() async {
-    var response = await DioUtil.getJhInstance().get(ApiService.HISTORY_DETAILS,
-        data: {'key': ApiService.HISTORY_KEY, 'e_id': widget.e_id});
+    var response = await HttpManager.getInstance().get(ApiService.getHistoryDetails,
+        params: {'key': ApiService.historyKey, 'e_id': widget.e_id});
     setState(() {
       data = HistoryDetailResultEntity.fromJson(response).result[0];
     });

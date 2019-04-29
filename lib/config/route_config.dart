@@ -12,5 +12,6 @@ class RouteConfig{
   static const String todayName = '/Today';
   static const String moreMoviesName = '/MoreMovies';
   static const String moreHotMoviesName =  '/MoreHotMovies';
+  static const String registerName = '/Register';
 
 }

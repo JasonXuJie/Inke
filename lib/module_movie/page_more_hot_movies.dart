@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/http/dio_util.dart';
 import 'package:Inke/http/api.dart';
 import 'dart:async';
 import 'package:Inke/components/loading_view.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:Inke/bean/city.dart';
 import 'package:async/async.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
+import 'package:Inke/http/http_manager.dart';
 
 class MoreHotMoviesPage extends StatefulWidget {
 
@@ -23,7 +23,7 @@ class _State extends State<MoreHotMoviesPage> {
 
   Future<MovieListEntity> _requestMoreHotMovies(cityName) async {
     var response =
-        await DioUtil.getInstance().get(ApiService.GET_MOVIES, data: {
+        await HttpManager.getInstance().get(ApiService.getMovies, params: {
       'city': cityName,
       'start': '16',
       'count': '20',

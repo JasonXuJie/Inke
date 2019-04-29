@@ -16,7 +16,7 @@ class ActionFragment extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<ActionFragment> with SingleTickerProviderStateMixin {
+class _State extends State<ActionFragment> with SingleTickerProviderStateMixin,AutomaticKeepAliveClientMixin {
   final Map<String, Tab> map = Map();
 
   TabController _controller;
@@ -26,9 +26,15 @@ class _State extends State<ActionFragment> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    print('Action iniState');
     _init();
     _controller = TabController(length: map.length, vsync: this);
   }
+
+  @override
+  bool get wantKeepAlive => true;
+
+
 
   @override
   void dispose() {
@@ -71,7 +77,7 @@ class _State extends State<ActionFragment> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print('ActionIndex');
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -212,4 +218,8 @@ class _State extends State<ActionFragment> with SingleTickerProviderStateMixin {
           ],
     );
   }
+
+
+
+
 }

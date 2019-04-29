@@ -8,18 +8,24 @@ class NewsPage extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<NewsPage> with SingleTickerProviderStateMixin {
+class _State extends State<NewsPage> with SingleTickerProviderStateMixin,AutomaticKeepAliveClientMixin {
   final Map<String, String> map = Map();
   TabController _controller;
 
   @override
   void initState() {
     super.initState();
+    print('News initState');
     map['头条'] = 'top';
     map['国内'] = 'guonei';
     map['国际'] = 'guoji';
     _controller = TabController(length: map.length, vsync: this);
   }
+
+  @override
+  bool get wantKeepAlive => true;
+
+
 
   @override
   void dispose() {
@@ -29,6 +35,8 @@ class _State extends State<NewsPage> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    print('News build');
     return Scaffold(
         appBar: AppBar(
           title: GestureDetector(
@@ -120,4 +128,8 @@ class _State extends State<NewsPage> with SingleTickerProviderStateMixin {
     });
     return containers;
   }
+
+
+
+
 }

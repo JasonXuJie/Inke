@@ -14,5 +14,5 @@ class AppImgPath {
 }
 
 class AppConfig {
-  static const bool debug = true;
+  static const bool debug = false;
 }

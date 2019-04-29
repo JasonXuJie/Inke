@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/http/dio_util.dart';
 import 'package:Inke/components/loading_view.dart';
 import 'dart:async';
 import 'package:Inke/config/app_config.dart';
@@ -8,6 +7,7 @@ import 'package:Inke/http/api.dart';
 import 'package:Inke/util/toast_util.dart';
 import 'package:Inke/components/bottom_picker_view.dart';
 import 'package:Inke/bean/pairing_result_entity.dart';
+import 'package:Inke/http/http_manager_afd.dart';
 
 class PairingPage extends StatefulWidget {
 
@@ -159,9 +159,9 @@ class _State extends State<PairingPage> {
   }
 
   Future<PairingResultEntity> _requestConstellactionPairing() async {
-    var response = await DioUtil.getAfdInstance().get(ApiService.PAIRING,
-        data: {
-          'key': ApiService.PAIRING_KEY,
+    var response = await HttpManager.getInstance().get(ApiService.getPairing,
+        params: {
+          'key': ApiService.pairingKey,
           'xingzuo1': _value1,
           'xingzuo2': _value2
         });
@@ -171,8 +171,8 @@ class _State extends State<PairingPage> {
 
   Future<PairingResultEntity> _requestChineseZodiac() async {
     var response =
-        await DioUtil.getAfdInstance().get(ApiService.CHINESE_PAIR, data: {
-      'key': ApiService.CHINESE_PAIR_KEY,
+        await HttpManager.getInstance().get(ApiService.getChinesePairing, params: {
+      'key': ApiService.chinesePairingKey,
       'shengxiao1': _value1,
       'shengxiao2': _value2,
     });

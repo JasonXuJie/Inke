@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:Inke/http/dio_util.dart';
 import 'package:Inke/http/api.dart';
 import 'package:Inke/components/loading_view.dart';
 import 'package:Inke/module_my/dream_list_view.dart';
 import 'package:Inke/bean/dream_result_entity.dart';
+import 'package:Inke/http/http_manager_afd.dart';
 
 class DreamPage extends StatefulWidget {
   @override
@@ -15,8 +15,8 @@ class _State extends State<DreamPage> {
   var _searchValue;
 
   Future<DreamResultEntity> _requestData() async {
-    var response = await DioUtil.getAfdInstance().get(ApiService.ZGJM, data: {
-      'key': ApiService.ZGJM_KEY,
+    var response = await HttpManager.getInstance().get(ApiService.getDream, params: {
+      'key': ApiService.dreamKey,
       'keyword': _searchValue,
       'rows': 20,
       'page': 1

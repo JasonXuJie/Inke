@@ -23,6 +23,11 @@ import 'package:Inke/page/page_not_found.dart';
 import 'package:Inke/page/page_main.dart';
 import 'package:Inke/page/page_city.dart';
 
+import 'package:Inke/module_login/page_register.dart';
+
+import 'package:Inke/test/test.dart';
+import 'package:Inke/test/hero_one.dart';
+
 
 void main()async{
   SystemChrome.setPreferredOrientations(
@@ -66,6 +71,7 @@ class InkeApp extends StatelessWidget {
           RouteConfig.todayName: (context) => TodayInHistoryPage(),
           RouteConfig.moreHotMoviesName: (context) => MoreHotMoviesPage(),
           RouteConfig.dreamName: (context) => DreamPage(),
+          RouteConfig.registerName:(context)=>RegisterPage()
         },
         onUnknownRoute: (RouteSettings setting) {
           String name = setting.name;

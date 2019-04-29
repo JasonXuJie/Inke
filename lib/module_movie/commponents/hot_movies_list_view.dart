@@ -7,7 +7,6 @@ import 'package:Inke/components/dialog_feed_back.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
 
 class HotMovieList extends StatelessWidget {
-
   final List<dynamic> movieList;
 
   HotMovieList({Key key, @required this.movieList}) : super(key: key);
@@ -33,16 +32,28 @@ class HotMovieList extends StatelessWidget {
             height: 140.0,
             child: Stack(
               children: <Widget>[
-                ClipRRect(
-                  child: CachedNetworkImage(
-                    imageUrl: subjects.images.medium,
-                    width: 130.0,
-                    height: 140.0,
-                    fit: BoxFit.fill,
-                    placeholder:(context,url)=>Image.asset(AppImgPath.loadingPath,width: 130.0,height: 140.0,),
-                    errorWidget: (context,url,error)=>Image.asset(AppImgPath.loadingErrorPath,width: 130.0,height: 140.0,),
-                  ),
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(6.0),topRight: Radius.circular(6.0))
+                Hero(
+                  tag: 'photo${subjects.id}',
+                  child: ClipRRect(
+                      child: CachedNetworkImage(
+                        imageUrl: subjects.images.medium,
+                        width: 130.0,
+                        height: 140.0,
+                        fit: BoxFit.fill,
+                        placeholder: (context, url) => Image.asset(
+                              AppImgPath.loadingPath,
+                              width: 130.0,
+                              height: 140.0,
+                            ),
+                        errorWidget: (context, url, error) => Image.asset(
+                              AppImgPath.loadingErrorPath,
+                              width: 130.0,
+                              height: 140.0,
+                            ),
+                      ),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(6.0),
+                          topRight: Radius.circular(6.0))),
                 ),
                 Align(
                     alignment: Alignment.bottomLeft,
@@ -72,20 +83,24 @@ class HotMovieList extends StatelessWidget {
       elevation: 3.0,
       margin: const EdgeInsets.all(5.0),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(6.0))
-      ),
+          borderRadius: BorderRadius.all(Radius.circular(6.0))),
       child: InkWell(
         child: _item,
         onTap: () {
-          RouteUtil.pushByWidget(context, MovieDetailsPage(id: subjects.id,));
+          RouteUtil.pushByWidget(
+              context,
+              MovieDetailsPage(
+                id: subjects.id,
+              ));
         },
-        onLongPress: (){
+        onLongPress: () {
           showModalBottomSheet(
               context: context,
-              builder: (BuildContext context){
-                return FeedBackDialog(title: subjects.title,);
-              }
-          );
+              builder: (BuildContext context) {
+                return FeedBackDialog(
+                  title: subjects.title,
+                );
+              });
         },
       ),
     );

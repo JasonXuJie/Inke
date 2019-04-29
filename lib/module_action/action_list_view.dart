@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:Inke/http/api.dart';
 import 'package:Inke/page/page_web.dart';
 import 'dart:async';
-import 'package:Inke/http/dio_util.dart';
 import 'package:Inke/util/event_util.dart';
 import 'package:Inke/components/loading_view.dart';
 import 'package:Inke/util/route_util.dart';
@@ -14,6 +13,8 @@ import 'package:Inke/redux/global_state.dart';
 import 'package:Inke/bean/city.dart';
 import 'package:async/async.dart';
 import 'package:Inke/bean/action_result_entity.dart';
+import 'package:Inke/http/http_manager.dart';
+
 
 class EventList extends StatefulWidget {
 
@@ -25,7 +26,7 @@ class EventList extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<EventList> {
+class _State extends State<EventList> with AutomaticKeepAliveClientMixin{
 
   ScrollController _controller = ScrollController();
   StreamSubscription mSubscription;
@@ -46,6 +47,9 @@ class _State extends State<EventList> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void dispose() {
     mSubscription.cancel();
     _controller.dispose();
@@ -54,9 +58,8 @@ class _State extends State<EventList> {
 
 
   Future<ActionResultEntity> _requestAction(cityId,dateType) async {
-    var response = await DioUtil.getInstance().get(ApiService.GET_EVENTS,
-        data: {'loc': cityId, 'day_type': dateType, 'type': widget.type});
-    print('请求完毕');
+    var response = await HttpManager.getInstance().get(ApiService.GET_EVENTS,
+        params: {'loc': cityId, 'day_type': dateType, 'type': widget.type});
     return ActionResultEntity.fromJson(response);
   }
   
@@ -83,6 +86,7 @@ class _State extends State<EventList> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return  _buildBody();
   }
 
@@ -220,4 +224,6 @@ class _State extends State<EventList> {
       ),
     );
   }
+
+
 }
