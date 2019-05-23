@@ -1,6 +1,6 @@
 class ApiService {
   ///豆瓣Api
-  static const doubanBaseUrl = 'https://api.douban.com/v2/';
+  static const doubanBaseUrl = 'https://douban.uieee.com/v2/';
 
   //获取城市列表
   static const getCityList = 'loc/list';

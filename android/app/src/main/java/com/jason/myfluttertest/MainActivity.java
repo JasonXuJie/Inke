@@ -1,6 +1,7 @@
 package com.jason.myfluttertest;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.jason.myfluttertest.channel.AboutMeChannel;
 import com.jason.myfluttertest.channel.WebChannel;
