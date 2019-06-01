@@ -25,6 +25,7 @@ class HotMovieList extends StatelessWidget {
 
   _buildItem(context, MovieListSubject subjects) {
     var _item = Container(
+      width: 130.0,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
