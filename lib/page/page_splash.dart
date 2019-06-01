@@ -6,15 +6,14 @@ import 'dart:async';
 import 'package:Inke/util/shared_util.dart';
 import 'package:Inke/config/shared_key.dart';
 import 'package:shimmer/shimmer.dart';
-
 import 'package:Inke/components/widget_icon.dart';
 
 class SplashPage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-    //jump2Guide(context);
     return Container(
-      color: Color(AppColors.colorPrimary),
+      color: AppColors.colorPrimary,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -36,7 +35,7 @@ class SplashPage extends StatelessWidget {
               padding: const EdgeInsets.only(top: 15.0),
               child: Shimmer.fromColors(
                 baseColor: Colors.white,
-                highlightColor: Color(AppColors.C_0099FD),
+                highlightColor: AppColors.color_0099fd,
                 child: Text(
                   'Inke',
                   style: const TextStyle(
@@ -52,6 +51,7 @@ class SplashPage extends StatelessWidget {
       ),
     );
   }
+
 
   void jump2Guide(context) {
     Future.delayed(const Duration(seconds: 3), () {

@@ -8,8 +8,21 @@ import 'package:Inke/util/route_util.dart';
 import 'package:Inke/redux/is_login_reducer.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:Inke/redux/global_state.dart';
+import 'package:flutter/cupertino.dart';
 
-class SettingPage extends StatelessWidget {
+class SettingPage extends StatefulWidget{
+
+  @override
+  State<StatefulWidget> createState() => _State();
+
+}
+
+
+class _State extends State<SettingPage> {
+
+  @protected
+  bool isCheck = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,21 +33,39 @@ class SettingPage extends StatelessWidget {
         body: Container(
           color: Colors.white,
           margin: const EdgeInsets.only(top: 15.0),
-          child: ListTile(
-            title: Text('退出登陆'),
-            leading: Icon(
-              Icons.all_out,
-              size: 20.0,
-            ),
-            trailing: Image.asset(
-              AppImgPath.mainPath + 'img_right_arrow.png',
-              width: 10.0,
-              height: 10.0,
-            ),
-            onTap: () {
-              _showDialog(context);
-            },
-          ),
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                title: Text('开启缓存'),
+                leading: Icon(Icons.clear,size: 20.0,),
+                trailing: CupertinoSwitch(
+                    value: isCheck,
+                    onChanged: (isCheck){
+                      setState(() {
+                        this.isCheck = isCheck;
+                      });
+                }),
+              ),
+              Divider(
+                height: 10.0,
+              ),
+              ListTile(
+                title: Text('退出登陆'),
+                leading: Icon(
+                  Icons.all_out,
+                  size: 20.0,
+                ),
+                trailing: Image.asset(
+                  AppImgPath.mainPath + 'img_right_arrow.png',
+                  width: 10.0,
+                  height: 10.0,
+                ),
+                onTap: () {
+                  _showDialog(context);
+                },
+              ),
+            ],
+          )
         ));
   }
 

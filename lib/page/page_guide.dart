@@ -61,10 +61,10 @@ class _State extends State<GuidePage> with SingleTickerProviderStateMixin {
                     child: Text(
                       '立即体验',
                       style: const TextStyle(
-                          color: Color(AppColors.colorPrimary), fontSize: 14.0),
+                          color: AppColors.colorPrimary, fontSize: 14.0),
                     ),
                     borderSide:
-                    BorderSide(color: Color(AppColors.colorPrimary)),
+                    BorderSide(color: AppColors.colorPrimary),
                     onPressed: () {
                       SharedUtil.getInstance()
                           .put(SharedKey.isFirst, false);

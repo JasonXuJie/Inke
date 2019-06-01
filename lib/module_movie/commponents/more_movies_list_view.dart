@@ -82,7 +82,7 @@ class MoreMovieList extends StatelessWidget {
           RouteUtil.pushByWidget(
               context,
               MovieDetailsPage(
-                id: subject.id,
+                data: subject,
               ));
         },
         onLongPress: (){

@@ -125,7 +125,7 @@ class _State extends State<TopList> {
         RouteUtil.pushByWidget(
             context,
             MovieDetailsPage(
-              id: itemData.id,
+              data: itemData,
             ));
       },
       child: Card(

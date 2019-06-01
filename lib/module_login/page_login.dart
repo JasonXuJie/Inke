@@ -13,14 +13,15 @@ import 'package:Inke/util/string_util.dart';
 import 'package:Inke/config/route_config.dart';
 
 class LoginPage extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() => _State();
 }
 
 class _State extends State<LoginPage> {
+
   var _phone = '';
   var _pwd = '';
+  bool _isChecked = false;
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _pwdController = TextEditingController();
 
@@ -76,7 +77,8 @@ class _State extends State<LoginPage> {
                       keyboardType: TextInputType.phone,
                       maxLines: 1,
                       autofocus: false,
-                      style: const TextStyle(fontSize: 18.0, color: Colors.black),
+                      style:
+                          const TextStyle(fontSize: 18.0, color: Colors.black),
                       onChanged: (String value) {
                         _phone = value;
                       },
@@ -107,6 +109,19 @@ class _State extends State<LoginPage> {
                 ),
               ),
               Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: CheckboxListTile(
+                    value: _isChecked,
+                    title: Text('记住账号',style: const TextStyle(color: Colors.black),),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    selected: _isChecked,
+                    onChanged: (isCheck) {
+                      setState(() {
+                        _isChecked = isCheck;
+                      });
+                    }),
+              ),
+              Padding(
                 padding: const EdgeInsets.fromLTRB(15.0, 30.0, 15.0, 15.0),
                 child: RaisedButton(
                     color: Colors.blue,
@@ -135,7 +150,8 @@ class _State extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      onPressed: ()=>RouteUtil.pushByNamed(context,RouteConfig.registerName))),
+                      onPressed: () => RouteUtil.pushByNamed(
+                          context, RouteConfig.registerName))),
               Expanded(
                   child: Padding(
                 padding: const EdgeInsets.only(bottom: 10.0),
@@ -154,7 +170,6 @@ class _State extends State<LoginPage> {
                               style: const TextStyle(
                                 color: Colors.blue,
                                 fontSize: 18.0,
-
                               ))
                         ]),
                   ),
@@ -166,7 +181,7 @@ class _State extends State<LoginPage> {
   }
 
   void _login() {
-    if (StringUtil.isEmpty(_phone)|| StringUtil.isEmpty(_pwd)) {
+    if (StringUtil.isEmpty(_phone) || StringUtil.isEmpty(_pwd)) {
       ToastUtil.showShortToast('请输入手机号或密码');
       return;
     }

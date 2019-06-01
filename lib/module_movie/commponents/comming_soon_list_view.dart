@@ -42,7 +42,7 @@ class CommingSoonList extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (context) => MovieDetailsPage(
-                        id: itemData.id,
+                       data: itemData,
                       )));
         },
         child: Row(

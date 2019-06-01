@@ -46,7 +46,7 @@ class MoreHotMoviesList extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: () {
-          RouteUtil.pushByWidget(context, MovieDetailsPage(id: data.id,));
+          RouteUtil.pushByWidget(context, MovieDetailsPage(data: data,));
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

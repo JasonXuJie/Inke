@@ -39,11 +39,15 @@ dependencies:
   flutter_webview_plugin: ^0.3.3
   #webview_flutter: ^0.3.5+3
   #android photoView
-  photo_view: ^0.2.2
+  photo_view: ^0.3.3
   #Banner轮播控件
   flutter_swiper: ^1.1.6
   #解析html,html标记呈现为Flutter小部件
   flutter_html: ^0.9.6
+  #星形评分控件
+  smooth_star_rating: 1.0.3
+  #点赞效果
+  like_button: ^0.1.3
 
   #Function
   #网络请求
@@ -55,9 +59,11 @@ dependencies:
   #事件总线
   event_bus: ^1.1.0
   #监听网络状态
-  connectivity: ^0.4.2+1
+  connectivity: ^0.4.3+1
   #动态权限请求
   #permission_handler: ^2.0.0
+  #获取设备信息
+  device_info: ^0.4.0+1
 
   #redux
   flutter_redux: ^0.5.3

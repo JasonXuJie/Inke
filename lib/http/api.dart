@@ -1,21 +1,30 @@
+
+
 class ApiService {
   ///豆瓣Api
   static const doubanBaseUrl = 'https://douban.uieee.com/v2/';
 
-  //获取城市列表
-  static const getCityList = 'loc/list';
-
-  //获取电影列表
-  static const getMovies = 'movie/in_theaters';
-
-  //获取电影详情
+  ///获取电影详情
   static const getMovieDetails = 'movie/subject/';
 
-  //获取即将上线的电影
+  ///获取城市列表
+  static const getCityList = 'loc/list';
+
+  ///获取电影列表
+  static const getMovies = 'movie/in_theaters';
+
+  ///获取即将上线的电影
   static const getCommingSoonMovie = 'movie/coming_soon';
 
-  //获取前250的电影
+  ///获取前250的电影
   static const getTop250 = 'movie/top250';
+
+  ///电影详情信息
+  static String movieDetailsUrl(String id)=>ApiService.getMovieDetails+'$id';
+  ///电影详情剧照
+  static String moviePhotosUrl(String id,int count)=> ApiService.getMovieDetails+'$id/photos?count=$count';
+  ///获取电影评论圈
+  static String movieCommentsUrl(String id,int start,int count)=> ApiService.getMovieDetails + '$id/comments?start=$start&count=$count';
 
   ///豆瓣同城
   ///@param loc 城市id
@@ -23,9 +32,7 @@ class ApiService {
   ///@param 活动类型   all,music, film, drama, commonweal, salon, exhibition, party, sports, travel, others
   ///
   static const GET_EVENTS = 'event/list';
-  static const getMusics = 'music/search';
-  static const getMusic =
-      'https://api.douban.com/v2/music/search?q=周杰伦&start=0&count=20';
+
 
   ///聚合数据Api
   static const juheBaseUrl = 'http://v.juhe.cn';

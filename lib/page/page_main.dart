@@ -179,7 +179,7 @@ class _State extends State<MainPage>{
         await FlutterStatusbarManager.setStyle(StatusBarStyle.DARK_CONTENT);
         break;
       default:
-        await FlutterStatusbarManager.setColor(Color(AppColors.C_0099FD));
+        await FlutterStatusbarManager.setColor(AppColors.color_0099fd);
         await FlutterStatusbarManager.setFullscreen(false);
         await FlutterStatusbarManager.setTranslucent(false);
         await FlutterStatusbarManager.setStyle(StatusBarStyle.LIGHT_CONTENT);

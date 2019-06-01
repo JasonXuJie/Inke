@@ -37,7 +37,7 @@ class BottomPhotoView extends StatelessWidget {
         ),
         Divider(
           height: 1.0,
-          color: Color(AppColors.windowBackground),
+          color: AppColors.windowBackground,
         ),
         InkWell(
           child: Padding(
@@ -60,7 +60,7 @@ class BottomPhotoView extends StatelessWidget {
         ),
         Divider(
           height: 1.0,
-          color: Color(AppColors.windowBackground),
+          color: AppColors.windowBackground,
         ),
         InkWell(
           child: Padding(

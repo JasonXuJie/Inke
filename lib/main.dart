@@ -28,8 +28,9 @@ import 'package:Inke/module_login/page_register.dart';
 import 'package:Inke/test/test.dart';
 import 'package:Inke/test/hero_one.dart';
 
+import 'package:Inke/module_movie/page_photo_details.dart';
 
-void main()async{
+void main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await SharedUtil.getInstance().init();
@@ -40,11 +41,20 @@ class InkeApp extends StatelessWidget {
   final store = Store<GlobalState>(appReducer,
       initialState: GlobalState(
         user: User.empty(),
-        city: City(name: SharedUtil.getInstance().get(SharedKey.cityName, '上海'),cityId: SharedUtil.getInstance().get(SharedKey.cityId, '108296')),
+        city: City(
+            name: SharedUtil.getInstance().get(SharedKey.cityName, '上海'),
+            cityId: SharedUtil.getInstance().get(SharedKey.cityId, '108296')),
         isLogin: SharedUtil.getInstance().get(SharedKey.isLogin, false),
         isFirst: SharedUtil.getInstance().get(SharedKey.isFirst, true),
         dateType: 'future',
       ));
+
+  //自定义路由信息
+  final Map<String, Function> routes = {
+    RouteConfig.stillName: (context, {arguments}) => PhotoPage(
+          arguments: arguments,
+        )
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +65,8 @@ class InkeApp extends StatelessWidget {
         title: 'Inke',
         theme: ThemeData(
           primarySwatch: Colors.blue,
-          primaryColor: Color(AppColors.colorPrimary),
-          backgroundColor: Color(AppColors.windowBackground),
+          primaryColor: AppColors.colorPrimary,
+          scaffoldBackgroundColor: AppColors.windowBackground, //默认全局背景色
         ),
         home: SplashPage(),
         routes: <String, WidgetBuilder>{
@@ -71,7 +81,17 @@ class InkeApp extends StatelessWidget {
           RouteConfig.todayName: (context) => TodayInHistoryPage(),
           RouteConfig.moreHotMoviesName: (context) => MoreHotMoviesPage(),
           RouteConfig.dreamName: (context) => DreamPage(),
-          RouteConfig.registerName:(context)=>RegisterPage()
+          RouteConfig.registerName: (context) => RegisterPage()
+        },
+        onGenerateRoute: (RouteSettings settings) {
+          final String name = settings.name;
+          final Function pageContentBuilder = this.routes[name];
+          if (pageContentBuilder != null) {
+            final Route route = MaterialPageRoute(
+                builder: (context) =>
+                    pageContentBuilder(context, arguments: settings.arguments));
+            return route;
+          }
         },
         onUnknownRoute: (RouteSettings setting) {
           String name = setting.name;

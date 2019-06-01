@@ -52,7 +52,7 @@ class _State extends State<PickerView> {
             Navigator.of(context).pop();
           }, child: Text('确定',style: const TextStyle(
             fontSize: 14.0,
-            color: Color(AppColors.C_0099FD),
+            color: AppColors.color_0099fd,
           ),),),
         ],
        ),

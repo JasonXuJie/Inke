@@ -18,6 +18,7 @@ import 'package:redux/redux.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
 
 import 'package:Inke/http/http_manager.dart';
+import 'package:Inke/util/toast_util.dart';
 
 class MovieFragment extends StatefulWidget {
   @override
@@ -26,6 +27,9 @@ class MovieFragment extends StatefulWidget {
 
 class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin{
 
+  AsyncMemoizer<List<MovieListEntity>> _memoizer = AsyncMemoizer();
+  var _cityName;
+  int firstTime = 0;
 
   @override
   void initState(){
@@ -36,8 +40,7 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin{
   @override
   bool get wantKeepAlive => true;
 
-  AsyncMemoizer<List<MovieListEntity>> _memoizer = AsyncMemoizer();
-  var _cityName;
+
 
   Store<GlobalState> _getStore() {
     if (context == null) {
@@ -82,37 +85,50 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin{
   Widget build(BuildContext context) {
     super.build(context);
     print('Movie build');
-    return Scaffold(
-      body: StoreConnector<GlobalState, City>(
-        converter: (store) => store.state.city,
-        builder: (context, city) {
-          return FutureBuilder<List<MovieListEntity>>(
-            future: _request(city.name),
-            builder: (BuildContext context,
-                AsyncSnapshot<List<MovieListEntity>> snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                case ConnectionState.waiting:
-                  return LoadingView(
-                    text: '加载中...',
-                  );
-                  break;
-                default:
-                  if (snapshot.hasError) {
-                    return Text('访问异常');
-                  } else {
-                    return _buildBody(
-                        snapshot.data[0].subjects, snapshot.data[1].subjects);
+    return WillPopScope(
+        child: Scaffold(
+          body: StoreConnector<GlobalState, City>(
+            converter: (store) => store.state.city,
+            builder: (context, city) {
+              return FutureBuilder<List<MovieListEntity>>(
+                future: _request(city.name),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<MovieListEntity>> snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
+                      return LoadingView(
+                        text: '加载中...',
+                      );
+                      break;
+                    default:
+                      if (snapshot.hasError) {
+                        return Text('访问异常');
+                      } else {
+                        return _buildBody(
+                            snapshot.data[0].subjects, snapshot.data[1].subjects);
+                      }
                   }
-              }
+                },
+              );
             },
-          );
-        },
-      ),
+          ),
+        ),
+        onWillPop: (){
+          ///双击退出
+          int secondTime = DateTime.now().millisecondsSinceEpoch;
+          if(secondTime - firstTime >2000){
+            ToastUtil.showShortToast('再按一次退出程序');
+            firstTime = secondTime;
+            return Future.value(false);
+          }else {
+            return Future.value(true);
+          }
+        }
     );
   }
 
-  _buildBody(hotMovies, moreMovies) {
+  _buildBody(List<MovieListSubject> hotMovies, List<MovieListSubject> moreMovies) {
     return RefreshIndicator(
       onRefresh: _onRefresh,
       child: CustomScrollView(
@@ -121,7 +137,7 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin{
               child: Stack(
             children: <Widget>[
               BannerView(
-                dataList: hotMovies,
+                dataList: hotMovies.take(4).toList(),
               ),
               _buildButton(
                   Alignment.topLeft,

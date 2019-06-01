@@ -74,7 +74,7 @@ class LogoutDialog extends Dialog {
                     child: Text(
                       '确定',
                       style: const TextStyle(
-                          color: Color(AppColors.colorPrimary),
+                          color: AppColors.colorPrimary,
                           fontSize: 16.0),
                     ),
                   ),

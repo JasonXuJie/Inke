@@ -65,7 +65,7 @@ class ChooseCityDialog extends Dialog {
                       },
                     ),
                     RaisedButton(
-                      color: Color(AppColors.C_0099FD),
+                      color: AppColors.color_0099fd,
                       highlightColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),

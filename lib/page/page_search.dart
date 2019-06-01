@@ -1,24 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:Inke/config/app_config.dart';
+import 'package:Inke/util/screen_util.dart';
 
 class SearchPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _SearchState();
+  State<StatefulWidget> createState() => _State();
 }
 
-class _SearchState extends State<SearchPage> {
+class _State extends State<SearchPage> {
   TextEditingController _editController = TextEditingController();
-  var _searchValue = '';
-  List<String> _searchTips = [
-    '周杰伦',
-    'supreme',
-    'kenzo',
-    '抖音',
-    '小米',
-    'ios',
-    '手机',
-    'ios',
-    '安卓'
-  ];
+
+  List<String> _data = ['搞笑', '爱情', '动作', '科技', '记录', '动漫', '犯罪', '战争'];
+
 
   @override
   void initState() {
@@ -26,91 +19,102 @@ class _SearchState extends State<SearchPage> {
   }
 
   @override
+  void dispose() {
+    _editController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Container(
-            padding: const EdgeInsets.only(left: 10.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(30.0)),
-            ),
+            height: 40.0,
             child: TextField(
+              autofocus: true,
               controller: _editController,
               decoration: InputDecoration(
-                hintText: '请输入搜索内容',
-                hintStyle: const TextStyle(color: Colors.grey),
+                hintText: '演员/电影名/类型/关键字',
+                hintStyle: TextStyle(fontSize: 14.0, color: AppColors.color_9d),
+                fillColor: AppColors.color_ff,
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 20.0),
               ),
               maxLines: 1,
-              keyboardType: TextInputType.text,
-              onChanged: (value) {
-                _searchValue = value;
-              },
+              cursorColor: Theme.of(context).primaryColor,
+              style: TextStyle(fontSize: 14.0, color: AppColors.color_66),
             ),
           ),
           centerTitle: true,
           actions: <Widget>[
-            InputChip(
-              onPressed: () {},
-              label: Text(
-                '搜索',
-                style: const TextStyle(color: Colors.black),
-              ),
-            )
+            IconButton(
+                icon: Icon(
+                  Icons.search,
+                  size: 28,
+                ),
+                onPressed: () {})
           ],
         ),
-        body: Container(
-          padding: const EdgeInsets.only(top: 30.0, left: 15.0, right: 15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                '搜索提示',
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 14.0,left: 10.0),
+              child: Text(
+                '推荐搜索',
                 style: const TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-              Wrap(
-                children: _buildSearchTips(),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: Text(
-                  '历史搜索',
-                  style: const TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
                     color: Colors.black,
-                  ),
-                ),
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold),
               ),
-            ],
-          ),
+            ),
+            _buildRecommend(context),
+            Padding(
+              padding: const EdgeInsets.only(top: 14.0,left: 10.0),
+              child: Text(
+                '历史搜索',
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
         ));
   }
 
-  List<Widget> _buildSearchTips() {
-    List<Widget> tipsChip = [];
-    _searchTips.forEach((tips) {
-      var chip = Padding(
-          padding: const EdgeInsets.fromLTRB(4.0, 2.0, 4.0, 2.0),
-          child: InputChip(
-            label: Text(tips),
-            backgroundColor: Colors.white,
-            shape: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.black,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(15.0)),
+  ///推荐搜索
+  Widget _buildRecommend(context) {
+    final screenWidth = ScreenUtil.getDeviceWidth(context) / 4;
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0),
+      child: Wrap(
+        children: _data.map((item) {
+          return Container(
+            width: screenWidth,
+            height: 40.0,
+            padding: const EdgeInsets.all(10),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: FlatButton(
+                  padding: const EdgeInsets.all(0.0),
+                  onPressed: () {
+                    FocusScope.of(context).requestFocus(FocusNode()); //取消键盘
+                    _editController.value = TextEditingValue(text: item);
+                  },
+                  color: AppColors.color_ff,
+                  child: Text(
+                    item,
+                    style: TextStyle(fontSize: 14.0, color: AppColors.color_9d),
+                  )),
             ),
-            onPressed: () {
-              print(tips);
-            },
-          ));
-      tipsChip.add(chip);
-    });
-    return tipsChip;
+          );
+        }).toList(),
+      ),
+    );
   }
 }

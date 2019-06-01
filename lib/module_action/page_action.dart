@@ -83,15 +83,15 @@ class _State extends State<ActionFragment> with SingleTickerProviderStateMixin,A
         backgroundColor: Colors.white,
         title: Text(
           '同城活动',
-          style: const TextStyle(color: Color(AppColors.C_FF9900)),
+          style: const TextStyle(color: AppColors.color_ff9900),
         ),
         centerTitle: true,
         automaticallyImplyLeading: false,
         bottom: TabBar(
             isScrollable: true,
             controller: _controller,
-            indicatorColor: Color(AppColors.C_FF9900),
-            labelColor: Color(AppColors.C_FF9900),
+            indicatorColor: AppColors.color_ff9900,
+            labelColor: AppColors.color_ff9900,
             labelStyle:
                 const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             unselectedLabelColor: Colors.black38,
@@ -112,7 +112,7 @@ class _State extends State<ActionFragment> with SingleTickerProviderStateMixin,A
                   labelStyle: const TextStyle(color: Colors.white),
                   selected: mValue == index,
                   backgroundColor: Colors.black38,
-                  selectedColor: Color(AppColors.C_FF9900),
+                  selectedColor: AppColors.color_ff9900,
                   onSelected: (bool selected) {
                     setState(() {
                       mValue = selected ? index : null;
@@ -151,7 +151,7 @@ class _State extends State<ActionFragment> with SingleTickerProviderStateMixin,A
         onPressed: () {
           EventUtil.getInstance().post(ScrollTopEvent());
         },
-        backgroundColor: Color(AppColors.C_FF9900),
+        backgroundColor: AppColors.color_ff9900,
         isExtended: true,
         child: Image.asset(
           AppImgPath.mainPath + 'app_icon.png',
@@ -182,7 +182,7 @@ class _State extends State<ActionFragment> with SingleTickerProviderStateMixin,A
     return PopupMenuButton<int>(
       icon: Icon(
         Icons.more_vert,
-        color: Color(AppColors.C_FF9900),
+        color: AppColors.color_ff9900,
       ),
       onSelected: (int value) {
         switch (value) {
