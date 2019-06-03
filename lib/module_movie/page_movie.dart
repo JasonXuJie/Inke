@@ -34,7 +34,6 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin{
   @override
   void initState(){
     super.initState();
-    print('Movie State');
   }
 
   @override
@@ -84,7 +83,6 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin{
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    print('Movie build');
     return WillPopScope(
         child: Scaffold(
           body: StoreConnector<GlobalState, City>(

@@ -2,6 +2,11 @@ PODS:
   - barcode_scan (0.0.1):
     - Flutter
     - MTBBarcodeScanner
+  - connectivity (0.0.1):
+    - Flutter
+    - Reachability
+  - device_info (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - flutter_statusbar_manager (0.0.1):
     - Flutter
@@ -9,34 +14,50 @@ PODS:
     - Flutter
   - fluttertoast (0.0.2):
     - Flutter
+  - FMDB (2.7.2):
+    - FMDB/standard (= 2.7.2)
+  - FMDB/standard (2.7.2)
   - image_picker (0.0.1):
     - Flutter
   - MTBBarcodeScanner (5.0.6)
   - path_provider (0.0.1):
     - Flutter
+  - Reachability (3.2)
+  - share (0.5.2):
+    - Flutter
   - shared_preferences (0.0.1):
     - Flutter
-  - webview_flutter (0.0.1):
+  - sqflite (0.0.1):
     - Flutter
+    - FMDB (~> 2.7.2)
 
 DEPENDENCIES:
   - barcode_scan (from `.symlinks/plugins/barcode_scan/ios`)
+  - connectivity (from `.symlinks/plugins/connectivity/ios`)
+  - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
   - flutter_statusbar_manager (from `.symlinks/plugins/flutter_statusbar_manager/ios`)
   - flutter_webview_plugin (from `.symlinks/plugins/flutter_webview_plugin/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - share (from `.symlinks/plugins/share/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
-  - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - FMDB
     - MTBBarcodeScanner
+    - Reachability
 
 EXTERNAL SOURCES:
   barcode_scan:
     :path: ".symlinks/plugins/barcode_scan/ios"
+  connectivity:
+    :path: ".symlinks/plugins/connectivity/ios"
+  device_info:
+    :path: ".symlinks/plugins/device_info/ios"
   Flutter:
     :path: ".symlinks/flutter/ios"
   flutter_statusbar_manager:
@@ -49,22 +70,29 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
+  share:
+    :path: ".symlinks/plugins/share/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
-  webview_flutter:
-    :path: ".symlinks/plugins/webview_flutter/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
   barcode_scan: 8288e70cb430072003bce2c794a1431e7adbcb4d
+  connectivity: d5992e3758d68b1c4b12d6e012fe0813f1aa1645
+  device_info: 76ce0b32e13034d1883be4a382433648f9dcee63
   Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
   flutter_statusbar_manager: eb7538441baef19aa0899dc64565bc5befb1e7e1
-  flutter_webview_plugin: 0b491d31c34ab5c86a71c9f1a57ac000dd1b75e9
+  flutter_webview_plugin: 116575b48572029304775b768e9f15ebfc316274
   fluttertoast: 0a20dcbbb8ecfd1a61b6285651ff2d5989d033fb
+  FMDB: 6198a90e7b6900cfc046e6bc0ef6ebb7be9236aa
   image_picker: ee00aab0487cedc80a304085219503cc6d0f2e22
   MTBBarcodeScanner: bb0bb62e18b57f8a571a482248adc20722b70a91
   path_provider: 09407919825bfe3c2deae39453b7a5b44f467873
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  share: 222b5dcc8031238af9d7de91149df65bad1aef75
   shared_preferences: 5a1d487c427ee18fcd3ea1f2a131569481834b53
-  webview_flutter: 9bd234c07e99632356cba112df56fd1d47d6b6e3
+  sqflite: d1612813fa7db7c667bed9f1d1b508deffc56999
 
 PODFILE CHECKSUM: 1e5af4103afd21ca5ead147d7b81d06f494f51a2
 

@@ -64,7 +64,6 @@ dependencies:
   #permission_handler: ^2.0.0
   #获取设备信息
   device_info: ^0.4.0+1
-
   #redux
   flutter_redux: ^0.5.3
   redux: ^3.0.0
