@@ -114,26 +114,28 @@ class _State extends State<ActionFragment> with SingleTickerProviderStateMixin,A
                   backgroundColor: Colors.black38,
                   selectedColor: AppColors.color_ff9900,
                   onSelected: (bool selected) {
-                    setState(() {
-                      mValue = selected ? index : null;
-                      switch (index) {
-                        case 0:
-                          StoreProvider.of<GlobalState>(context).dispatch(UpdateActionDateTypeAction('future'));
-                          break;
-                        case 1:
-                          StoreProvider.of<GlobalState>(context).dispatch(UpdateActionDateTypeAction('week'));
-                          break;
-                        case 2:
-                          StoreProvider.of<GlobalState>(context).dispatch(UpdateActionDateTypeAction('weekend'));
-                          break;
-                        case 3:
-                          StoreProvider.of<GlobalState>(context).dispatch(UpdateActionDateTypeAction('today'));
-                          break;
-                        case 4:
-                          StoreProvider.of<GlobalState>(context).dispatch(UpdateActionDateTypeAction('tomorrow'));
-                          break;
-                      }
-                    });
+                   if(selected){
+                     setState(() {
+                       mValue = selected ? index : null;
+                       switch (index) {
+                         case 0:
+                           StoreProvider.of<GlobalState>(context).dispatch(UpdateActionDateTypeAction('future'));
+                           break;
+                         case 1:
+                           StoreProvider.of<GlobalState>(context).dispatch(UpdateActionDateTypeAction('week'));
+                           break;
+                         case 2:
+                           StoreProvider.of<GlobalState>(context).dispatch(UpdateActionDateTypeAction('weekend'));
+                           break;
+                         case 3:
+                           StoreProvider.of<GlobalState>(context).dispatch(UpdateActionDateTypeAction('today'));
+                           break;
+                         case 4:
+                           StoreProvider.of<GlobalState>(context).dispatch(UpdateActionDateTypeAction('tomorrow'));
+                           break;
+                       }
+                     });
+                   }
                   },
                 );
               }),

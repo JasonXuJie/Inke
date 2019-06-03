@@ -14,5 +14,6 @@ class RouteConfig{
   static const String moreHotMoviesName =  '/MoreHotMovies';
   static const String registerName = '/Register';
   static const String stillName = '/Still';
+  static const String themeName = '/Theme';
 
 }

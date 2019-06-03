@@ -64,6 +64,21 @@ class _State extends State<SettingPage> {
                   _showDialog(context);
                 },
               ),
+              ListTile(
+                title: Text('更换主题'),
+                leading: Icon(
+                  Icons.all_out,
+                  size: 20.0,
+                ),
+                trailing: Image.asset(
+                  AppImgPath.mainPath + 'img_right_arrow.png',
+                  width: 10.0,
+                  height: 10.0,
+                ),
+                onTap: () {
+                  RouteUtil.pushByNamed(context, RouteConfig.themeName);
+                },
+              ),
             ],
           )
         ));

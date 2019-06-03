@@ -14,6 +14,7 @@ import 'package:Inke/config/route_config.dart';
 import 'package:Inke/components/base_widget.dart';
 
 import 'package:like_button/like_button.dart';
+import 'dart:ui';
 
 class MovieDetailsPage extends StatefulWidget {
   final MovieListSubject data;
@@ -30,11 +31,16 @@ class _State extends State<MovieDetailsPage> {
   bool _isOpenIntro = false;
   StillResultEntityEntity _stillData;
   CommentResultEntity _commentData;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _requestData();
+    _scrollController.addListener(() {
+      double _curHeight = _scrollController.position.pixels;
+      double _maxHeight = _scrollController.position.maxScrollExtent;
+    });
   }
 
   _requestData() async {
@@ -60,6 +66,7 @@ class _State extends State<MovieDetailsPage> {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: CustomScrollView(
+        controller: _scrollController,
         slivers: <Widget>[
           _buildAppBar(),
           _buildBody(),
@@ -78,28 +85,50 @@ class _State extends State<MovieDetailsPage> {
       flexibleSpace: FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
         background: Container(
-          margin: EdgeInsets.only(
-              bottom: 28, top: ScreenUtil.getSafeTopPadding(context) + 56),
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: GestureDetector(
-                child: Hero(
-                  tag: 'photo${widget.data.id}',
-                  child: Image.network(
-                    widget.data.images.medium,
+            margin: EdgeInsets.only(
+                top: ScreenUtil.getSafeTopPadding(context) + 56),
+            child: Stack(
+              ///高斯模糊效果
+              children: <Widget>[
+                Image.network(
+                  widget.data.images.medium,
+                  width: ScreenUtil.getDeviceWidth(context),
+                  height: 300,
+                  fit: BoxFit.fill,
+                ),
+                BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                  child: Container(
+                    color: Colors.white.withOpacity(0.1),
+                    width: ScreenUtil.getDeviceWidth(context),
+                    height: 300,
                   ),
                 ),
-                onTap: () {
-                  if (_detailData != null) {
-                    RouteUtil.pushByWidget(
-                        context,
-                        Web(
-                            title: widget.data.title,
-                            url: _detailData.mobileUrl));
-                  }
-                },
-              )),
-        ),
+                Align(
+                  alignment: Alignment.center,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: GestureDetector(
+                        child: Hero(
+                          tag: 'photo${widget.data.id}',
+                          child: Image.network(
+                            widget.data.images.medium,
+                            height: 200.0,
+                          ),
+                        ),
+                        onTap: () {
+                          if (_detailData != null) {
+                            RouteUtil.pushByWidget(
+                                context,
+                                Web(
+                                    title: widget.data.title,
+                                    url: _detailData.mobileUrl));
+                          }
+                        },
+                      )),
+                )
+              ],
+            )),
       ),
     );
   }
@@ -123,7 +152,7 @@ class _State extends State<MovieDetailsPage> {
               color: AppColors.color_e6,
             ),
             Padding(
-              padding: const EdgeInsets.only(top:20.0,bottom: 10.0),
+              padding: const EdgeInsets.only(top: 20.0, bottom: 10.0),
               child: Text(
                 '评论区',
                 style: const TextStyle(
@@ -550,7 +579,7 @@ class _State extends State<MovieDetailsPage> {
                               ],
                             ),
                             Expanded(
-                              child:LikeButton(
+                              child: LikeButton(
                                 size: 25.0,
                                 likeCount: itemData.usefulCount,
                                 mainAxisAlignment: MainAxisAlignment.end,
