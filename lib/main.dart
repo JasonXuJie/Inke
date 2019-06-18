@@ -1,3 +1,4 @@
+import 'package:Inke/provider/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:Inke/config/app_config.dart';
@@ -11,45 +12,40 @@ import 'package:Inke/module_movie/page_more_movies.dart';
 import 'package:Inke/page/page_search.dart';
 import 'package:Inke/module_my/page_today_in_history.dart';
 import 'package:Inke/module_my/page_dream.dart';
-import 'package:redux/redux.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:Inke/redux/global_state.dart';
-import 'package:Inke/bean/user.dart';
-import 'package:Inke/bean/city.dart';
-import 'package:Inke/config/shared_key.dart';
 import 'package:Inke/page/page_splash.dart';
 import 'package:Inke/page/page_guide.dart';
 import 'package:Inke/page/page_not_found.dart';
 import 'package:Inke/page/page_main.dart';
 import 'package:Inke/page/page_city.dart';
-
 import 'package:Inke/module_login/page_register.dart';
-
-import 'package:Inke/test/test.dart';
-import 'package:Inke/test/hero_one.dart';
-import 'package:Inke/test/blur.dart';
-
 import 'package:Inke/module_movie/page_photo_details.dart';
 import 'package:Inke/page/page_theme.dart';
+import 'package:provider/provider.dart';
+import 'package:Inke/provider/city_provider.dart';
+import 'package:Inke/provider/first_provider.dart';
+import 'package:Inke/provider/date_type_provider.dart';
 
 void main() async {
+  Provider.debugCheckInvalidValueType = null;
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await SharedUtil.getInstance().init();
   runApp(InkeApp());
 }
 
+
 class InkeApp extends StatelessWidget {
-  final store = Store<GlobalState>(appReducer,
-      initialState: GlobalState(
-        user: User.empty(),
-        city: City(
-            name: SharedUtil.getInstance().get(SharedKey.cityName, '上海'),
-            cityId: SharedUtil.getInstance().get(SharedKey.cityId, '108296')),
-        isLogin: SharedUtil.getInstance().get(SharedKey.isLogin, false),
-        isFirst: SharedUtil.getInstance().get(SharedKey.isFirst, true),
-        dateType: 'future',
-      ));
+
+//  final store = Store<GlobalState>(appReducer,
+//      initialState: GlobalState(
+//        user: User.empty(),
+//        city: City(
+//            name: SharedUtil.getInstance().get(SharedKey.cityName, '上海'),
+//            cityId: SharedUtil.getInstance().get(SharedKey.cityId, '108296')),
+//        isLogin: SharedUtil.getInstance().get(SharedKey.isLogin, false),
+//        isFirst: SharedUtil.getInstance().get(SharedKey.isFirst, true),
+//        dateType: 'future',
+//      ));
 
   //自定义路由信息
   final Map<String, Function> routes = {
@@ -58,10 +54,20 @@ class InkeApp extends StatelessWidget {
         )
   };
 
+
   @override
   Widget build(BuildContext context) {
-    return StoreProvider(
-      store: store,
+    var firstProvider = FirstProvider();
+    var cityProvider = CityProvider();
+    var loginProvider = LoginProvider();
+    var dateTypeProvider = DateTypeProvider();
+    return MultiProvider(
+      providers: [
+        Provider<CityProvider>.value(value: cityProvider),
+        Provider<FirstProvider>.value(value: firstProvider),
+        Provider<LoginProvider>.value(value: loginProvider),
+        Provider<DateTypeProvider>.value(value: dateTypeProvider),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Inke',

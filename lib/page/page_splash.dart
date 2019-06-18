@@ -7,6 +7,8 @@ import 'package:Inke/util/shared_util.dart';
 import 'package:Inke/config/shared_key.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:Inke/components/widget_icon.dart';
+import 'package:provider/provider.dart';
+import 'package:Inke/provider/first_provider.dart';
 
 class SplashPage extends StatelessWidget {
 
@@ -21,14 +23,13 @@ class SplashPage extends StatelessWidget {
           children: [
             IconWidget(
               callBack: () {
-                bool isFirst =
-                    SharedUtil.getInstance().get(SharedKey.isFirst, true);
+                bool isFirst = Provider.of<FirstProvider>(context).isFirst;
+                print(isFirst);
                 if (isFirst) {
                   RouteUtil.popAndPushByNamed(context, RouteConfig.guideName);
                 } else {
                   RouteUtil.popAndPushByNamed(context, RouteConfig.mainName);
                 }
-
               },
             ),
             Padding(

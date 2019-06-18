@@ -58,7 +58,9 @@ class _State extends State<MovieDetailsPage> {
     var commentResponse = await HttpManager.getInstance()
         .get(ApiService.movieCommentsUrl(widget.data.id, 0, 8));
     _commentData = CommentResultEntity.fromJson(commentResponse);
-    setState(() {});
+    if(mounted){
+      setState(() {});
+    }
   }
 
   @override
@@ -118,6 +120,7 @@ class _State extends State<MovieDetailsPage> {
                         ),
                         onTap: () {
                           if (_detailData != null) {
+                            print(_detailData.mobileUrl);
                             RouteUtil.pushByWidget(
                                 context,
                                 Web(
@@ -424,6 +427,7 @@ class _State extends State<MovieDetailsPage> {
                 ],
               ),
               onTap: () {
+                //print(data[position].alt);
                 RouteUtil.pushByWidget(context,
                     Web(title: data[position].name, url: data[position].alt));
               },

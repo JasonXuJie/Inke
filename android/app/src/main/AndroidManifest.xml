@@ -21,6 +21,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="my_flutter_test"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher"
         android:theme="@style/LaunchTheme">
         <activity

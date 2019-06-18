@@ -8,12 +8,12 @@ import 'package:Inke/util/route_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:Inke/config/app_config.dart';
 import 'package:Inke/event/event_scroll_top.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:Inke/redux/global_state.dart';
-import 'package:Inke/bean/city.dart';
 import 'package:async/async.dart';
 import 'package:Inke/bean/action_result_entity.dart';
 import 'package:Inke/http/http_manager.dart';
+import 'package:provider/provider.dart';
+import 'package:Inke/provider/city_provider.dart';
+import 'package:Inke/provider/date_type_provider.dart';
 
 
 class EventList extends StatefulWidget {
@@ -93,40 +93,68 @@ class _State extends State<EventList> with AutomaticKeepAliveClientMixin{
 
 
   _buildBody(){
-    return StoreConnector<GlobalState,City>(
-      converter: (store)=>store.state.city,
-      builder: (context,city){
-        return StoreConnector<GlobalState,String>(
-          converter: (store)=>store.state.dateType,
-          builder: (context,dateType){
-            return FutureBuilder<ActionResultEntity>(
-              future: _request(city.cityId, dateType),
-              builder: (BuildContext context,AsyncSnapshot<ActionResultEntity> snapshot){
-                switch(snapshot.connectionState){
-                  case ConnectionState.none:
-                  case ConnectionState.waiting:
-                    return LoadingView();
-                    break;
-                  default:
-                    if(snapshot.hasError){
-                      return Text('访问异常');
-                    }else{
-                      return RefreshIndicator(
-                        onRefresh: _onRefresh,
-                        child: ListView.builder(
-                            itemCount: snapshot.data.events.length,
-                            controller: _controller,
-                            itemBuilder: (context,position)=>_buildItems(snapshot.data.events[position])
-                        ),
-                      );
-                    }
-                }
-              },
-            );
-          },
-        );
-      },
+    return Consumer2<CityProvider,DateTypeProvider>(
+       builder: (context,CityProvider provider,DateTypeProvider dateType,_){
+         return FutureBuilder<ActionResultEntity>(
+           future: _request(provider.id, dateType.dateType),
+           builder: (BuildContext context,AsyncSnapshot<ActionResultEntity> snapshot){
+             switch(snapshot.connectionState){
+               case ConnectionState.none:
+               case ConnectionState.waiting:
+                 return LoadingView();
+                 break;
+               default:
+                 if(snapshot.hasError){
+                   return Text('访问异常');
+                 }else{
+                   return RefreshIndicator(
+                     onRefresh: _onRefresh,
+                     child: ListView.builder(
+                         itemCount: snapshot.data.events.length,
+                         controller: _controller,
+                         itemBuilder: (context,position)=>_buildItems(snapshot.data.events[position])
+                     ),
+                   );
+                 }
+             }
+           },
+         );
+       },
     );
+//    return StoreConnector<GlobalState,City>(
+//      converter: (store)=>store.state.city,
+//      builder: (context,city){
+//        return StoreConnector<GlobalState,String>(
+//          converter: (store)=>store.state.dateType,
+//          builder: (context,dateType){
+//            return FutureBuilder<ActionResultEntity>(
+//              future: _request(city.cityId, dateType),
+//              builder: (BuildContext context,AsyncSnapshot<ActionResultEntity> snapshot){
+//                switch(snapshot.connectionState){
+//                  case ConnectionState.none:
+//                  case ConnectionState.waiting:
+//                    return LoadingView();
+//                    break;
+//                  default:
+//                    if(snapshot.hasError){
+//                      return Text('访问异常');
+//                    }else{
+//                      return RefreshIndicator(
+//                        onRefresh: _onRefresh,
+//                        child: ListView.builder(
+//                            itemCount: snapshot.data.events.length,
+//                            controller: _controller,
+//                            itemBuilder: (context,position)=>_buildItems(snapshot.data.events[position])
+//                        ),
+//                      );
+//                    }
+//                }
+//              },
+//            );
+//          },
+//        );
+//      },
+//    );
   }
 
 

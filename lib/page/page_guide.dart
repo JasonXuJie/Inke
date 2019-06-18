@@ -1,9 +1,9 @@
+import 'package:Inke/provider/first_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/config/app_config.dart';
 import 'package:Inke/config/route_config.dart';
-import 'package:Inke/config/shared_key.dart';
-import 'package:Inke/util/shared_util.dart';
+import 'package:provider/provider.dart';
 
 class GuidePage extends StatefulWidget {
   @override
@@ -66,8 +66,8 @@ class _State extends State<GuidePage> with SingleTickerProviderStateMixin {
                     borderSide:
                     BorderSide(color: AppColors.colorPrimary),
                     onPressed: () {
-                      SharedUtil.getInstance()
-                          .put(SharedKey.isFirst, false);
+                      //SharedUtil.getInstance().put(SharedKey.isFirst, false);
+                      Provider.of<FirstProvider>(context).setFirst(false);
                       RouteUtil.popAndPushByNamed(
                           context, RouteConfig.mainName);
                     }),

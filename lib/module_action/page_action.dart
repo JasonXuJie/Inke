@@ -1,3 +1,4 @@
+import 'package:Inke/provider/city_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:Inke/module_action//action_list_view.dart';
 import 'package:Inke/config/app_config.dart';
@@ -6,17 +7,16 @@ import 'package:Inke/util/route_util.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:Inke/event/event_scroll_top.dart';
 import 'package:Inke/util/event_util.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:Inke/bean/city.dart';
-import 'package:Inke/redux/global_state.dart';
-import 'package:Inke/redux/action_date_type_reducer.dart';
+import 'package:provider/provider.dart';
+import 'package:Inke/provider/date_type_provider.dart';
 
 class ActionFragment extends StatefulWidget {
   @override
   _State createState() => _State();
 }
 
-class _State extends State<ActionFragment> with SingleTickerProviderStateMixin,AutomaticKeepAliveClientMixin {
+class _State extends State<ActionFragment>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   final Map<String, Tab> map = Map();
 
   TabController _controller;
@@ -26,15 +26,12 @@ class _State extends State<ActionFragment> with SingleTickerProviderStateMixin,A
   @override
   void initState() {
     super.initState();
-    print('Action iniState');
     _init();
     _controller = TabController(length: map.length, vsync: this);
   }
 
   @override
   bool get wantKeepAlive => true;
-
-
 
   @override
   void dispose() {
@@ -114,28 +111,28 @@ class _State extends State<ActionFragment> with SingleTickerProviderStateMixin,A
                   backgroundColor: Colors.black38,
                   selectedColor: AppColors.color_ff9900,
                   onSelected: (bool selected) {
-                   if(selected){
-                     setState(() {
-                       mValue = selected ? index : null;
-                       switch (index) {
-                         case 0:
-                           StoreProvider.of<GlobalState>(context).dispatch(UpdateActionDateTypeAction('future'));
-                           break;
-                         case 1:
-                           StoreProvider.of<GlobalState>(context).dispatch(UpdateActionDateTypeAction('week'));
-                           break;
-                         case 2:
-                           StoreProvider.of<GlobalState>(context).dispatch(UpdateActionDateTypeAction('weekend'));
-                           break;
-                         case 3:
-                           StoreProvider.of<GlobalState>(context).dispatch(UpdateActionDateTypeAction('today'));
-                           break;
-                         case 4:
-                           StoreProvider.of<GlobalState>(context).dispatch(UpdateActionDateTypeAction('tomorrow'));
-                           break;
-                       }
-                     });
-                   }
+                    if (selected) {
+                      setState(() {
+                        mValue = selected ? index : null;
+                        switch (index) {
+                          case 0:
+                            Provider.of<DateTypeProvider>(context).setType('future');
+                            break;
+                          case 1:
+                            Provider.of<DateTypeProvider>(context).setType('week');
+                            break;
+                          case 2:
+                            Provider.of<DateTypeProvider>(context).setType('weekend');
+                            break;
+                          case 3:
+                            Provider.of<DateTypeProvider>(context).setType('today');
+                            break;
+                          case 4:
+                            Provider.of<DateTypeProvider>(context).setType('tomorrow');
+                            break;
+                        }
+                      });
+                    }
                   },
                 );
               }),
@@ -175,7 +172,9 @@ class _State extends State<ActionFragment> with SingleTickerProviderStateMixin,A
   List<Widget> _buildTabViews() {
     List<Widget> list = [];
     map.keys.forEach((value) {
-      list.add(EventList(type: value,));
+      list.add(EventList(
+        type: value,
+      ));
     });
     return list;
   }
@@ -205,13 +204,12 @@ class _State extends State<ActionFragment> with SingleTickerProviderStateMixin,A
             ),
             PopupMenuItem<int>(
               value: 1,
-              child: StoreConnector<GlobalState, City>(
-                converter: (store) => store.state.city,
-                builder: (context, city) {
+              child: Consumer<CityProvider>(
+                builder: (context, CityProvider provider, _) {
                   return Row(
                     children: <Widget>[
                       Icon(Icons.location_city),
-                      Text(city.name)
+                      Text(provider.name)
                     ],
                   );
                 },
@@ -220,8 +218,4 @@ class _State extends State<ActionFragment> with SingleTickerProviderStateMixin,A
           ],
     );
   }
-
-
-
-
 }

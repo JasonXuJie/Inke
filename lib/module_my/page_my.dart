@@ -11,11 +11,9 @@ import 'page_pairing.dart';
 import 'package:Inke/util/shared_util.dart';
 import 'package:Inke/config/shared_key.dart';
 import 'package:Inke/components/bottom_photo_view.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:Inke/redux/global_state.dart';
-import 'package:Inke/bean/user.dart';
-
 import 'package:Inke/module_my/page_setting.dart';
+import 'package:provider/provider.dart';
+import 'package:Inke/provider/login_provider.dart';
 
 class MyIndex extends StatefulWidget {
   @override
@@ -85,32 +83,26 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin{
               _showModifyHeader(context);
             },
           ),
-          StoreConnector<GlobalState, bool>(
-            converter: (store) => store.state.isLogin,
-            builder: (context, isLogin) {
-              return StoreConnector<GlobalState, User>(
-                converter: (store) => store.state.user,
-                builder: (context, user) {
-                  return Column(
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          if (!isLogin) {
-                            RouteUtil.pushByNamed(
-                                context, RouteConfig.loginName);
-                          }
-                        },
-                        child: Text(
-                          isLogin ? user.name ?? '名字为空' : '登陆',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      )
-                    ],
-                  );
-                },
+          Consumer<LoginProvider>(
+            builder: (context,LoginProvider provider,_){
+              return Column(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      if (!provider.isLogin) {
+                        RouteUtil.pushByNamed(
+                            context, RouteConfig.loginName);
+                      }
+                    },
+                    child: Text(
+                      provider.isLogin ? '名字为空' : '登陆',
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
               );
             },
           ),
@@ -122,8 +114,8 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin{
   Container _buildMenu() {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
-      child: new Row(
+      padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+      child:  Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           _buildMenuBtn(AppImgPath.mainPath + 'img_menu_two.png', '星座配对', () {
@@ -201,7 +193,6 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin{
             onTap: () {
               switch (index) {
                 case 0:
-
                   RouteUtil.pushByNamed(context, RouteConfig.todayName);
                   break;
                 case 1:
@@ -322,12 +313,11 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin{
         automaticallyImplyLeading: false,
         elevation: 0.0,
         actions: <Widget>[
-          StoreConnector<GlobalState, bool>(
-            converter: (store) => store.state.isLogin,
-            builder: (context, isLogin) {
+          Consumer<LoginProvider>(
+            builder: (context,LoginProvider provider,_){
               return FlatButton(
                 onPressed: () {
-                  if (isLogin) {
+                  if (provider.isLogin) {
                     RouteUtil.pushByWidget(
                         context, MyInfoSettingPage(name: name));
                   } else {

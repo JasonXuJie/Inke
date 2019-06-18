@@ -2,15 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:Inke/config/app_config.dart';
 import 'package:Inke/util/toast_util.dart';
 import 'package:Inke/util/route_util.dart';
-import 'package:Inke/util/shared_util.dart';
-import 'package:Inke/config/shared_key.dart';
-import 'package:Inke/redux/global_state.dart';
-import 'package:Inke/bean/user.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:Inke/redux/is_login_reducer.dart';
-import 'package:Inke/redux/user_reducer.dart';
 import 'package:Inke/util/string_util.dart';
 import 'package:Inke/config/route_config.dart';
+import 'package:provider/provider.dart';
+import 'package:Inke/provider/login_provider.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -39,7 +34,7 @@ class _State extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomPadding: true,
+        resizeToAvoidBottomInset: false,///防止部件被键盘遮挡
         appBar: AppBar(
           title: Text('登陆'),
           automaticallyImplyLeading: false,
@@ -185,11 +180,7 @@ class _State extends State<LoginPage> {
       ToastUtil.showShortToast('请输入手机号或密码');
       return;
     }
-    SharedUtil.getInstance().put(SharedKey.isLogin, true);
-    StoreProvider.of<GlobalState>(context).dispatch(UpdateIsLoginAction(true));
-    var user = User.empty();
-    user.name = 'Jason';
-    StoreProvider.of<GlobalState>(context).dispatch(UpdateUserAction(user));
+    Provider.of<LoginProvider>(context).hasLogin(true);
     RouteUtil.pop(context);
   }
 }

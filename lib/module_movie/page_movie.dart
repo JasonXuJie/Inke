@@ -1,6 +1,8 @@
+import 'package:Inke/provider/city_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:Inke/http/api.dart';
 import 'package:Inke/components/banner_view.dart';
+import 'package:provider/provider.dart';
 import 'commponents/hot_movies_list_view.dart';
 import 'package:Inke/components/dialog_loading.dart';
 import 'commponents/more_movies_list_view.dart';
@@ -10,13 +12,8 @@ import 'package:Inke/config/app_config.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:Inke/util/qr_scan_util.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:Inke/redux/global_state.dart';
-import 'package:Inke/bean/city.dart';
 import 'package:async/async.dart';
-import 'package:redux/redux.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
-
 import 'package:Inke/http/http_manager.dart';
 import 'package:Inke/util/toast_util.dart';
 
@@ -25,28 +22,18 @@ class MovieFragment extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin{
-
+class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin {
   AsyncMemoizer<List<MovieListEntity>> _memoizer = AsyncMemoizer();
   var _cityName;
   int firstTime = 0;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
   }
 
   @override
   bool get wantKeepAlive => true;
-
-
-
-  Store<GlobalState> _getStore() {
-    if (context == null) {
-      return null;
-    }
-    return StoreProvider.of<GlobalState>(context);
-  }
 
   _request(cityName) {
     if (_cityName == cityName) {
@@ -65,8 +52,7 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin{
         params: {'city': cityName, 'start': '0', 'count': '15'});
     var hotMovies = MovieListEntity.fromJson(hotResponse);
     datas.add(hotMovies);
-    var moreResponse = await HttpManager.getInstance().get(
-        ApiService.getMovies,
+    var moreResponse = await HttpManager.getInstance().get(ApiService.getMovies,
         params: {'city': cityName, 'start': '16', 'count': '25'});
     var moreMovies = MovieListEntity.fromJson(moreResponse);
     datas.add(moreMovies);
@@ -83,50 +69,43 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin{
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return WillPopScope(
-        child: Scaffold(
-          body: StoreConnector<GlobalState, City>(
-            converter: (store) => store.state.city,
-            builder: (context, city) {
-              return FutureBuilder<List<MovieListEntity>>(
-                future: _request(city.name),
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<MovieListEntity>> snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.none:
-                    case ConnectionState.waiting:
-                      return LoadingView(
-                        text: '加载中...',
-                      );
-                      break;
-                    default:
-                      if (snapshot.hasError) {
-                        return Text('访问异常');
-                      } else {
-                        return _buildBody(
-                            snapshot.data[0].subjects, snapshot.data[1].subjects);
-                      }
-                  }
-                },
-              );
-            },
-          ),
-        ),
-        onWillPop: (){
-          ///双击退出
-          int secondTime = DateTime.now().millisecondsSinceEpoch;
-          if(secondTime - firstTime >2000){
-            ToastUtil.showShortToast('再按一次退出程序');
-            firstTime = secondTime;
-            return Future.value(false);
-          }else {
-            return Future.value(true);
-          }
-        }
-    );
+    return WillPopScope(child: Consumer<CityProvider>(
+      builder: (context, CityProvider provider, _) {
+        return FutureBuilder<List<MovieListEntity>>(
+          future: _request(provider.name),
+          builder: (BuildContext context,
+              AsyncSnapshot<List<MovieListEntity>> snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.waiting:
+                return LoadingView(text: '加载中....');
+                break;
+              default:
+                if (snapshot.hasError) {
+                  return Text('访问异常');
+                } else {
+                  return _buildBody(
+                      snapshot.data[0].subjects, snapshot.data[1].subjects);
+                }
+            }
+          },
+        );
+      },
+    ), onWillPop: () {
+      ///双击退出
+      int secondTime = DateTime.now().millisecondsSinceEpoch;
+      if (secondTime - firstTime > 2000) {
+        ToastUtil.showShortToast('再按一次退出程序');
+        firstTime = secondTime;
+        return Future.value(false);
+      } else {
+        return Future.value(true);
+      }
+    });
   }
 
-  _buildBody(List<MovieListSubject> hotMovies, List<MovieListSubject> moreMovies) {
+  _buildBody(
+      List<MovieListSubject> hotMovies, List<MovieListSubject> moreMovies) {
     return RefreshIndicator(
       onRefresh: _onRefresh,
       child: CustomScrollView(
@@ -137,19 +116,16 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin{
               BannerView(
                 dataList: hotMovies.take(4).toList(),
               ),
-              _buildButton(
-                  Alignment.topLeft,
-                  StoreConnector<GlobalState, City>(
-                      converter: (store) => store.state.city,
-                      builder: (context, city) {
-                        return Text(
-                          city.name,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14.0,
-                          ),
-                        );
-                      }), () {
+              _buildButton(Alignment.topLeft, Consumer<CityProvider>(
+                  builder: (context, CityProvider provider, _) {
+                return Text(
+                  provider.name,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14.0,
+                  ),
+                );
+              }), () {
                 RouteUtil.pushByNamed(context, RouteConfig.cityName);
               }, l: 15.0, t: 50.0),
               _buildButton(
@@ -246,8 +222,4 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin{
       ),
     );
   }
-
-
-
-
 }

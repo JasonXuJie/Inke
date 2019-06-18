@@ -4,11 +4,10 @@ import 'package:Inke/http/api.dart';
 import 'dart:async';
 import 'commponents/comming_soon_list_view.dart';
 import 'commponents/top_list_view.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:Inke/redux/global_state.dart';
-import 'package:Inke/bean/city.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
 import 'package:Inke/http/http_manager.dart';
+import 'package:provider/provider.dart';
+import 'package:Inke/provider/city_provider.dart';
 
 class MoreMoviesPage extends StatefulWidget {
   @override
@@ -90,11 +89,10 @@ class _State extends State<MoreMoviesPage> with SingleTickerProviderStateMixin {
   }
 
   _buildCommingSoonContainer() {
-    return StoreConnector<GlobalState, City>(
-      converter: (store) => store.state.city,
-      builder: (context, city) {
+    return Consumer<CityProvider>(
+      builder: (context,CityProvider provider,_){
         return FutureBuilder<MovieListEntity>(
-          future: _requestCommingSoon(city.name),
+          future: _requestCommingSoon(provider.name),
           builder: (BuildContext context, AsyncSnapshot<MovieListEntity> snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:

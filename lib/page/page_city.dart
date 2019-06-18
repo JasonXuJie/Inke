@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:Inke/http/api.dart';
-import 'package:Inke/util/shared_util.dart';
-import 'package:Inke/bean/city.dart';
-import 'package:Inke/config/shared_key.dart';
 import 'package:Inke/components/loading_view.dart';
 import 'package:Inke/components/dialog_choose_city.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:Inke/redux/global_state.dart';
-import 'package:Inke/redux/city_reducer.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/bean/city_result_entity.dart';
 import 'package:Inke/http/http_manager.dart';
+import 'package:Inke/provider/city_provider.dart';
+import 'package:provider/provider.dart';
 
 class CityPage extends StatelessWidget {
   @override
@@ -86,11 +82,8 @@ class CityPage extends StatelessWidget {
             barrierDismissible: false,
             builder: (context) {
               return ChooseCityDialog(city, (cityName, cityId) async {
-                await SharedUtil.getInstance()
-                    .put(SharedKey.cityName, city.name);
-                await SharedUtil.getInstance().put(SharedKey.cityId, city.id);
-                StoreProvider.of<GlobalState>(context).dispatch(
-                    UpdateCityAction(City(name: cityName, cityId: cityId)));
+                Provider.of<CityProvider>(context).setName(cityName);
+                Provider.of<CityProvider>(context).setId(cityId);
                 RouteUtil.pop(context);
                 //将值反船给上个界面
                 //Navigator.of(context).pop(city.name);

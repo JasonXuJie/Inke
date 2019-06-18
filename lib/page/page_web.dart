@@ -19,7 +19,7 @@ class _WebState extends State<Web> {
 
   final _flutterWebviewPlugin = FlutterWebviewPlugin();
   StreamSubscription<WebViewStateChanged> _onStateChanged;
-  GlobalKey<ScaffoldState> _webKey = GlobalKey();
+
 
   @override
   void initState() {
@@ -54,7 +54,7 @@ class _WebState extends State<Web> {
       softWrap: true,
     )));
     return WebviewScaffold(
-      key: _webKey,
+     // key: _webKey,
       url: widget.url,
       appBar: AppBar(
         title: Row(

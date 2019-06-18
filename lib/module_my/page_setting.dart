@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/config/app_config.dart';
 import 'package:Inke/components/dialog_logout.dart';
-import 'package:Inke/util/shared_util.dart';
-import 'package:Inke/config/shared_key.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:Inke/util/route_util.dart';
-import 'package:Inke/redux/is_login_reducer.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:Inke/redux/global_state.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:Inke/provider/login_provider.dart';
+import 'package:provider/provider.dart';
 
 class SettingPage extends StatefulWidget{
 
@@ -90,8 +87,9 @@ class _State extends State<SettingPage> {
         barrierDismissible: true,
         builder: (context) {
           return LogoutDialog((){
-            SharedUtil.getInstance().put(SharedKey.isLogin, false);
-            StoreProvider.of<GlobalState>(context).dispatch(UpdateIsLoginAction(false));
+            //SharedUtil.getInstance().put(SharedKey.isLogin, false);
+            //StoreProvider.of<GlobalState>(context).dispatch(UpdateIsLoginAction(false));
+            Provider.of<LoginProvider>(context).hasLogin(false);
             RouteUtil.popAllAndPushByNamed(context,RouteConfig.mainName);
           });
         });
