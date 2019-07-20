@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/page/page_web.dart';
-import 'package:Inke/config/app_config.dart';
 import 'package:Inke/components/loading_view.dart';
 import 'package:Inke/http/api.dart';
 import 'dart:async';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/bean/news_result_entity.dart';
 import 'package:Inke/http/http_manager_jh.dart';
+import 'package:Inke/util/image_util.dart';
+import 'package:Inke/config/route_config.dart';
 
 class NewsList extends StatefulWidget {
   final String value;
@@ -76,13 +76,14 @@ class _State extends State<NewsList> with AutomaticKeepAliveClientMixin{
   _buildItem(context, NewsResultResultData itemData) {
     return InkWell(
       onTap: () {
-        RouteUtil.pushByWidget(context, Web(title: itemData.title, url: itemData.url));
+        RouteUtil.pushNamedByArgs(context, RouteConfig.webName, {'title':itemData.title,'url':itemData.url});
       },
       child: Container(
         width: MediaQuery
             .of(context)
             .size
             .width,
+        color: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
@@ -140,13 +141,7 @@ class _State extends State<NewsList> with AutomaticKeepAliveClientMixin{
                   child: Padding(
                     padding: const EdgeInsets.only(
                         left: 15.0, right: 15.0, top: 20.0),
-                    child: FadeInImage.assetNetwork(
-                      placeholder: AppImgPath.mainPath + 'app_icon.png',
-                      image: itemData.thumbnailPicS,
-                      width: 80.0,
-                      height: 100.0,
-                      fit: BoxFit.fill,
-                    ),
+                    child: loadFadeInNetImage(itemData.thumbnailPicS,width: 80.0,height: 100.0),
                   ),
                 ),
               ],

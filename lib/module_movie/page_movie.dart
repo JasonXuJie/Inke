@@ -11,26 +11,25 @@ import 'commponents/func_view.dart';
 import 'package:Inke/config/app_config.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/config/route_config.dart';
-import 'package:Inke/util/qr_scan_util.dart';
 import 'package:async/async.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
 import 'package:Inke/http/http_manager.dart';
-import 'package:Inke/util/toast_util.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:Inke/util/image_util.dart';
 
 class MovieFragment extends StatefulWidget {
   @override
   _State createState() => _State();
 }
 
-class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin {
+class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin{
+
+
   AsyncMemoizer<List<MovieListEntity>> _memoizer = AsyncMemoizer();
+
   var _cityName;
   int firstTime = 0;
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   bool get wantKeepAlive => true;
@@ -69,7 +68,8 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return WillPopScope(child: Consumer<CityProvider>(
+    return WillPopScope(
+        child: Consumer<CityProvider>(
       builder: (context, CityProvider provider, _) {
         return FutureBuilder<List<MovieListEntity>>(
           future: _request(provider.name),
@@ -95,7 +95,7 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin {
       ///双击退出
       int secondTime = DateTime.now().millisecondsSinceEpoch;
       if (secondTime - firstTime > 2000) {
-        ToastUtil.showShortToast('再按一次退出程序');
+        showToast('再按一次退出程序');
         firstTime = secondTime;
         return Future.value(false);
       } else {
@@ -130,22 +130,14 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin {
               }, l: 15.0, t: 50.0),
               _buildButton(
                   Alignment.topRight,
-                  Image.asset(
-                    AppImgPath.mainPath + 'img_search.png',
-                    width: 25.0,
-                    height: 25.0,
-                  ),
+                  loadAssetImage('img_search',width: 25.0,height: 25.0),
                   () => RouteUtil.pushByNamed(context, RouteConfig.searchName),
                   t: 50.0,
                   r: 15.0),
               _buildButton(
                   Alignment.topRight,
-                  Image.asset(
-                    AppImgPath.mainPath + 'img_scan.png',
-                    width: 25.0,
-                    height: 25.0,
-                  ),
-                  () => QrScanUtil.scan(),
+                  loadAssetImage('img_scan',width: 25.0,height: 25.0),
+                  (){},
                   t: 50.0,
                   r: 50.0),
             ],

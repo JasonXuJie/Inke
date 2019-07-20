@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/bean/funItem.dart';
-import 'package:Inke/util/toast_util.dart';
+import 'package:oktoast/oktoast.dart';
 
 class FunView extends StatelessWidget {
 
@@ -48,7 +48,7 @@ class FunView extends StatelessWidget {
         break;
     }
     return GestureDetector(
-      onTap: ()=>ToastUtil.showShortToast('功能暂未开通'),
+      onTap: ()=>showToast('功能暂未开通'),
       child: Opacity(
           opacity: 0.7,
           child: Container(

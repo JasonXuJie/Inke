@@ -29,13 +29,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.0"
-  barcode_scan:
-    dependency: "direct main"
-    description:
-      name: barcode_scan
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.0.8"
   boolean_selector:
     dependency: transitive
     description:
@@ -230,13 +223,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.0.3"
-  flutter_slidable:
-    dependency: "direct main"
-    description:
-      name: flutter_slidable
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.4.7"
   flutter_staggered_grid_view:
     dependency: "direct main"
     description:
@@ -244,13 +230,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.2.7"
-  flutter_statusbar_manager:
-    dependency: "direct main"
-    description:
-      name: flutter_statusbar_manager
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.2"
   flutter_swiper:
     dependency: "direct main"
     description:
@@ -263,20 +242,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_webview_plugin:
-    dependency: "direct main"
-    description:
-      name: flutter_webview_plugin
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.3.3"
-  fluttertoast:
-    dependency: "direct main"
-    description:
-      name: fluttertoast
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.0.3"
   front_end:
     dependency: transitive
     description:
@@ -284,6 +249,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.1.4"
+  get_it:
+    dependency: "direct main"
+    description:
+      name: get_it
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.3+2"
   glob:
     dependency: transitive
     description:
@@ -332,7 +304,7 @@ packages:
       name: image_picker
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.4.12+1"
+    version: "0.6.0+17"
   io:
     dependency: transitive
     description:
@@ -403,6 +375,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.9.6+2"
+  oktoast:
+    dependency: "direct main"
+    description:
+      name: oktoast
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.2.0"
   package_config:
     dependency: transitive
     description:
@@ -493,7 +472,7 @@ packages:
       name: share
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.6.0+1"
+    version: "0.6.2"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -549,7 +528,7 @@ packages:
     source: hosted
     version: "1.5.5"
   sqflite:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: sqflite
       url: "https://pub.flutter-io.cn"
@@ -618,6 +597,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.6"
+  url_launcher:
+    dependency: "direct main"
+    description:
+      name: url_launcher
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "5.1.0"
   utf:
     dependency: transitive
     description:
@@ -653,6 +639,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.13"
+  webview_flutter:
+    dependency: "direct main"
+    description:
+      name: webview_flutter
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.3.10+3"
   yaml:
     dependency: transitive
     description:
@@ -662,4 +655,4 @@ packages:
     version: "2.1.15"
 sdks:
   dart: ">=2.2.0 <3.0.0"
-  flutter: ">=1.4.7 <2.0.0"
+  flutter: ">=1.5.0 <2.0.0"

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/http/api.dart';
-import 'package:Inke/page/page_web.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/bean/movie_detail_result_entity.dart';
 import 'package:Inke/http/http_manager.dart';
@@ -12,9 +11,9 @@ import 'package:Inke/bean/still_result_entity.dart';
 import 'package:Inke/bean/comment_result_entity.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:Inke/components/base_widget.dart';
-
 import 'package:like_button/like_button.dart';
 import 'dart:ui';
+import 'package:Inke/util/image_util.dart';
 
 class MovieDetailsPage extends StatefulWidget {
   final MovieListSubject data;
@@ -31,16 +30,11 @@ class _State extends State<MovieDetailsPage> {
   bool _isOpenIntro = false;
   StillResultEntityEntity _stillData;
   CommentResultEntity _commentData;
-  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _requestData();
-    _scrollController.addListener(() {
-      double _curHeight = _scrollController.position.pixels;
-      double _maxHeight = _scrollController.position.maxScrollExtent;
-    });
   }
 
   _requestData() async {
@@ -58,7 +52,7 @@ class _State extends State<MovieDetailsPage> {
     var commentResponse = await HttpManager.getInstance()
         .get(ApiService.movieCommentsUrl(widget.data.id, 0, 8));
     _commentData = CommentResultEntity.fromJson(commentResponse);
-    if(mounted){
+    if (mounted) {
       setState(() {});
     }
   }
@@ -68,7 +62,6 @@ class _State extends State<MovieDetailsPage> {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: CustomScrollView(
-        controller: _scrollController,
         slivers: <Widget>[
           _buildAppBar(),
           _buildBody(),
@@ -92,12 +85,10 @@ class _State extends State<MovieDetailsPage> {
             child: Stack(
               ///高斯模糊效果
               children: <Widget>[
-                Image.network(
-                  widget.data.images.medium,
-                  width: ScreenUtil.getDeviceWidth(context),
-                  height: 300,
-                  fit: BoxFit.fill,
-                ),
+                loadNetImage(widget.data.images.medium,
+                    width: ScreenUtil.getDeviceWidth(context),
+                    height: 300,
+                    fit: BoxFit.fill),
                 BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
                   child: Container(
@@ -113,19 +104,16 @@ class _State extends State<MovieDetailsPage> {
                       child: GestureDetector(
                         child: Hero(
                           tag: 'photo${widget.data.id}',
-                          child: Image.network(
-                            widget.data.images.medium,
-                            height: 200.0,
-                          ),
+                          child: loadNetImage(widget.data.images.medium,
+                              height: 200.0),
                         ),
                         onTap: () {
                           if (_detailData != null) {
-                            print(_detailData.mobileUrl);
-                            RouteUtil.pushByWidget(
-                                context,
-                                Web(
-                                    title: widget.data.title,
-                                    url: _detailData.mobileUrl));
+                            RouteUtil.pushNamedByArgs(
+                                context, RouteConfig.webName, {
+                              'title': widget.data.title,
+                              'url': _detailData.mobileUrl
+                            });
                           }
                         },
                       )),
@@ -410,11 +398,8 @@ class _State extends State<MovieDetailsPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Image.network(
-                    data[position].avatars.small,
-                    width: 80.0,
-                    height: 100.0,
-                  ),
+                  loadNetImage(data[position].avatars.small,
+                      width: 80.0, height: 100.0),
                   Padding(
                     padding: const EdgeInsets.only(top: 5.0),
                     child: Text(
@@ -427,9 +412,8 @@ class _State extends State<MovieDetailsPage> {
                 ],
               ),
               onTap: () {
-                //print(data[position].alt);
-                RouteUtil.pushByWidget(context,
-                    Web(title: data[position].name, url: data[position].alt));
+                RouteUtil.pushNamedByArgs(context, RouteConfig.webName,
+                    {'title': data[position].name, 'url': data[position].alt});
               },
             ),
           );
@@ -468,12 +452,8 @@ class _State extends State<MovieDetailsPage> {
         borderRadius: BorderRadius.circular(2),
         child: Padding(
           padding: const EdgeInsets.only(right: 4),
-          child: Image.network(
-            item.image,
-            fit: BoxFit.fill,
-            width: 220,
-            height: 150,
-          ),
+          child: loadNetImage(item.image,
+              width: 220.0, height: 150.0, fit: BoxFit.fill),
         ),
       ));
     }
@@ -551,11 +531,8 @@ class _State extends State<MovieDetailsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   ClipOval(
-                    child: Image.network(
-                      itemData.author.avatar,
-                      width: 36.0,
-                      height: 36.0,
-                    ),
+                    child: loadNetImage(itemData.author.avatar,
+                        width: 36.0, height: 36.0),
                   ),
                   Expanded(
                       child: Padding(

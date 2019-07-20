@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/module_movie/page_movie_details.dart';
 import 'package:Inke/util/route_util.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:Inke/config/app_config.dart';
 import 'package:Inke/components/dialog_feed_back.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
+import 'package:Inke/util/image_util.dart';
 
 class HotMovieList extends StatelessWidget {
   final List<dynamic> movieList;
@@ -36,22 +35,7 @@ class HotMovieList extends StatelessWidget {
                 Hero(
                   tag: 'photo${subjects.id}',
                   child: ClipRRect(
-                      child: CachedNetworkImage(
-                        imageUrl: subjects.images.medium,
-                        width: 130.0,
-                        height: 140.0,
-                        fit: BoxFit.fill,
-                        placeholder: (context, url) => Image.asset(
-                              AppImgPath.loadingPath,
-                              width: 130.0,
-                              height: 140.0,
-                            ),
-                        errorWidget: (context, url, error) => Image.asset(
-                              AppImgPath.loadingErrorPath,
-                              width: 130.0,
-                              height: 140.0,
-                            ),
-                      ),
+                      child:loadNetworkImage(subjects.images.medium,width: 130.0,height: 140.0,fit: BoxFit.fill),
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(6.0),
                           topRight: Radius.circular(6.0))),

@@ -15,5 +15,6 @@ class RouteConfig{
   static const String registerName = '/Register';
   static const String stillName = '/Still';
   static const String themeName = '/Theme';
+  static const String webName = '/Web';
 
 }

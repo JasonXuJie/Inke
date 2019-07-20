@@ -24,7 +24,6 @@ class SplashPage extends StatelessWidget {
             IconWidget(
               callBack: () {
                 bool isFirst = Provider.of<FirstProvider>(context).isFirst;
-                print(isFirst);
                 if (isFirst) {
                   RouteUtil.popAndPushByNamed(context, RouteConfig.guideName);
                 } else {

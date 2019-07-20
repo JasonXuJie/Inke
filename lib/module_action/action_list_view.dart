@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/http/api.dart';
-import 'package:Inke/page/page_web.dart';
 import 'dart:async';
 import 'package:Inke/util/event_util.dart';
 import 'package:Inke/components/loading_view.dart';
 import 'package:Inke/util/route_util.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:Inke/config/app_config.dart';
 import 'package:Inke/event/event_scroll_top.dart';
 import 'package:async/async.dart';
 import 'package:Inke/bean/action_result_entity.dart';
@@ -14,6 +11,8 @@ import 'package:Inke/http/http_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:Inke/provider/city_provider.dart';
 import 'package:Inke/provider/date_type_provider.dart';
+import 'package:Inke/config/route_config.dart';
+import 'package:Inke/util/image_util.dart';
 
 
 class EventList extends StatefulWidget {
@@ -121,52 +120,19 @@ class _State extends State<EventList> with AutomaticKeepAliveClientMixin{
          );
        },
     );
-//    return StoreConnector<GlobalState,City>(
-//      converter: (store)=>store.state.city,
-//      builder: (context,city){
-//        return StoreConnector<GlobalState,String>(
-//          converter: (store)=>store.state.dateType,
-//          builder: (context,dateType){
-//            return FutureBuilder<ActionResultEntity>(
-//              future: _request(city.cityId, dateType),
-//              builder: (BuildContext context,AsyncSnapshot<ActionResultEntity> snapshot){
-//                switch(snapshot.connectionState){
-//                  case ConnectionState.none:
-//                  case ConnectionState.waiting:
-//                    return LoadingView();
-//                    break;
-//                  default:
-//                    if(snapshot.hasError){
-//                      return Text('访问异常');
-//                    }else{
-//                      return RefreshIndicator(
-//                        onRefresh: _onRefresh,
-//                        child: ListView.builder(
-//                            itemCount: snapshot.data.events.length,
-//                            controller: _controller,
-//                            itemBuilder: (context,position)=>_buildItems(snapshot.data.events[position])
-//                        ),
-//                      );
-//                    }
-//                }
-//              },
-//            );
-//          },
-//        );
-//      },
-//    );
   }
 
 
   _buildItems(ActionResultEvent event) {
-    var icon = CachedNetworkImage(
-        imageUrl: event.image,
-        width: 100.0,
-        height: 120.0,
-        fit: BoxFit.cover,
-        placeholder: (context,url)=>Image.asset(AppImgPath.mainPath+'img_loading.jpeg',width: 100.0,height: 120.0,),
-        errorWidget: (context,url,error)=>Image.asset(AppImgPath.mainPath+'img_loading_error.png',width: 100.0,height: 120.0,),
-    );
+    var icon = loadNetworkImage(event.image,width: 100.0,height: 120.0);
+//    var icon = CachedNetworkImage(
+//        imageUrl: event.image,
+//        width: 100.0,
+//        height: 120.0,
+//        fit: BoxFit.cover,
+//        placeholder: (context,url)=>Image.asset(AppImgPath.mainPath+'img_loading.jpeg',width: 100.0,height: 120.0,),
+//        errorWidget: (context,url,error)=>Image.asset(AppImgPath.mainPath+'img_loading_error.png',width: 100.0,height: 120.0,),
+//    );
     var info = Container(
       padding: const EdgeInsets.only(left: 10.0),
       child: Column(
@@ -247,7 +213,8 @@ class _State extends State<EventList> with AutomaticKeepAliveClientMixin{
       child: InkWell(
         child: item,
         onTap: () {
-          RouteUtil.pushByWidget(context, Web(title: event.title, url: event.adaptUrl));
+          RouteUtil.pushNamedByArgs(context, RouteConfig.webName, {'title':event.title,'url':event.adaptUrl});
+
         },
       ),
     );

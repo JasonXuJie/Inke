@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/config/app_config.dart';
-import 'package:Inke/util/toast_util.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/util/string_util.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:provider/provider.dart';
 import 'package:Inke/provider/login_provider.dart';
+import 'package:oktoast/oktoast.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -177,7 +177,7 @@ class _State extends State<LoginPage> {
 
   void _login() {
     if (StringUtil.isEmpty(_phone) || StringUtil.isEmpty(_pwd)) {
-      ToastUtil.showShortToast('请输入手机号或密码');
+      showToast('请输入手机号或密码');
       return;
     }
     Provider.of<LoginProvider>(context).hasLogin(true);

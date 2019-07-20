@@ -2,9 +2,8 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:Inke/module_movie/page_movie_details.dart';
 import 'package:Inke/util/route_util.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:Inke/config/app_config.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
+import 'package:Inke/util/image_util.dart';
 
 
 class BannerView extends StatelessWidget {
@@ -34,9 +33,6 @@ class BannerView extends StatelessWidget {
         onIndexChanged: (index) {
           newIndex = index;
         },
-//        onTap:(int index){
-//          print(index);
-//        }
       ),
     );
   }
@@ -47,13 +43,7 @@ class BannerView extends StatelessWidget {
         onTap: () {
           RouteUtil.pushByWidget(context, MovieDetailsPage(data: itemData,));
         },
-        child: CachedNetworkImage(
-          imageUrl: itemData.images.medium,
-          fit: BoxFit.fill,
-          placeholder: (context,url)=>Image.asset(
-            AppImgPath.mainPath + 'img_loading.jpeg', fit: BoxFit.fill,),
-          errorWidget: (context,url,error)=>Image.asset(
-            AppImgPath.mainPath + 'img_loading_error.png',fit: BoxFit.fill,),),
+        child:loadNetworkImage(itemData.images.medium,fit: BoxFit.fill),
       );
     }
   }

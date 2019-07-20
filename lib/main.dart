@@ -24,36 +24,33 @@ import 'package:provider/provider.dart';
 import 'package:Inke/provider/city_provider.dart';
 import 'package:Inke/provider/first_provider.dart';
 import 'package:Inke/provider/date_type_provider.dart';
+import 'package:Inke/util/service_locator.dart';
+import 'package:Inke/util/navigate_service.dart';
+import 'package:oktoast/oktoast.dart';
+
+import 'package:Inke/test/value_listenable.dart';
+import 'package:Inke/test/test.dart';
+import 'package:Inke/page/page_web.dart';
 
 void main() async {
   Provider.debugCheckInvalidValueType = null;
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  setupLocator();
   await SharedUtil.getInstance().init();
   runApp(InkeApp());
 }
 
-
 class InkeApp extends StatelessWidget {
-
-//  final store = Store<GlobalState>(appReducer,
-//      initialState: GlobalState(
-//        user: User.empty(),
-//        city: City(
-//            name: SharedUtil.getInstance().get(SharedKey.cityName, '上海'),
-//            cityId: SharedUtil.getInstance().get(SharedKey.cityId, '108296')),
-//        isLogin: SharedUtil.getInstance().get(SharedKey.isLogin, false),
-//        isFirst: SharedUtil.getInstance().get(SharedKey.isFirst, true),
-//        dateType: 'future',
-//      ));
-
   //自定义路由信息
   final Map<String, Function> routes = {
     RouteConfig.stillName: (context, {arguments}) => PhotoPage(
           arguments: arguments,
-        )
+        ),
+    RouteConfig.webName :(context,{arguments})=> WebPage(
+        arguments: arguments,
+    )
   };
-
 
   @override
   Widget build(BuildContext context) {
@@ -62,52 +59,59 @@ class InkeApp extends StatelessWidget {
     var loginProvider = LoginProvider();
     var dateTypeProvider = DateTypeProvider();
     return MultiProvider(
-      providers: [
-        Provider<CityProvider>.value(value: cityProvider),
-        Provider<FirstProvider>.value(value: firstProvider),
-        Provider<LoginProvider>.value(value: loginProvider),
-        Provider<DateTypeProvider>.value(value: dateTypeProvider),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Inke',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          primaryColor: AppColors.colorPrimary,
-          scaffoldBackgroundColor: AppColors.windowBackground, //默认全局背景色
-        ),
-        home: SplashPage(),
-        routes: <String, WidgetBuilder>{
-          RouteConfig.guideName: (context) => GuidePage(),
-          RouteConfig.loginName: (context) => LoginPage(),
-          RouteConfig.mainName: (context) => MainPage(),
-          RouteConfig.cityName: (context) => CityPage(),
-          RouteConfig.feedBackName: (context) => FeedBackPage(),
-          RouteConfig.settingName: (context) => SettingPage(),
-          RouteConfig.moreMoviesName: (context) => MoreMoviesPage(),
-          RouteConfig.searchName: (context) => SearchPage(),
-          RouteConfig.todayName: (context) => TodayInHistoryPage(),
-          RouteConfig.moreHotMoviesName: (context) => MoreHotMoviesPage(),
-          RouteConfig.dreamName: (context) => DreamPage(),
-          RouteConfig.registerName: (context) => RegisterPage(),
-          RouteConfig.themeName:(context) => ThemePage(),
-        },
-        onGenerateRoute: (RouteSettings settings) {
-          final String name = settings.name;
-          final Function pageContentBuilder = this.routes[name];
-          if (pageContentBuilder != null) {
-            final Route route = MaterialPageRoute(
-                builder: (context) =>
-                    pageContentBuilder(context, arguments: settings.arguments));
-            return route;
-          }
-        },
-        onUnknownRoute: (RouteSettings setting) {
-          String name = setting.name;
-          print("onUnknownRoute:$name");
-          return MaterialPageRoute(builder: (context) => NotFoundPage());
-        },
-      ),
-    );
+        providers: [
+          Provider<CityProvider>.value(value: cityProvider),
+          Provider<FirstProvider>.value(value: firstProvider),
+          Provider<LoginProvider>.value(value: loginProvider),
+          Provider<DateTypeProvider>.value(value: dateTypeProvider),
+        ],
+        child: OKToast(
+          backgroundColor: Colors.black54,
+          position: ToastPosition.bottom,
+          radius: 20.0,
+          textPadding:
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+          child: MaterialApp(
+            navigatorKey: getIt<NavigateService>().key,
+            debugShowCheckedModeBanner: false,
+            title: 'Inke',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+              primaryColor: AppColors.colorPrimary,
+              scaffoldBackgroundColor: AppColors.windowBackground, //默认全局背景色
+            ),
+            home: SplashPage(),
+            routes: <String, WidgetBuilder>{
+              RouteConfig.guideName: (context) => GuidePage(),
+              RouteConfig.loginName: (context) => LoginPage(),
+              RouteConfig.mainName: (context) => MainPage(),
+              RouteConfig.cityName: (context) => CityPage(),
+              RouteConfig.feedBackName: (context) => FeedBackPage(),
+              RouteConfig.settingName: (context) => SettingPage(),
+              RouteConfig.moreMoviesName: (context) => MoreMoviesPage(),
+              RouteConfig.searchName: (context) => SearchPage(),
+              RouteConfig.todayName: (context) => TodayInHistoryPage(),
+              RouteConfig.moreHotMoviesName: (context) => MoreHotMoviesPage(),
+              RouteConfig.dreamName: (context) => DreamPage(),
+              RouteConfig.registerName: (context) => RegisterPage(),
+              RouteConfig.themeName: (context) => ThemePage(),
+            },
+            onGenerateRoute: (RouteSettings settings) {
+              final String name = settings.name;
+              final Function pageContentBuilder = this.routes[name];
+              if (pageContentBuilder != null) {
+                final Route route = MaterialPageRoute(
+                    builder: (context) => pageContentBuilder(context,
+                        arguments: settings.arguments));
+                return route;
+              }
+            },
+            onUnknownRoute: (RouteSettings setting) {
+              String name = setting.name;
+              print("onUnknownRoute:$name");
+              return MaterialPageRoute(builder: (context) => NotFoundPage());
+            },
+          ),
+        ));
   }
 }

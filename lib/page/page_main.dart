@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import '../module_movie/page_movie.dart';
-import '../module_action/page_action.dart';
-import '../module_my/page_my.dart';
-import '../module_news/page_news.dart';
-import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
-import '../config/app_config.dart';
+import 'package:Inke/module_movie/page_movie.dart';
+import 'package:Inke/module_action/page_action.dart';
+import 'package:Inke/module_my/page_my.dart';
+import 'package:Inke/module_news/page_news.dart';
+import 'package:Inke/util/image_util.dart';
 
 
 class MainPage extends StatefulWidget {
@@ -28,36 +27,32 @@ class _State extends State<MainPage>{
     _init();
   }
 
+
+
   void _init() {
     if (tabImages == null) {
       tabImages = [
         [
-          _renderTabIcon(AppImgPath.mainPath+'nav_movie.png'),
-          _renderTabIcon(AppImgPath.mainPath+'nav_movie_selected.png'),
+          loadAssetImage('nav_movie',width: 25.0,height: 25.0),
+          loadAssetImage('nav_movie_selected',width: 25.0,height: 25.0),
         ],
         [
-          _renderTabIcon(AppImgPath.mainPath+'nav_action.png'),
-          _renderTabIcon(AppImgPath.mainPath+'nav_action_selected.png'),
+          loadAssetImage('nav_action',width: 25.0,height: 25.0),
+          loadAssetImage('nav_action_selected',width: 25.0,height: 25.0),
         ],
         [
-          _renderTabIcon(AppImgPath.mainPath+'nav_music.png'),
-          _renderTabIcon(AppImgPath.mainPath+'nav_music_selected.png'),
+          loadAssetImage('nav_music',width: 25.0,height: 25.0),
+          loadAssetImage('nav_music_selected',width: 25.0,height: 25.0),
         ],
         [
-          _renderTabIcon(AppImgPath.mainPath+'nav_my.png'),
-          _renderTabIcon(AppImgPath.mainPath+'nav_my_selected.png'),
+          loadAssetImage('nav_my',width: 25.0,height: 25.0),
+          loadAssetImage('nav_my_selected',width: 25.0,height: 25.0),
+
         ]
       ];
     }
   }
 
-  Image _renderTabIcon(path) {
-    return Image.asset(
-      path,
-      width: 20.0,
-      height: 20.0,
-    );
-  }
 
   Image _getTabIcon(int index) {
     if (index == _currentIndex) {
@@ -67,16 +62,12 @@ class _State extends State<MainPage>{
     }
   }
 
-  Text _getTabTitle(int index) {
-    var color;
-    if (index == _currentIndex) {
-      color = Colors.blue;
-    } else {
-      color = Color(0xff969696);
-    }
-    return Text(
-      titles[index],
-      style: TextStyle(color: color),
+  Widget _getTabTitle(int index) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 5.0),
+      child: Text(
+        titles[index],
+      ),
     );
   }
 
@@ -86,9 +77,13 @@ class _State extends State<MainPage>{
       body: _buildBody(),
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          fixedColor: Colors.blue,
           currentIndex: _currentIndex,
           onTap: onTap,
+          iconSize: 10.0,
+          selectedFontSize: 13.0,
+          unselectedFontSize: 13.0,
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: Color(0xff969696),
           items: [
             BottomNavigationBarItem(
                 icon: _getTabIcon(0), title: _getTabTitle(0)),
@@ -103,19 +98,6 @@ class _State extends State<MainPage>{
           ]),
     );
   }
-
-  //调用这个方法会初始化里面所有的子视图
-//  _buildBody() {
-//    return IndexedStack(
-//      children: <Widget>[
-//        MovieFragment(),
-//        ActionFragment(),
-//        NewsPage(),
-//        MyIndex(),
-//      ],
-//      index: _currentIndex,
-//    );
-//  }
 
   _buildBody(){
     return PageView(
@@ -140,51 +122,5 @@ class _State extends State<MainPage>{
         _currentIndex = index;
       });
   }
-
-//  _buildBody(){
-//    switch(_currentIndex){
-//      case 0:
-//        return MovieFragment();
-//        break;
-//      case 1:
-//        return ActionFragment();
-//        break;
-//      case 2:
-//        return NewsPage();
-//        break;
-//      case 3:
-//        return MyIndex();
-//        break;
-//    }
-//  }
-
-
-
-  void _onTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
-
-  void setStateBarColor(int index) async {
-    switch (index) {
-      case 0:
-        await FlutterStatusbarManager.setFullscreen(true);
-        break;
-      case 1:
-        await FlutterStatusbarManager.setColor(Colors.white);
-        await FlutterStatusbarManager.setFullscreen(false);
-        await FlutterStatusbarManager.setTranslucent(false);
-        await FlutterStatusbarManager.setStyle(StatusBarStyle.DARK_CONTENT);
-        break;
-      default:
-        await FlutterStatusbarManager.setColor(AppColors.color_0099fd);
-        await FlutterStatusbarManager.setFullscreen(false);
-        await FlutterStatusbarManager.setTranslucent(false);
-        await FlutterStatusbarManager.setStyle(StatusBarStyle.LIGHT_CONTENT);
-    }
-  }
-
 
 }

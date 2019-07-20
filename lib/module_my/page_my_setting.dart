@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/util/toast_util.dart';
 import 'package:Inke/components/dialog_loading.dart';
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +6,7 @@ import 'package:Inke/config/shared_key.dart';
 import 'package:Inke/util/shared_util.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/components/bottom_picker_view.dart';
+import 'package:oktoast/oktoast.dart';
 
 class MyInfoSettingPage extends StatefulWidget {
 
@@ -119,7 +119,7 @@ class _State extends State<MyInfoSettingPage> {
 
   void submit(context) {
     if (widget.name.isEmpty) {
-      ToastUtil.showShortToast('请填写数据');
+      showToast('请填写数据');
       return;
     }
     _showLoading(context);

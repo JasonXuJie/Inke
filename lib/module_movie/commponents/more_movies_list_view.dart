@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/module_movie/page_movie_details.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/components/dialog_feed_back.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
+import 'package:Inke/util/image_util.dart';
 
 class MoreMovieList extends StatelessWidget {
   final List movieList;
@@ -36,11 +36,7 @@ class MoreMovieList extends StatelessWidget {
             Hero(
               tag: 'photo${subject.id}',
               child: ClipRRect(
-                child: CachedNetworkImage(
-                  imageUrl: subject.images.medium,
-                  width: MediaQuery.of(context).size.width,
-                  fit: BoxFit.cover,
-                ),
+                child: loadNetworkImage(subject.images.medium,width:MediaQuery.of(context).size.width ),
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(4.0),
                     topRight: Radius.circular(4.0)),

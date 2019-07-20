@@ -23,7 +23,9 @@
         android:label="my_flutter_test"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher"
-        android:theme="@style/LaunchTheme">
+        android:theme="@style/LaunchTheme"
+
+        >
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -43,10 +45,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        
-        
-        <activity android:name="com.apptreesoftware.barcodescan.BarcodeScannerActivity"/>
-
 
 
         <activity android:name=".ui.MyActivity"

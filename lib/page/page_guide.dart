@@ -4,6 +4,10 @@ import 'package:Inke/util/route_util.dart';
 import 'package:Inke/config/app_config.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:provider/provider.dart';
+import 'package:Inke/util/image_util.dart';
+
+import 'package:Inke/util/service_locator.dart';
+import 'package:Inke/util/navigate_service.dart';
 
 class GuidePage extends StatefulWidget {
   @override
@@ -29,28 +33,16 @@ class _State extends State<GuidePage> with SingleTickerProviderStateMixin {
     return TabBarView(
       controller: _tabController,
       children: <Widget>[
-        Image.asset(
-          AppImgPath.mainPath + 'img_guide_one.png',
-          fit: BoxFit.fill,
-        ),
-        Image.asset(
-          AppImgPath.mainPath + 'img_guide_two.png',
-          fit: BoxFit.fill,
-        ),
-        Image.asset(
-          AppImgPath.mainPath + 'img_guide_three.png',
-          fit: BoxFit.fill,
-        ),
+        loadAssetImage('img_guide_one',fit: BoxFit.fill),
+        loadAssetImage('img_guide_two',fit: BoxFit.fill),
+        loadAssetImage('img_guide_three',fit: BoxFit.fill),
         Stack(
           children: <Widget>[
             Column(
               children: <Widget>[
                 Expanded(
-                  child: Image.asset(
-                    AppImgPath.mainPath + 'img_guide_four.png',
-                    fit: BoxFit.fill,
+                  child: loadAssetImage('img_guide_four',fit: BoxFit.fill),
                   ),
-                )
               ],
             ),
             Padding(
@@ -66,10 +58,11 @@ class _State extends State<GuidePage> with SingleTickerProviderStateMixin {
                     borderSide:
                     BorderSide(color: AppColors.colorPrimary),
                     onPressed: () {
-                      //SharedUtil.getInstance().put(SharedKey.isFirst, false);
                       Provider.of<FirstProvider>(context).setFirst(false);
                       RouteUtil.popAndPushByNamed(
                           context, RouteConfig.mainName);
+                     //getIt<NavigateService>().pushNamed('/Main');
+
                     }),
               ),
             ),

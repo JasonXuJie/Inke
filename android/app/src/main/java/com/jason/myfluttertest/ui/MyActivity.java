@@ -1,6 +1,6 @@
 package com.jason.myfluttertest.ui;
 
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import com.jason.myfluttertest.R;
 import com.jason.myfluttertest.base.BaseActivity;
 import butterknife.BindView;

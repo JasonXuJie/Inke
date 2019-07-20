@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:Inke/util/image_util.dart';
 import 'package:Inke/config/app_config.dart';
 
 
@@ -42,11 +43,7 @@ class _State extends State<IconWidget> with SingleTickerProviderStateMixin{
   Widget build(BuildContext context) {
     return RotationTransition(
       turns:animation,
-      child: Image.asset(
-        AppImgPath.mainPath + 'app_icon.png',
-        width: 100.0,
-        height: 100.0,
-      ),
+      child: loadAssetImage('app_icon',width: 100.0,height: 100.0)
     );
   }
 

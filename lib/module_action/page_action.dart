@@ -2,13 +2,13 @@ import 'package:Inke/provider/city_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:Inke/module_action//action_list_view.dart';
 import 'package:Inke/config/app_config.dart';
-import 'package:Inke/util/qr_scan_util.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:Inke/event/event_scroll_top.dart';
 import 'package:Inke/util/event_util.dart';
 import 'package:provider/provider.dart';
 import 'package:Inke/provider/date_type_provider.dart';
+import 'package:Inke/util/image_util.dart';
 
 class ActionFragment extends StatefulWidget {
   @override
@@ -152,11 +152,7 @@ class _State extends State<ActionFragment>
         },
         backgroundColor: AppColors.color_ff9900,
         isExtended: true,
-        child: Image.asset(
-          AppImgPath.mainPath + 'app_icon.png',
-          width: 25.0,
-          height: 25.0,
-        ),
+        child: loadAssetImage('app_icon',width: 25.0,height: 25.0),
       ),
     );
   }
@@ -188,7 +184,7 @@ class _State extends State<ActionFragment>
       onSelected: (int value) {
         switch (value) {
           case 0:
-            QrScanUtil.scan();
+
             break;
           case 1:
             RouteUtil.pushByNamed(context, RouteConfig.cityName);
