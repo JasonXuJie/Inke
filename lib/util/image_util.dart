@@ -35,13 +35,15 @@ Widget loadNetworkImage(String url,{String placeholder:"none",double width,doubl
 }
 
 ///加载网络图片(带淡入淡出效果)
-Widget loadFadeInNetImage(String url,{String placeholder:"none",double width,double height,BoxFit fit:BoxFit.fill}){
+Widget loadFadeInNetImage(String url,{String placeholder:"none",double width,double height,BoxFit fit:BoxFit.fill,int fadeIn:700,int fadeOut:300}){
   return FadeInImage.assetNetwork(
     placeholder: getImgPath(placeholder),
     image: url == null ? "" : url,
     width: width,
     height: height,
     fit: fit,
+    fadeInDuration: Duration(milliseconds: fadeIn),
+    fadeOutDuration: Duration(milliseconds: fadeOut),
   );
 }
 

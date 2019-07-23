@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/config/app_config.dart';
 import 'package:Inke/module_movie//page_movie_details.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
+import 'package:Inke/util/image_util.dart';
+import 'package:Inke/components/text.dart';
 
 class MoreHotMoviesList extends StatelessWidget {
 
@@ -33,13 +34,7 @@ class MoreHotMoviesList extends StatelessWidget {
       if(cast.avatars!=null){
         return Padding(
             padding: const EdgeInsets.only(left: 2.0),
-            child: FadeInImage.assetNetwork(
-              placeholder: AppImgPath.mainPath+'app_icon.png',
-              image: cast.avatars.medium,
-              width: 40.0,
-              height: 40.0,
-              fit: BoxFit.fill,
-            )
+            child:loadFadeInNetImage(cast.avatars.medium,width: 40.0,height: 40.0,placeholder: 'app_icon'),
         );
       }
     });
@@ -51,22 +46,10 @@ class MoreHotMoviesList extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            FadeInImage.assetNetwork(
-              placeholder: AppImgPath.mainPath + 'app_icon.png',
-              image: data.images.medium,
-              width: MediaQuery.of(context).size.width,
-              height: 150.0,
-              fadeInDuration: Duration(milliseconds: 1000),
-              fadeOutDuration: Duration(milliseconds: 1000),
-              fit: BoxFit.fill,
-            ),
+            loadFadeInNetImage(data.images.medium,width: MediaQuery.of(context).size.width,height: 150.0,placeholder: 'app_icon',fadeIn: 1000,fadeOut: 1000),
             Padding(
               padding: EdgeInsets.only(top: isEven?10.0:0.0),
-              child: Text(data.title,style: const TextStyle(
-                fontSize: 16.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),),
+              child: Text(data.title,style: TextStyles.blackBold16),
             ),
             Padding(
               padding: EdgeInsets.only(top: isEven?5.0:0.0),

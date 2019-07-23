@@ -36,7 +36,6 @@ class _State extends State<NewsPage> with SingleTickerProviderStateMixin,Automat
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    print('News build');
     return Scaffold(
         appBar: AppBar(
           title: GestureDetector(
@@ -77,7 +76,8 @@ class _State extends State<NewsPage> with SingleTickerProviderStateMixin,Automat
         ),
         body: Column(
           children: <Widget>[
-            SizedBox(
+            Container(
+              color: Colors.white,
               height: 40.0,
               child: Center(
                 child: TabBar(

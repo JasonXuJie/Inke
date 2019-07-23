@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/bean/funItem.dart';
-import 'package:oktoast/oktoast.dart';
+import 'package:Inke/util/toast.dart';
 
 class FunView extends StatelessWidget {
-
   final List<FunItem> items = [];
-
 
   FunView() {
     items.add(FunItem('热门预告片', '精彩电影视频集锦', Colors.redAccent));
@@ -19,26 +17,24 @@ class FunView extends StatelessWidget {
     return SliverGrid(
         delegate: SliverChildBuilderDelegate((BuildContext ctx, int index) {
           return _buildItem(index);
-        },
-            childCount: items.length),
+        }, childCount: items.length),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisSpacing: 5.0,
           crossAxisSpacing: 5.0,
           childAspectRatio: 2.0,
-        )
-    );
+        ));
   }
 
   _buildItem(int index) {
     var item = items[index];
     var margin;
-    switch(index){
+    switch (index) {
       case 0:
-        margin = const EdgeInsets.only(left: 10.0,top: 10.0);
+        margin = const EdgeInsets.only(left: 10.0, top: 10.0);
         break;
       case 1:
-        margin = const EdgeInsets.only(right: 10.0,top: 10.0);
+        margin = const EdgeInsets.only(right: 10.0, top: 10.0);
         break;
       case 2:
         margin = const EdgeInsets.only(left: 10.0);
@@ -48,34 +44,36 @@ class FunView extends StatelessWidget {
         break;
     }
     return GestureDetector(
-      onTap: ()=>showToast('功能暂未开通'),
-      child: Opacity(
-          opacity: 0.7,
-          child: Container(
-            decoration: BoxDecoration(
-              color: item.colors,
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-            ),
-            margin: margin,
-            padding: const EdgeInsets.only(left:10.0,top: 20.0),
-            child: Wrap(
-              direction: Axis.vertical,
-              spacing: 5.0,
-              crossAxisAlignment: WrapCrossAlignment.start,
-              children: <Widget>[
-                Text(item.title, style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16.0,
-                ),),
-                Text(item.subTitle, style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12.0,
-                )),
-              ],
-            ),
-          ))
-    );
+        onTap: () => Toast.show('功能暂未开通'),
+        child: Opacity(
+            opacity: 0.7,
+            child: Container(
+              decoration: BoxDecoration(
+                color: item.colors,
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              ),
+              margin: margin,
+              padding: const EdgeInsets.only(left: 10.0, top: 20.0),
+              child: Wrap(
+                direction: Axis.vertical,
+                spacing: 5.0,
+                crossAxisAlignment: WrapCrossAlignment.start,
+                children: <Widget>[
+                  Text(
+                    item.title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  Text(item.subTitle,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12.0,
+                      )),
+                ],
+              ),
+            )));
   }
-
 }

@@ -8,14 +8,13 @@ import 'package:Inke/components/dialog_loading.dart';
 import 'commponents/more_movies_list_view.dart';
 import 'commponents/red_packet_banner_view.dart';
 import 'commponents/func_view.dart';
-import 'package:Inke/config/app_config.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/config/route_config.dart';
-import 'package:async/async.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
 import 'package:Inke/http/http_manager.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:Inke/util/image_util.dart';
+import 'package:Inke/util/toast.dart';
+import 'package:Inke/components/widget_refresh.dart';
 
 class MovieFragment extends StatefulWidget {
   @override
@@ -25,25 +24,14 @@ class MovieFragment extends StatefulWidget {
 class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin{
 
 
-  AsyncMemoizer<List<MovieListEntity>> _memoizer = AsyncMemoizer();
 
   var _cityName;
   int firstTime = 0;
-
+  List<MovieListEntity> dataList;
 
   @override
   bool get wantKeepAlive => true;
 
-  _request(cityName) {
-    if (_cityName == cityName) {
-      return _memoizer.runOnce(() async {
-        return _requestMovies(cityName);
-      });
-    } else {
-      _cityName = cityName;
-      return _requestMovies(cityName);
-    }
-  }
 
   Future<List<MovieListEntity>> _requestMovies(cityName) async {
     List<MovieListEntity> datas = [];
@@ -60,7 +48,6 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin{
 
   Future<void> _onRefresh() async {
     setState(() {
-      _memoizer = AsyncMemoizer();
       _cityName = null;
     });
   }
@@ -71,31 +58,41 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin{
     return WillPopScope(
         child: Consumer<CityProvider>(
       builder: (context, CityProvider provider, _) {
-        return FutureBuilder<List<MovieListEntity>>(
-          future: _request(provider.name),
-          builder: (BuildContext context,
-              AsyncSnapshot<List<MovieListEntity>> snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return LoadingView(text: '加载中....');
-                break;
-              default:
-                if (snapshot.hasError) {
-                  return Text('访问异常');
-                } else {
-                  return _buildBody(
-                      snapshot.data[0].subjects, snapshot.data[1].subjects);
-                }
-            }
-          },
-        );
+        if(_cityName == provider.name && dataList !=null){
+          return _buildBody(dataList[0].subjects, dataList[1].subjects);
+        }else{
+          _cityName = provider.name;
+          return FutureBuilder<List<MovieListEntity>>(
+            future: _requestMovies(_cityName),
+            builder: (BuildContext context,
+                AsyncSnapshot<List<MovieListEntity>> snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                case ConnectionState.waiting:
+                  return LoadingView(text: '加载中....');
+                  break;
+                default:
+                  if (snapshot.hasError) {
+                    return RefreshWidget(callback: (){
+                      setState(() {
+
+                      });
+                    },);
+                  } else {
+                    dataList = snapshot.data;
+                    return _buildBody(dataList[0].subjects, dataList[1].subjects);
+                  }
+              }
+            },
+          );
+        }
+
       },
     ), onWillPop: () {
       ///双击退出
       int secondTime = DateTime.now().millisecondsSinceEpoch;
       if (secondTime - firstTime > 2000) {
-        showToast('再按一次退出程序');
+        Toast.show('再按一次退出程序');
         firstTime = secondTime;
         return Future.value(false);
       } else {
@@ -134,12 +131,6 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin{
                   () => RouteUtil.pushByNamed(context, RouteConfig.searchName),
                   t: 50.0,
                   r: 15.0),
-              _buildButton(
-                  Alignment.topRight,
-                  loadAssetImage('img_scan',width: 25.0,height: 25.0),
-                  (){},
-                  t: 50.0,
-                  r: 50.0),
             ],
           )),
           SliverToBoxAdapter(

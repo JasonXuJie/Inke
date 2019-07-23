@@ -27,10 +27,9 @@ import 'package:Inke/provider/date_type_provider.dart';
 import 'package:Inke/util/service_locator.dart';
 import 'package:Inke/util/navigate_service.dart';
 import 'package:oktoast/oktoast.dart';
-
-import 'package:Inke/test/value_listenable.dart';
-import 'package:Inke/test/test.dart';
 import 'package:Inke/page/page_web.dart';
+import 'package:fluwx/fluwx.dart' as fluwx;
+
 
 void main() async {
   Provider.debugCheckInvalidValueType = null;
@@ -38,6 +37,8 @@ void main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   setupLocator();
   await SharedUtil.getInstance().init();
+  ///初始化微信分享Sdk
+  //fluwx.register(appId: '');
   runApp(InkeApp());
 }
 
@@ -108,7 +109,7 @@ class InkeApp extends StatelessWidget {
             },
             onUnknownRoute: (RouteSettings setting) {
               String name = setting.name;
-              print("onUnknownRoute:$name");
+             // print("onUnknownRoute:$name");
               return MaterialPageRoute(builder: (context) => NotFoundPage());
             },
           ),

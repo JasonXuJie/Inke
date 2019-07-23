@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/module_movie//page_movie_details.dart';
-import 'package:Inke/config/app_config.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/http/api.dart';
 import 'package:Inke/components/loading_view.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
 import 'package:Inke/http/http_manager.dart';
+import 'package:Inke/util/image_util.dart';
+import 'package:Inke/components/text.dart';
 
 class TopList extends StatefulWidget {
   @override
@@ -86,7 +87,6 @@ class _State extends State<TopList> {
        _requestTop250(start).then((movie){
            setState(() {
              data = movie.subjects;
-             print('下拉刷新:${data.length}');
            });
            _refreshController.sendBack(up, RefreshStatus.completed);
            _refreshController.sendBack(false, RefreshStatus.canRefresh);
@@ -135,52 +135,34 @@ class _State extends State<TopList> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(top: 5.0),
-              child: FadeInImage.assetNetwork(
-                placeholder: AppImgPath.mainPath + 'app_icon.png',
-                image: itemData.images.medium,
-                width: 120.0,
-                height: 80.0,
-                fit: BoxFit.fill,
-                fadeInDuration: Duration(milliseconds: 1000),
-                fadeOutDuration: Duration(milliseconds: 1000),
-              ),
+              child:loadFadeInNetImage(itemData.images.medium,width: 120.0,height: 80.0,placeholder: 'app_icon'),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 5.0),
               child: Text(
                 itemData.title,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
-                ),
+                style: TextStyles.blackBold16
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 5.0),
               child: Text(
                 '类型:' + genres,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 14.0,
-                ),
+                style: TextStyles.blackNormal14
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 5.0),
               child: Text(
                 '上映时间:${itemData.year}',
-                style: const TextStyle(color: Colors.black, fontSize: 14.0),
+                style: TextStyles.blackNormal14,
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 5.0),
               child: Text(
                 '评分:${itemData.rating.average}',
-                style: const TextStyle(
-                  color: Colors.red,
-                  fontSize: 14.0,
-                ),
+                style: TextStyles.blackNormal14
               ),
             ),
           ],

@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:Inke/module_movie/page_movie_details.dart';
 import 'package:Inke/config/app_config.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
+import 'package:Inke/components/text.dart';
+import 'package:Inke/util/image_util.dart';
+import 'package:Inke/util/route_util.dart';
+import 'package:Inke/config/route_config.dart';
 
 class CommingSoonList extends StatelessWidget {
   final List<MovieListSubject> data;
@@ -25,38 +29,21 @@ class CommingSoonList extends StatelessWidget {
     var casts = List.generate(itemData.casts.length, (index){
       return Padding(
           padding: const EdgeInsets.only(left: 5.0),
-          child: FadeInImage.assetNetwork(
-            placeholder: AppImgPath.mainPath+'app_icon.png',
-            image: itemData.casts[index].avatars.medium,
-            width: 50.0,
-            height: 50.0,
-            fit: BoxFit.cover,
-          )
+          child:loadFadeInNetImage(itemData.casts[index].avatars.medium,width: 50.0,height: 50.0,placeholder: 'app_icon'),
       );
     });
     return Card(
       margin: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
       child: InkWell(
         onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MovieDetailsPage(
-                       data: itemData,
-                      )));
+          RouteUtil.pushByWidget(context, MovieDetailsPage(data: itemData,));
         },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.fromLTRB(15.0, 15.0, 10.0, 15.0),
-              child: FadeInImage.assetNetwork(
-                placeholder: AppImgPath.mainPath + 'app_icon.png',
-                image: itemData.images.medium,
-                width: 100.0,
-                height: 150.0,
-                fit: BoxFit.cover,
-              ),
+              child:loadFadeInNetImage(itemData.images.medium,width: 100.0,height: 150.0,placeholder: 'app_icon'),
             ),
             Expanded(
               child: Column(
@@ -66,41 +53,28 @@ class CommingSoonList extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 15.0),
                     child: Text(
                       itemData.title,
-                      style: const TextStyle(
-                        fontSize: 18.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyles.blackBold18
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
                       '类型:$genres',
-                      style: const TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.black,
-                      ),
+                      style: TextStyles.blackNormal14
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
                       '上映时间:${itemData.year}',
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.black,
-                      ),
+                      style: TextStyles.blackNormal14
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Row(
                       children: <Widget>[
-                        Text('主演:',style: TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.black,
-                        ),),
+                        Text('主演:',style: TextStyles.blackNormal14,),
                         Wrap(
                           children: casts,
                         ),

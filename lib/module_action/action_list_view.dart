@@ -5,7 +5,6 @@ import 'package:Inke/util/event_util.dart';
 import 'package:Inke/components/loading_view.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/event/event_scroll_top.dart';
-import 'package:async/async.dart';
 import 'package:Inke/bean/action_result_entity.dart';
 import 'package:Inke/http/http_manager.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +12,7 @@ import 'package:Inke/provider/city_provider.dart';
 import 'package:Inke/provider/date_type_provider.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:Inke/util/image_util.dart';
+import 'package:Inke/components/widget_refresh.dart';
 
 
 class EventList extends StatefulWidget {
@@ -29,9 +29,9 @@ class _State extends State<EventList> with AutomaticKeepAliveClientMixin{
 
   ScrollController _controller = ScrollController();
   StreamSubscription mSubscription;
-  AsyncMemoizer<ActionResultEntity> _memoizer = AsyncMemoizer();
   var _cityId;
   var _dateType;
+  List<ActionResultEvent> dataList;
 
   @override
   void initState() {
@@ -62,22 +62,9 @@ class _State extends State<EventList> with AutomaticKeepAliveClientMixin{
     return ActionResultEntity.fromJson(response);
   }
   
-  
-  Future<ActionResultEntity> _request(cityId,dateType)async{
-    if(_cityId == cityId && _dateType == dateType){
-      return _memoizer.runOnce(()async{
-         return _requestAction(cityId, dateType);
-      });
-    }else{
-      _cityId = cityId;
-      _dateType = dateType;
-      return _requestAction(cityId, dateType);
-    }
-  }
 
   Future<void> _onRefresh()async{
     setState(() {
-      _memoizer = AsyncMemoizer();
       _cityId = null;
       _dateType = null;
     });
@@ -90,49 +77,58 @@ class _State extends State<EventList> with AutomaticKeepAliveClientMixin{
   }
 
 
-
   _buildBody(){
     return Consumer2<CityProvider,DateTypeProvider>(
        builder: (context,CityProvider provider,DateTypeProvider dateType,_){
-         return FutureBuilder<ActionResultEntity>(
-           future: _request(provider.id, dateType.dateType),
-           builder: (BuildContext context,AsyncSnapshot<ActionResultEntity> snapshot){
-             switch(snapshot.connectionState){
-               case ConnectionState.none:
-               case ConnectionState.waiting:
-                 return LoadingView();
-                 break;
-               default:
-                 if(snapshot.hasError){
-                   return Text('访问异常');
-                 }else{
-                   return RefreshIndicator(
-                     onRefresh: _onRefresh,
-                     child: ListView.builder(
-                         itemCount: snapshot.data.events.length,
-                         controller: _controller,
-                         itemBuilder: (context,position)=>_buildItems(snapshot.data.events[position])
-                     ),
-                   );
-                 }
-             }
-           },
-         );
+         if(_cityId == provider.id && _dateType == dateType.dateType&& dataList != null){
+           return _buildList();
+         }else{
+           _cityId = provider.id;
+           _dateType = dateType.dateType;
+           return FutureBuilder<ActionResultEntity>(
+             future: _requestAction(_cityId, _dateType),
+             builder: (BuildContext context,AsyncSnapshot<ActionResultEntity> snapshot){
+               switch(snapshot.connectionState){
+                 case ConnectionState.none:
+                 case ConnectionState.waiting:
+                   return LoadingView();
+                   break;
+                 default:
+                   if(snapshot.hasError){
+                     return RefreshWidget(callback: (){
+                       setState(() {
+                         _cityId = null;
+                         _dateType = null;
+                       });
+                     },);
+                   }else{
+                     dataList = snapshot.data.events;
+                     return _buildList();
+                   }
+               }
+             },
+           );
+         }
        },
+    );
+  }
+
+
+
+  Widget _buildList(){
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: ListView.builder(
+          itemCount: dataList.length,
+          controller: _controller,
+          itemBuilder: (context,position)=>_buildItems(dataList[position])
+      ),
     );
   }
 
 
   _buildItems(ActionResultEvent event) {
     var icon = loadNetworkImage(event.image,width: 100.0,height: 120.0);
-//    var icon = CachedNetworkImage(
-//        imageUrl: event.image,
-//        width: 100.0,
-//        height: 120.0,
-//        fit: BoxFit.cover,
-//        placeholder: (context,url)=>Image.asset(AppImgPath.mainPath+'img_loading.jpeg',width: 100.0,height: 120.0,),
-//        errorWidget: (context,url,error)=>Image.asset(AppImgPath.mainPath+'img_loading_error.png',width: 100.0,height: 120.0,),
-//    );
     var info = Container(
       padding: const EdgeInsets.only(left: 10.0),
       child: Column(
@@ -214,7 +210,6 @@ class _State extends State<EventList> with AutomaticKeepAliveClientMixin{
         child: item,
         onTap: () {
           RouteUtil.pushNamedByArgs(context, RouteConfig.webName, {'title':event.title,'url':event.adaptUrl});
-
         },
       ),
     );

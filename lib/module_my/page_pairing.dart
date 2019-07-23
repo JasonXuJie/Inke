@@ -7,8 +7,7 @@ import 'package:Inke/http/api.dart';
 import 'package:Inke/components/bottom_picker_view.dart';
 import 'package:Inke/bean/pairing_result_entity.dart';
 import 'package:Inke/http/http_manager_afd.dart';
-import 'package:oktoast/oktoast.dart';
-
+import 'package:Inke/util/toast.dart';
 class PairingPage extends StatefulWidget {
 
   final bool flag;
@@ -129,7 +128,7 @@ class _State extends State<PairingPage> {
             child: RaisedButton(
               onPressed: () {
                 if (_value1 == _placeHolder || _value2 == _placeHolder) {
-                  showToast(widget.flag == true ? '请选择星座' : '请选择生肖');
+                  Toast.show(widget.flag == true ? '请选择星座' : '请选择生肖');
                 } else {
                   setState(() {
                     submit = true;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:Inke/util/image_util.dart';
+import 'package:Inke/util/toast.dart';
 class RedPacketBanner extends StatelessWidget {
 
   @override
@@ -8,7 +8,7 @@ class RedPacketBanner extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 20.0),
       child: GestureDetector(
-        onTap: () => showToast('活动已结束！明年再来吧～～～'),
+        onTap: () => Toast.show('活动已结束！明年再来吧～～～'),
         child: Image.asset( getImgPath('banner',format: 'jpeg'),
           fit: BoxFit.cover,
         ),

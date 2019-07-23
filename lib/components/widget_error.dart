@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
+
+///Flutter报错后一般都是红色背景加黄色字体显示堆栈，
+///为了良好的交互模型，可以选中此控件进行优化
 class MyErrorWidget extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return _buildError();

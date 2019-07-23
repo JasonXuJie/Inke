@@ -7,6 +7,7 @@ import 'package:Inke/bean/news_result_entity.dart';
 import 'package:Inke/http/http_manager_jh.dart';
 import 'package:Inke/util/image_util.dart';
 import 'package:Inke/config/route_config.dart';
+import 'package:Inke/components/widget_refresh.dart';
 
 class NewsList extends StatefulWidget {
   final String value;
@@ -20,7 +21,6 @@ class NewsList extends StatefulWidget {
 
 class _State extends State<NewsList> with AutomaticKeepAliveClientMixin{
 
-  var isRefresh = false;
 
   @override
   bool get wantKeepAlive => true;
@@ -38,7 +38,11 @@ class _State extends State<NewsList> with AutomaticKeepAliveClientMixin{
             break;
           default:
             if (snapshot.hasError) {
-              return Text('错误:${snapshot.error.toString()}');
+               return RefreshWidget(callback: (){
+                 setState(() {
+
+                 });
+               },);
             } else {
               if (snapshot.data.result == null) {
                 return Center(
@@ -69,7 +73,6 @@ class _State extends State<NewsList> with AutomaticKeepAliveClientMixin{
 
   Future<void> _onRefresh()async{
     setState(() {
-      isRefresh = true;
     });
   }
 

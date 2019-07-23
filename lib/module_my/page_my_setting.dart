@@ -6,8 +6,7 @@ import 'package:Inke/config/shared_key.dart';
 import 'package:Inke/util/shared_util.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/components/bottom_picker_view.dart';
-import 'package:oktoast/oktoast.dart';
-
+import 'package:Inke/util/toast.dart';
 class MyInfoSettingPage extends StatefulWidget {
 
   var name;
@@ -119,7 +118,7 @@ class _State extends State<MyInfoSettingPage> {
 
   void submit(context) {
     if (widget.name.isEmpty) {
-      showToast('请填写数据');
+      Toast.show('请填写数据');
       return;
     }
     _showLoading(context);

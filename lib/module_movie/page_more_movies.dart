@@ -8,15 +8,19 @@ import 'package:Inke/bean/movie_list_result_entity.dart';
 import 'package:Inke/http/http_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:Inke/provider/city_provider.dart';
+import 'package:Inke/components/widget_refresh.dart';
 
 class MoreMoviesPage extends StatefulWidget {
+
   @override
   State<StatefulWidget> createState() => _State();
 }
 
 class _State extends State<MoreMoviesPage> with SingleTickerProviderStateMixin {
+
   TabController _controller;
-  var isRefresh = false;
+  MovieListEntity data;
+
 
   Future<MovieListEntity> _requestCommingSoon(cityName) async {
     var response =
@@ -31,7 +35,7 @@ class _State extends State<MoreMoviesPage> with SingleTickerProviderStateMixin {
 
   Future<void> _onRefresh() async {
     setState(() {
-      isRefresh = true;
+
     });
   }
 
@@ -91,28 +95,38 @@ class _State extends State<MoreMoviesPage> with SingleTickerProviderStateMixin {
   _buildCommingSoonContainer() {
     return Consumer<CityProvider>(
       builder: (context,CityProvider provider,_){
-        return FutureBuilder<MovieListEntity>(
-          future: _requestCommingSoon(provider.name),
-          builder: (BuildContext context, AsyncSnapshot<MovieListEntity> snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return LoadingView();
-                break;
-              default:
-                if (snapshot.hasError) {
-                  return Text('${snapshot.error.toString()}');
-                } else {
-                  return RefreshIndicator(
-                    onRefresh: _onRefresh,
-                    child: CommingSoonList(
-                      data: snapshot.data.subjects,
-                    ),
-                  );
-                }
-            }
-          },
-        );
+        if(data == null){
+          return FutureBuilder<MovieListEntity>(
+            future: _requestCommingSoon(provider.name),
+            builder: (BuildContext context, AsyncSnapshot<MovieListEntity> snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                case ConnectionState.waiting:
+                  return LoadingView();
+                  break;
+                default:
+                  if (snapshot.hasError) {
+                    return RefreshWidget(callback: (){
+                      setState(() {
+
+                      });
+                    },);
+                  } else {
+                    data = snapshot.data;
+                    return RefreshIndicator(
+                      onRefresh: _onRefresh,
+                      child: CommingSoonList(
+                        data: data.subjects,
+                      ),
+                    );
+                  }
+              }
+            },
+          );
+        }else{
+
+        }
+
       },
     );
   }
