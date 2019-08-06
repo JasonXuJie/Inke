@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/components/loading_view.dart';
+import 'package:Inke/widgets//loading_view.dart';
 import 'dart:async';
 import 'package:Inke/config/app_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:Inke/http/api.dart';
-import 'package:Inke/components/bottom_picker_view.dart';
+import 'package:Inke/widgets/bottom_picker_view.dart';
 import 'package:Inke/bean/pairing_result_entity.dart';
 import 'package:Inke/http/http_manager_afd.dart';
 import 'package:Inke/util/toast.dart';

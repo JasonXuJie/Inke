@@ -1,20 +1,20 @@
 import 'package:Inke/provider/city_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:Inke/http/api.dart';
-import 'package:Inke/components/banner_view.dart';
+import 'package:Inke/widgets/banner_view.dart';
 import 'package:provider/provider.dart';
 import 'commponents/hot_movies_list_view.dart';
-import 'package:Inke/components/dialog_loading.dart';
+import 'package:Inke/widgets/dialog_loading.dart';
 import 'commponents/more_movies_list_view.dart';
-import 'commponents/red_packet_banner_view.dart';
-import 'commponents/func_view.dart';
+import 'package:Inke/widgets/red_packet_banner_view.dart';
+import 'package:Inke/widgets/widget_func.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
 import 'package:Inke/http/http_manager.dart';
 import 'package:Inke/util/image_util.dart';
 import 'package:Inke/util/toast.dart';
-import 'package:Inke/components/widget_refresh.dart';
+import 'package:Inke/widgets/widget_refresh.dart';
 
 class MovieFragment extends StatefulWidget {
   @override
@@ -69,7 +69,7 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin{
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                 case ConnectionState.waiting:
-                  return LoadingView(text: '加载中....');
+                  return LoadingDialog(text: '加载中....');
                   break;
                 default:
                   if (snapshot.hasError) {

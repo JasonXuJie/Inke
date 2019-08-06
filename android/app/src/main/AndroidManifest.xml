@@ -51,5 +51,9 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.WebActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/DisablePreviewTheme"/>
     </application>
 </manifest>

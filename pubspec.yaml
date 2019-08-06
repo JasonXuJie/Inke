@@ -116,6 +116,7 @@ flutter:
    - images/img_loading_error.png
    - images/img_search.png
    - images/none.png
+   - images/logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

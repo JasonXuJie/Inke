@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/config/app_config.dart';
-
+import 'package:Inke/widgets/text.dart';
 
 typedef void OnPickPhotoCallBack();
 typedef void OnPickGalleryCallBack();
@@ -22,10 +22,7 @@ class BottomPhotoView extends StatelessWidget {
             child: Center(
               child: Text(
                 '拍照',
-                style: TextStyle(
-                    fontSize: 18.0,
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold),
+                style: TextStyles.blueBold18,
               ),
             ),
           ),
@@ -45,10 +42,7 @@ class BottomPhotoView extends StatelessWidget {
             child: Center(
               child: Text(
                 '从相册选取',
-                style: TextStyle(
-                    fontSize: 18.0,
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold),
+                style: TextStyles.blueBold18,
               ),
             ),
           ),
@@ -68,10 +62,7 @@ class BottomPhotoView extends StatelessWidget {
             child: Center(
               child: Text(
                 '取消',
-                style: TextStyle(
-                    fontSize: 18.0,
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold),
+                style: TextStyles.redBold18,
               ),
             ),
           ),

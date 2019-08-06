@@ -3,8 +3,9 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:Inke/util/image_util.dart';
 import 'package:share/share.dart';
-import 'package:Inke/components/text.dart';
+import 'package:Inke/widgets/text.dart';
 import 'package:Inke/config/app_config.dart';
+import 'package:fluwx/fluwx.dart' as fluwx;
 class WebPage extends StatefulWidget{
 
   final Map arguments;
@@ -21,6 +22,7 @@ class _State extends State<WebPage> {
 
   final Completer<WebViewController> _controller = Completer<WebViewController>();
   var _visible = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +141,15 @@ class _State extends State<WebPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     FlatButton(onPressed: (){
-
+                      fluwx.share(fluwx.WeChatShareWebPageModel(
+                          webPage: widget.arguments['url'],
+                          title: widget.arguments['title'],
+                          description: '这是一条分享',
+                          scene: fluwx.WeChatScene.SESSION,
+                          thumbnail: getImgPath('logo'),
+                          transaction: "hh"
+                        )
+                      );
                     },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -150,7 +160,14 @@ class _State extends State<WebPage> {
                         )
                     ),
                     FlatButton(onPressed: (){
-
+                      fluwx.share(fluwx.WeChatShareWebPageModel(
+                          webPage: widget.arguments['url'],
+                          title: widget.arguments['title'],
+                          description: '这是一条分享',
+                          scene: fluwx.WeChatScene.TIMELINE,
+                          thumbnail: getImgPath('logo'),
+                          transaction: "hh"
+                      ));
                     },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,

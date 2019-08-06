@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:Inke/http/api.dart';
-import 'package:Inke/components/loading_view.dart';
+import 'package:Inke/widgets/loading_view.dart';
 import 'package:Inke/module_my/dream_list_view.dart';
 import 'package:Inke/bean/dream_result_entity.dart';
 import 'package:Inke/http/http_manager_afd.dart';

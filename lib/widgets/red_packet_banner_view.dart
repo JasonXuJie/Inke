@@ -9,9 +9,7 @@ class RedPacketBanner extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 20.0),
       child: GestureDetector(
         onTap: () => Toast.show('活动已结束！明年再来吧～～～'),
-        child: Image.asset( getImgPath('banner',format: 'jpeg'),
-          fit: BoxFit.cover,
-        ),
+        child:loadAssetImage('banner',format: 'jpeg',fit: BoxFit.cover),
       ),
     );
   }

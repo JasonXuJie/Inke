@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/http/api.dart';
 import 'dart:async';
-import 'package:Inke/components/loading_view.dart';
+import 'package:Inke/widgets/loading_view.dart';
 import 'commponents/more_hot_movie_list.dart';
-import 'package:async/async.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
 import 'package:Inke/http/http_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:Inke/provider/city_provider.dart';
-import 'package:Inke/components/widget_refresh.dart';
+import 'package:Inke/widgets/widget_refresh.dart';
 
 class MoreHotMoviesPage extends StatefulWidget {
   @override

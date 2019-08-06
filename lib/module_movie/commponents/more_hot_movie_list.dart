@@ -4,7 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
 import 'package:Inke/util/image_util.dart';
-import 'package:Inke/components/text.dart';
+import 'package:Inke/widgets/text.dart';
 
 class MoreHotMoviesList extends StatelessWidget {
 

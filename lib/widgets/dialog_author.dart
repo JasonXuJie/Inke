@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/components/gaps.dart';
+import 'package:Inke/widgets/gaps.dart';
 import 'package:Inke/util/utils.dart';
 class AuthorDialog extends Dialog {
   @override

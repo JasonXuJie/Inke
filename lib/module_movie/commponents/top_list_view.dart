@@ -3,11 +3,11 @@ import 'package:Inke/module_movie//page_movie_details.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/http/api.dart';
-import 'package:Inke/components/loading_view.dart';
+import 'package:Inke/widgets/loading_view.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
 import 'package:Inke/http/http_manager.dart';
 import 'package:Inke/util/image_util.dart';
-import 'package:Inke/components/text.dart';
+import 'package:Inke/widgets/text.dart';
 
 class TopList extends StatefulWidget {
   @override

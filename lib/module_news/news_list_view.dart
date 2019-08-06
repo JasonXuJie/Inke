@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/components/loading_view.dart';
+import 'package:Inke/widgets/loading_view.dart';
 import 'package:Inke/http/api.dart';
 import 'dart:async';
 import 'package:Inke/util/route_util.dart';
@@ -7,7 +7,8 @@ import 'package:Inke/bean/news_result_entity.dart';
 import 'package:Inke/http/http_manager_jh.dart';
 import 'package:Inke/util/image_util.dart';
 import 'package:Inke/config/route_config.dart';
-import 'package:Inke/components/widget_refresh.dart';
+import 'package:Inke/widgets/widget_my_future.dart';
+import 'package:Inke/widgets/text.dart';
 
 class NewsList extends StatefulWidget {
   final String value;
@@ -28,39 +29,14 @@ class _State extends State<NewsList> with AutomaticKeepAliveClientMixin{
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return FutureBuilder<NewsResultEntity>(
-      future: _requestData(),
-      builder: (BuildContext context, AsyncSnapshot<NewsResultEntity> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-          case ConnectionState.waiting:
-            return LoadingView();
-            break;
-          default:
-            if (snapshot.hasError) {
-               return RefreshWidget(callback: (){
-                 setState(() {
+    return FutureBuilderWidget<NewsResultEntity>(
+      loadFuture: _requestData(),
+      loadingWidget: LoadingView(),
+      buildDataWidget: _DataWidget(onRefresh: _onRefresh,),
+      defaultErrorCallback: (){
+        setState(() {
 
-                 });
-               },);
-            } else {
-              if (snapshot.data.result == null) {
-                return Center(
-                  child: Text('请求条数已使用完'),
-                );
-              } else {
-                return RefreshIndicator(
-                  onRefresh: _onRefresh,
-                  child: ListView.builder(
-                      itemCount: snapshot.data.result.data.length,
-                      itemBuilder: (context, index) {
-                        return _buildItem(
-                            context, snapshot.data.result.data[index]);
-                      }),
-                );
-              }
-            }
-        }
+        });
       },
     );
   }
@@ -73,7 +49,28 @@ class _State extends State<NewsList> with AutomaticKeepAliveClientMixin{
 
   Future<void> _onRefresh()async{
     setState(() {
+
     });
+  }
+
+
+}
+
+class _DataWidget extends DataWidget<NewsResultEntity>{
+
+  final Function onRefresh;
+  _DataWidget({@required this.onRefresh});
+
+  @override
+  Widget buildContainer(NewsResultEntity data) {
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: ListView.builder(
+          itemCount: data.result.data.length,
+          itemBuilder: (context, index) {
+            return _buildItem(context, data.result.data[index]);
+          }),
+    );
   }
 
   _buildItem(context, NewsResultResultData itemData) {
@@ -103,14 +100,10 @@ class _State extends State<NewsList> with AutomaticKeepAliveClientMixin{
                       SizedBox(
                         width: 250.0,
                         child: Text(
-                          itemData.title,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 17.0,
-                            fontWeight: FontWeight.bold,
-                          ),
+                            itemData.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyles.blackBold17
                         ),
                       ),
                       Padding(
@@ -123,15 +116,11 @@ class _State extends State<NewsList> with AutomaticKeepAliveClientMixin{
                             children: <Widget>[
                               Text(
                                 '来源:${itemData.authorName}',
-                                style: const TextStyle(
-                                    color: Colors.grey, fontSize: 12.0),
+                                style: TextStyles.greyNormal12,
                               ),
                               Text(
                                 itemData.date,
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 10.0,
-                                ),
+                                style: TextStyles.greyNormal10,
                               ),
                             ],
                           ),
@@ -155,7 +144,4 @@ class _State extends State<NewsList> with AutomaticKeepAliveClientMixin{
       ),
     );
   }
-
-
-
 }

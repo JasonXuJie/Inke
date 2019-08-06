@@ -3,9 +3,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:Inke/config/app_config.dart';
 
 ///加载本地资源图片
-Widget loadAssetImage(String name,{double width,double height,BoxFit fit}){
+Widget loadAssetImage(String name,{double width,double height,String format,BoxFit fit}){
   return Image.asset(
-    getImgPath(name),
+    getImgPath(name,format: format),
     height: height,
     width: width,
     fit: fit,
@@ -48,8 +48,8 @@ Widget loadFadeInNetImage(String url,{String placeholder:"none",double width,dou
 }
 
 
-String getImgPath(String name,{String format:'png'}){
-    return AppImgPath.mainPath+'$name.$format';
+String getImgPath(String name,{String format = 'png'}){
+    return AppImgPath.mainPath+'$name.${format ?? 'png'}';
 }
 
 

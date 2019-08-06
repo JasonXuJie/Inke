@@ -10,7 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'page_pairing.dart';
 import 'package:Inke/util/shared_util.dart';
 import 'package:Inke/config/shared_key.dart';
-import 'package:Inke/components/bottom_photo_view.dart';
+import 'package:Inke/widgets/bottom_photo_view.dart';
 import 'package:Inke/module_my/page_setting.dart';
 import 'package:provider/provider.dart';
 import 'package:Inke/provider/login_provider.dart';

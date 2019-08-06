@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/http/api.dart';
 import 'dart:async';
-import 'package:Inke/components/loading_view.dart';
+import 'package:Inke/widgets/loading_view.dart';
 import 'package:Inke/module_my/history_list_view.dart';
-import 'package:Inke/config/app_config.dart';
 import 'package:Inke/bean/history_list_result_entity.dart';
-
 import 'package:Inke/http/http_manager_jh.dart';
+import 'package:Inke/widgets/widget_my_future.dart';
+import 'package:Inke/util/image_util.dart';
 
 class TodayInHistoryPage extends StatefulWidget {
   @override
@@ -14,68 +14,66 @@ class TodayInHistoryPage extends StatefulWidget {
 }
 
 class _State extends State<TodayInHistoryPage> {
-  var date = DateTime.now();
-  List<HistoryListResult> data;
 
-  Future<Null> _requestData({bool isRefresh = false}) async {
-    if (isRefresh) {
-      setState(() {
-        this.data = null;
-      });
-    }
+  var date = DateTime.now();
+
+
+  Future<HistoryListEntity> _requestData()async{
     var response = await HttpManager.getInstance()
         .get(ApiService.getTodayList, params: {
       'key': ApiService.historyKey,
       'date': '${date.month}/${date.day}'
     });
-    var data = HistoryListEntity.fromJson(response);
-    setState(() {
-      this.data = data.result;
-    });
-    return null;
+    return HistoryListEntity.fromJson(response);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _requestData();
+
+  Future<void> _onRefresh()async{
+     setState(() {
+
+     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return _buildContainer();
+    return Scaffold(
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: CustomScrollView(
+         slivers: <Widget>[
+           SliverAppBar(
+             title: Text('历史上的今天'),
+             centerTitle: true,
+             expandedHeight: 250.0,
+             flexibleSpace: FlexibleSpaceBar(
+               background: loadAssetImage('history_bg',format: 'jpeg',fit: BoxFit.cover),
+             ),
+             pinned: true,
+           ),
+           SliverToBoxAdapter(
+             child: FutureBuilderWidget(
+               loadFuture: _requestData(),
+               loadingWidget: LoadingView(),
+               defaultErrorCallback: (){
+                 setState(() {
+
+                 });
+               },
+               buildDataWidget: _DataWidget(),
+             ),
+           )
+         ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DataWidget extends DataWidget<HistoryListEntity>{
+
+  @override
+  Widget buildContainer(HistoryListEntity data) {
+    return HistoryList(data: data.result);
   }
 
-  Widget _buildContainer() {
-    if (data == null) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('历史上的今天'),
-          centerTitle: true,
-        ),
-        body: LoadingView(),
-      );
-    } else {
-      return Scaffold(
-          body: RefreshIndicator(
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  SliverAppBar(
-                    title: Text('历史上的今天'),
-                    centerTitle: true,
-                    expandedHeight: 200.0,
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: Image.asset(
-                        AppImgPath.mainPath + 'history_bg.jpeg',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    pinned: true,
-                  ),
-                  HistoryList(data: data),
-                ],
-              ),
-              onRefresh: () => _requestData(isRefresh: true)));
-    }
-  }
 }

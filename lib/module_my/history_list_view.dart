@@ -10,10 +10,13 @@ class HistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate((BuildContext ctx, int index) {
-        return _buildItem(ctx, data[index]);
-      },childCount: data.length),
+    return ListView.builder(
+        itemCount: data.length,
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemBuilder: (BuildContext context,int position){
+          return _buildItem(context, data[position]);
+        }
     );
   }
 

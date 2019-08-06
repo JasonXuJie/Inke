@@ -6,7 +6,7 @@ import 'dart:async';
 import 'package:Inke/util/shared_util.dart';
 import 'package:Inke/config/shared_key.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:Inke/components/widget_icon.dart';
+import 'package:Inke/widgets/widget_icon.dart';
 import 'package:provider/provider.dart';
 import 'package:Inke/provider/first_provider.dart';
 

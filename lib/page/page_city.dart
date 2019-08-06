@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:Inke/http/api.dart';
-import 'package:Inke/components/loading_view.dart';
-import 'package:Inke/components/dialog_choose_city.dart';
+import 'package:Inke/widgets/loading_view.dart';
+import 'package:Inke/widgets/dialog_choose_city.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/bean/city_result_entity.dart';
 import 'package:Inke/http/http_manager.dart';

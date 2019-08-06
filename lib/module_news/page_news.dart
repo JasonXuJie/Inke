@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:Inke/module_news/news_list_view.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/config/route_config.dart';
+import 'package:Inke/widgets/text.dart';
 
 class NewsPage extends StatefulWidget {
   @override
@@ -15,7 +16,6 @@ class _State extends State<NewsPage> with SingleTickerProviderStateMixin,Automat
   @override
   void initState() {
     super.initState();
-    print('News initState');
     map['头条'] = 'top';
     map['国内'] = 'guonei';
     map['国际'] = 'guoji';
@@ -61,10 +61,7 @@ class _State extends State<NewsPage> with SingleTickerProviderStateMixin,Automat
                     child: Center(
                         child: Text(
                       '请输入要搜索的内容',
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 13.0,
-                      ),
+                      style: TextStyles.greyNormal13
                     )),
                   )
                 ],

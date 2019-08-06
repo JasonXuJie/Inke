@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:Inke/http/api.dart';
 import 'dart:async';
 import 'package:Inke/util/event_util.dart';
-import 'package:Inke/components/loading_view.dart';
+import 'package:Inke/widgets/loading_view.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/event/event_scroll_top.dart';
 import 'package:Inke/bean/action_result_entity.dart';
@@ -12,7 +12,7 @@ import 'package:Inke/provider/city_provider.dart';
 import 'package:Inke/provider/date_type_provider.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:Inke/util/image_util.dart';
-import 'package:Inke/components/widget_refresh.dart';
+import 'package:Inke/widgets/widget_refresh.dart';
 
 
 class EventList extends StatefulWidget {

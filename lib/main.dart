@@ -30,6 +30,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:Inke/page/page_web.dart';
 import 'package:fluwx/fluwx.dart' as fluwx;
 
+import 'package:Inke/test/anim_switch.dart';
 
 void main() async {
   Provider.debugCheckInvalidValueType = null;
@@ -38,8 +39,20 @@ void main() async {
   setupLocator();
   await SharedUtil.getInstance().init();
   ///初始化微信分享Sdk
-  //fluwx.register(appId: '');
+  _initFluwx();
   runApp(InkeApp());
+}
+
+
+void _initFluwx()async{
+  await fluwx.register(
+    appId: 'wx1be424701c80ec69',
+    doOnAndroid: true,
+    doOnIOS: true,
+    enableMTA: false
+  );
+  var result = await fluwx.isWeChatInstalled();
+  print("初始化$result");
 }
 
 class InkeApp extends StatelessWidget {

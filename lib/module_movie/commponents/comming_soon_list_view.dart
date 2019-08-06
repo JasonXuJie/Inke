@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/module_movie/page_movie_details.dart';
-import 'package:Inke/config/app_config.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
-import 'package:Inke/components/text.dart';
+import 'package:Inke/widgets/text.dart';
 import 'package:Inke/util/image_util.dart';
 import 'package:Inke/util/route_util.dart';
-import 'package:Inke/config/route_config.dart';
 
 class CommingSoonList extends StatelessWidget {
   final List<MovieListSubject> data;

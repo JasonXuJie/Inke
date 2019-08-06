@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/components/dialog_loading.dart';
+import 'package:Inke/widgets/dialog_loading.dart';
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:Inke/config/shared_key.dart';
 import 'package:Inke/util/shared_util.dart';
 import 'package:Inke/util/route_util.dart';
-import 'package:Inke/components/bottom_picker_view.dart';
+import 'package:Inke/widgets/bottom_picker_view.dart';
 import 'package:Inke/util/toast.dart';
 class MyInfoSettingPage extends StatefulWidget {
 
@@ -137,7 +137,7 @@ class _State extends State<MyInfoSettingPage> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return LoadingView(text: '加载中....');
+          return LoadingDialog(text: '加载中....');
         });
   }
 

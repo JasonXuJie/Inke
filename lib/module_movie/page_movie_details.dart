@@ -10,7 +10,7 @@ import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:Inke/bean/still_result_entity.dart';
 import 'package:Inke/bean/comment_result_entity.dart';
 import 'package:Inke/config/route_config.dart';
-import 'package:Inke/components/base_widget.dart';
+import 'package:Inke/widgets//base_widget.dart';
 import 'package:like_button/like_button.dart';
 import 'dart:ui';
 import 'package:Inke/util/image_util.dart';

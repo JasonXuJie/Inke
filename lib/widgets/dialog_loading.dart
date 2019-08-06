@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'dart:io';
 
 ///加载进度对话框
-class LoadingView extends Dialog{
+class LoadingDialog extends Dialog{
 
   final String text;
 
-  LoadingView({Key key,@required this.text}):super(key:key);
+  LoadingDialog({Key key,this.text}):super(key:key);
 
 
   @override
@@ -33,7 +33,7 @@ class LoadingView extends Dialog{
                    Padding(
                        padding:const EdgeInsets.only(top: 20.0),
                        child: Text(
-                         text,
+                         text ?? '加载中...',
                          style: const TextStyle(fontSize: 13.0),
                        ),
                    )

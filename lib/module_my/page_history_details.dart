@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/http/api.dart';
-import 'package:Inke/components/loading_view.dart';
+import 'package:Inke/widgets/loading_view.dart';
 import 'package:Inke/config/app_config.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';

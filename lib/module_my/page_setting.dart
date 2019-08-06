@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/components/dialog_logout.dart';
+import 'package:Inke/widgets/dialog_logout.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:Inke/provider/login_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:Inke/components/gaps.dart';
-import 'package:Inke/components/dialog_author.dart';
+import 'package:Inke/widgets/gaps.dart';
+import 'package:Inke/widgets/dialog_author.dart';
 import 'package:Inke/util/image_util.dart';
 
 class SettingPage extends StatefulWidget {

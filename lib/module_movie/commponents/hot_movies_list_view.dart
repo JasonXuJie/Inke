@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/module_movie/page_movie_details.dart';
 import 'package:Inke/util/route_util.dart';
-import 'package:Inke/components/dialog_feed_back.dart';
+import 'package:Inke/widgets/dialog_feed_back.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
 import 'package:Inke/util/image_util.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/util/image_util.dart';
-import 'package:Inke/components/text.dart';
+import 'package:Inke/widgets/text.dart';
 
 class NotFoundPage extends StatelessWidget {
   @override

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/bean/funItem.dart';
 import 'package:Inke/util/toast.dart';
-
+import 'package:Inke/widgets/text.dart';
 class FunView extends StatelessWidget {
+
   final List<FunItem> items = [];
 
   FunView() {
@@ -61,17 +62,9 @@ class FunView extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     item.title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16.0,
-                    ),
+                    style: TextStyles.whiteW700_16,
                   ),
-                  Text(item.subTitle,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12.0,
-                      )),
+                  Text(item.subTitle, style: TextStyles.whiteNormal12),
                 ],
               ),
             )));

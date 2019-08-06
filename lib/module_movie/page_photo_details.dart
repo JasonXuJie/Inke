@@ -4,7 +4,7 @@ import 'package:Inke/http/api.dart';
 import 'package:Inke/bean/still_result_entity.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:Inke/config/app_config.dart';
-import 'package:Inke/components/loading_view.dart';
+import 'package:Inke/widgets//loading_view.dart';
 
 class PhotoPage extends StatefulWidget {
   final Map arguments;
