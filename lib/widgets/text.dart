@@ -52,16 +52,10 @@ class TextStyles {
   );
 
   static const TextStyle blueBold18 = TextStyle(
-      fontSize: 18.0,
-      color: Colors.blue,
-      fontWeight: FontWeight.bold
-  );
+      fontSize: 18.0, color: Colors.blue, fontWeight: FontWeight.bold);
 
-  static const TextStyle redBold18 = TextStyle(
-      fontSize: 18.0,
-      color: Colors.red,
-      fontWeight: FontWeight.bold
-  );
+  static const TextStyle redBold18 =
+      TextStyle(fontSize: 18.0, color: Colors.red, fontWeight: FontWeight.bold);
 
   static const TextStyle greyNormal13 = TextStyle(
     color: Colors.grey,
@@ -74,10 +68,8 @@ class TextStyles {
     fontWeight: FontWeight.bold,
   );
 
-  static const TextStyle greyNormal12 = TextStyle(
-      color: Colors.grey,
-      fontSize: 12.0
-  );
+  static const TextStyle greyNormal12 =
+      TextStyle(color: Colors.grey, fontSize: 12.0);
 
   static const TextStyle greyNormal10 = TextStyle(
     color: Colors.grey,
@@ -95,4 +87,15 @@ class TextStyles {
     fontSize: 16.0,
   );
 
+  static const TextStyle whiteBold16 = TextStyle(
+      color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.bold);
+
+  static const TextStyle greyNormal15 =
+      TextStyle(color: Colors.grey, fontSize: 15.0);
+
+  static const TextStyle whiteNormal14 =
+      TextStyle(color: Colors.white, fontSize: 14);
+
+  static const TextStyle orangeBold11 =
+       TextStyle(color: Colors.orangeAccent, fontSize: 11.0,fontWeight: FontWeight.bold);
 }

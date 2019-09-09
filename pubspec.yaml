@@ -12,19 +12,19 @@ dependencies:
   #android,IOS图像选择器 image_picker: ^0.4.10
   image_picker: ^0.6.0+17
   #上拉加载更多
-  pull_to_refresh: ^1.1.6
+  pull_to_refresh: ^1.5.4
   #瀑布流布局
   flutter_staggered_grid_view: ^0.2.7
   # Toast插件 https://github.com/OpenFlutter/flutter_oktoast
   oktoast: ^2.1.9
   #android glide
-  cached_network_image: ^0.7.0
+  cached_network_image: ^1.1.1
   #骨架效果
   shimmer: ^1.0.0
   #flutter官方webview控件
-  webview_flutter: ^0.3.10+3
+  webview_flutter: ^0.3.13
   #android photoView
-  photo_view: ^0.3.3
+  photo_view: ^0.4.2
   #Banner轮播控件
   flutter_swiper: ^1.1.6
   #解析html,html标记呈现为Flutter小部件

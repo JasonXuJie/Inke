@@ -53,8 +53,41 @@ class RouteUtil {
     Navigator.push(context, CupertinoPageRoute(builder: (context) => page));
   }
 
+  ///页面逐渐放大展开
+  void pushScale(BuildContext context, Widget page) {
+    Navigator.push(context, PageRouteBuilder(pageBuilder: (BuildContext context,
+        Animation animation, Animation secondaryAnimation) {
+      return ScaleTransition(
+          scale: animation, alignment: Alignment.center, child: page);
+    }));
+  }
 
-  static pushNamedByArgs(BuildContext context,String routeName,Object args){
-    Navigator.pushNamed(context, routeName,arguments: args);
+  ///淡出效果
+  void pushFade(BuildContext context, Widget page) {
+    Navigator.push(context, PageRouteBuilder(pageBuilder: (BuildContext context,
+        Animation animation, Animation secondaryAnimation) {
+      return FadeTransition(opacity: animation, child: page);
+    }));
+  }
+
+  ///旋转效果
+  void jump3(BuildContext context, Widget page) {
+    Navigator.push(context, PageRouteBuilder(pageBuilder: (BuildContext context,
+        Animation animation, Animation secondaryAnimation) {
+      return RotationTransition(
+          alignment: Alignment.center, turns: animation, child: page);
+    }));
+  }
+
+  ///出现方向
+  void pushSlide(BuildContext context, Widget page) {
+    Navigator.push(context, PageRouteBuilder(pageBuilder: (BuildContext context,
+        Animation animation, Animation secondaryAnimation) {
+      return SlideTransition(position: animation, child: page);
+    }));
+  }
+
+  static pushNamedByArgs(BuildContext context, String routeName, Object args) {
+    Navigator.pushNamed(context, routeName, arguments: args);
   }
 }

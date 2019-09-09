@@ -6,6 +6,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:Inke/bean/history_detail_result_entity.dart';
 import 'package:Inke/http/http_manager_jh.dart';
+import 'package:Inke/widgets/text.dart';
 
 class HistoryDetailsPage extends StatefulWidget {
   final String e_id;
@@ -21,41 +22,102 @@ class HistoryDetailsPage extends StatefulWidget {
 class _State extends State<HistoryDetailsPage> with TickerProviderStateMixin {
   TabController _controller;
   bool _isShow = false;
-  HistoryDetailResult data;
 
-  @override
-  void initState() {
-    super.initState();
-    _requestData();
-  }
-
-  void _requestData() async {
-    var response = await HttpManager.getInstance().get(ApiService.getHistoryDetails,
+  Future<HistoryDetailResult> _requestData() async {
+    var response = await HttpManager.getInstance().get(
+        ApiService.getHistoryDetails,
         params: {'key': ApiService.historyKey, 'e_id': widget.e_id});
-    setState(() {
-      data = HistoryDetailResultEntity.fromJson(response).result[0];
-    });
+    return HistoryDetailResultEntity.fromJson(response).result[0];
   }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.e_id);
     return Scaffold(
-      body: _renderLoading(),
+      appBar: AppBar(
+        title: Text(widget.title),
+        centerTitle: true,
+      ),
+      body: FutureBuilder<HistoryDetailResult>(
+        future: _requestData(),
+        builder: (BuildContext context,
+            AsyncSnapshot<HistoryDetailResult> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+              return LoadingView();
+              break;
+            default:
+              if (snapshot.hasData && snapshot.data != null) {
+                return _buildContent(snapshot.data);
+              }
+          }
+        },
+      ),
     );
   }
 
-  Widget _renderLoading() {
-    if (data == null) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          centerTitle: true,
-        ),
-        body: LoadingView(),
-      );
+  Widget _buildContent(HistoryDetailResult data) {
+    if (!_isShow) {
+      _controller = TabController(length: data.picUrl.length, vsync: this);
+      var isVisible = false;
+      if (data.picUrl.length <= 1) {
+        isVisible = true;
+      }
+      return SingleChildScrollView(
+          child: Column(
+        children: <Widget>[
+          Visibility(
+            visible: data.picUrl.length != 0,
+            child: SizedBox(
+              height: 300.0,
+              child: Stack(
+                children: <Widget>[
+                  TabBarView(
+                    controller: _controller,
+                    children: _buildImages(data),
+                  ),
+                  Offstage(
+                    offstage: isVisible,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: TabPageSelector(
+                          controller: _controller,
+                          color: Colors.white,
+                          selectedColor: Colors.blue,
+                          indicatorSize: 13.0,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
+            child: Text(
+              data.content,
+              style: TextStyles.blackNormal12,
+            ),
+          )
+        ],
+      ));
     } else {
-      return Scaffold(body: _renderContent());
+      return GestureDetector(
+        onTap: () {
+          setState(() {
+            _isShow = false;
+          });
+        },
+        child: Container(
+            color: Colors.black,
+            child: PhotoViewGallery(
+              pageOptions: getGallery(data),
+              // backgroundDecoration: BoxDecoration(color: Colors.black87),
+            )),
+      );
     }
   }
 
@@ -83,82 +145,7 @@ class _State extends State<HistoryDetailsPage> with TickerProviderStateMixin {
     return images;
   }
 
-  Widget _renderContent() {
-    if (!_isShow) {
-      _controller = TabController(length: data.picUrl.length, vsync: this);
-      var isVisible = false;
-      if (data.picUrl.length <= 1) {
-        isVisible = true;
-      }
-      return Offstage(
-        offstage: _isShow,
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              title: Text(widget.title),
-              centerTitle: true,
-              floating: true,
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 300.0,
-                child: Stack(
-                  children: <Widget>[
-                    TabBarView(
-                      controller: _controller,
-                      children: _buildImages(data),
-                    ),
-                    Offstage(
-                      offstage: isVisible,
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: TabPageSelector(
-                            controller: _controller,
-                            color: Colors.white,
-                            selectedColor: Colors.blue,
-                            indicatorSize: 13.0,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-                child: Padding(
-              padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 20.0),
-              child: Text(
-                data.content,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 13.0,
-                ),
-              ),
-            ))
-          ],
-        ),
-      );
-    } else {
-      return GestureDetector(
-        onTap: () {
-          setState(() {
-            _isShow = false;
-          });
-        },
-        child: Container(
-            color: Colors.black,
-            child: PhotoViewGallery(
-              pageOptions: getGallery(),
-              // backgroundDecoration: BoxDecoration(color: Colors.black87),
-            )),
-      );
-    }
-  }
-
-  List<PhotoViewGalleryPageOptions> getGallery() {
+  List<PhotoViewGalleryPageOptions> getGallery(HistoryDetailResult data) {
     return List<PhotoViewGalleryPageOptions>.generate(data.picUrl.length,
         (int index) {
       return PhotoViewGalleryPageOptions(

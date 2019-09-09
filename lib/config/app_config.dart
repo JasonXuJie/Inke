@@ -7,6 +7,7 @@ class AppColors {
   static const color_0099fd = Color(0XFF0099FD);
   static const color_ff9900 = Color(0XFFFF9900);
   static const white = Color(0XFFFFFFFF);
+  static const black = Color(0XFF000000);
   static const toastBackground = Color(0XFF808080);
   static const color_fc3 = Color(0xffFFCC33);
   static const color_e6 = Color(0xffe6e6e6);

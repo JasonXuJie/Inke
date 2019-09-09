@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/util/route_util.dart';
 import 'package:Inke/config/route_config.dart';
-import 'package:Inke/config/app_config.dart';
-import 'page_my_setting.dart';
+import 'package:Inke/module_my/page_my_setting.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/services.dart';
@@ -11,117 +10,111 @@ import 'page_pairing.dart';
 import 'package:Inke/util/shared_util.dart';
 import 'package:Inke/config/shared_key.dart';
 import 'package:Inke/widgets/bottom_photo_view.dart';
-import 'package:Inke/module_my/page_setting.dart';
 import 'package:provider/provider.dart';
 import 'package:Inke/provider/login_provider.dart';
+import 'package:Inke/widgets/bottom_clipper.dart';
+import 'package:Inke/widgets/text.dart';
+import 'package:Inke/util/image_util.dart';
+import 'package:Inke/widgets/search_delegate.dart';
 
 class MyIndex extends StatefulWidget {
   @override
   _State createState() => _State();
 }
 
-class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin{
+class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin {
   var methodChannel = const MethodChannel('com.jason.myfluttertest/module_my');
   var webChannel = const MethodChannel('com.jason.myfluttertest/web');
   File _header;
 
-  final titles = ['历史上的今天', '周公解梦', '反馈', '设置', 'menu_five', '百度一下', '关于我'];
-
-  final imgPath = [
-    AppImgPath.mainPath + 'menu_list_one.png',
-    AppImgPath.mainPath + 'menu_list_two.png',
-    AppImgPath.mainPath + 'menu_list_three.png',
-    AppImgPath.mainPath + 'menu_list_four.png',
-    AppImgPath.mainPath + 'menu_list_five.png',
-    AppImgPath.mainPath + 'menu_list_six.png',
-    AppImgPath.mainPath + 'menu_list_seven.png'
-  ];
+  final menus = {
+    '历史上的今天': 'menu_list_one',
+    '周公解梦': 'menu_list_two',
+    '反馈': 'menu_list_three',
+    '设置': 'menu_list_four',
+    '关于App': 'menu_list_five',
+    '百度一下': 'menu_list_six',
+    '关于我': 'menu_list_seven'
+  };
 
   var name;
+
+  
 
   @override
   void initState() {
     super.initState();
-    print('My initState');
     name = SharedUtil.getInstance().get(SharedKey.USER_NAME, '');
   }
 
   @override
   bool get wantKeepAlive => true;
 
-
-  Container _buildMyInfo() {
-    return Container(
-      color: Colors.blue,
-      width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 15.0),
-      child: Wrap(
-        direction: Axis.vertical,
-        runAlignment: WrapAlignment.center,
-        alignment: WrapAlignment.center,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: 3.0,
-        children: <Widget>[
-          GestureDetector(
-            child: _header == null
-                ? Image.asset(
-                    AppImgPath.mainPath + 'img_header.png',
-                    width: 80.0,
-                    height: 80.0,
-                  )
-                : ClipOval(
-                    child: SizedBox(
-                      width: 80.0,
-                      height: 80.0,
-                      child: Image.file(
-                        _header,
-                        fit: BoxFit.fill,
+  Widget _buildMyInfo() {
+    return ClipPath(
+        clipper: BottomClipper(),
+        child: Container(
+          color: Colors.blue,
+          width: MediaQuery.of(context).size.width,
+          height: 200.0,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              GestureDetector(
+                child: _header == null
+                    ? loadAssetImage('img_header', width: 80.0, height: 80.0)
+                    : ClipOval(
+                        child: SizedBox(
+                          width: 80.0,
+                          height: 80.0,
+                          child: Image.file(
+                            _header,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-            onTap: () {
-              _showModifyHeader(context);
-            },
+                onTap: () {
+                  _showModifyHeader(context);
+                },
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Consumer<LoginProvider>(
+                builder: (context, LoginProvider provider, _) {
+                  return Column(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          if (!provider.isLogin) {
+                            RouteUtil.pushByNamed(
+                                context, RouteConfig.loginName);
+                          }
+                        },
+                        child: Text(
+                          provider.isLogin ? '名字为空' : '登陆',
+                          style: TextStyles.whiteBold16,
+                        ),
+                      )
+                    ],
+                  );
+                },
+              ),
+            ],
           ),
-          Consumer<LoginProvider>(
-            builder: (context,LoginProvider provider,_){
-              return Column(
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      if (!provider.isLogin) {
-                        RouteUtil.pushByNamed(
-                            context, RouteConfig.loginName);
-                      }
-                    },
-                    child: Text(
-                      provider.isLogin ? '名字为空' : '登陆',
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  )
-                ],
-              );
-            },
-          ),
-        ],
-      ),
-    );
+        ));
   }
 
   Container _buildMenu() {
     return Container(
-      color: Colors.white,
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
-      child:  Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          _buildMenuBtn(AppImgPath.mainPath + 'img_menu_two.png', '星座配对', () {
+          _buildMenuBtn('img_menu_two', '星座配对', () {
             RouteUtil.pushByWidget(context, PairingPage(flag: true));
           }),
-          _buildMenuBtn(AppImgPath.mainPath + 'img_menu_three.png', '生肖配对', () {
+          _buildMenuBtn('img_menu_three', '生肖配对', () {
             RouteUtil.pushByWidget(context, PairingPage(flag: false));
           }),
         ],
@@ -129,26 +122,19 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin{
     );
   }
 
-  GestureDetector _buildMenuBtn(imgPath, label, callBack) {
-    Color color = Theme.of(context).primaryColor;
+  GestureDetector _buildMenuBtn(
+      String imgPath, String label, Function callBack) {
     return GestureDetector(
       onTap: callBack,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Image.asset(
-            imgPath,
-            width: 40.0,
-            height: 40.0,
-          ),
+          loadAssetImage(imgPath, width: 40.0, height: 40.0),
           Padding(
             padding: EdgeInsets.only(top: 5.0),
             child: Text(
               label,
-              style: TextStyle(
-                color: color,
-                fontSize: 15.0,
-              ),
+              style: TextStyles.textMain12,
             ),
           )
         ],
@@ -156,62 +142,37 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin{
     );
   }
 
-  Column _buildItem(label, imagePath, index) {
-    var divider;
-    if (index == 1 || index == 4) {
-      divider = Divider(
-        color: Colors.transparent,
-        height: 10.0,
-      );
-    } else {
-      divider = Divider(
-        color: Colors.transparent,
-        height: 1.0,
-      );
-    }
+  Column _buildItem(label, imagePath) {
     return Column(
       children: <Widget>[
         Container(
-          color: Colors.white,
           child: ListTile(
-            title: Text(
-              label,
-              style: TextStyle(
-                fontSize: 14.0,
-              ),
-            ),
-            leading: Image.asset(
-              imagePath,
-              width: 30.0,
-              height: 30.0,
-            ),
-            trailing: Image.asset(
-              AppImgPath.mainPath + 'img_right_arrow.png',
-              width: 10.0,
-              height: 10.0,
-            ),
+            title: Text(label, style: TextStyles.mainNormal14),
+            leading: loadAssetImage(imagePath, width: 30.0, height: 30.0),
+            trailing: Icon(Icons.chevron_right),
             onTap: () {
-              switch (index) {
-                case 0:
+              switch (label) {
+                case '历史上的今天':
                   RouteUtil.pushByNamed(context, RouteConfig.todayName);
                   break;
-                case 1:
+                case '周公解梦':
                   RouteUtil.pushByNamed(context, RouteConfig.dreamName);
                   break;
-                case 2:
+                case '反馈':
                   RouteUtil.pushByNamed(context, RouteConfig.feedBackName);
                   break;
-                case 3:
+                case '设置':
                   RouteUtil.pushByNamed(context, RouteConfig.settingName);
                   break;
-                case 4:
+                case '关于App':
+                  RouteUtil.pushByNamed(context, RouteConfig.stepName);
                   break;
-                case 5:
+                case '百度一下':
                   if (Platform.isAndroid) {
                     go2Web();
                   }
                   break;
-                case 6:
+                case '关于我':
                   if (Platform.isAndroid) {
                     go2AboutMe();
                   }
@@ -221,65 +182,20 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin{
             },
           ),
         ),
-        divider
+        Divider(
+          height: 0.5,
+        )
       ],
     );
   }
 
-
-  void jump(context){
-    Navigator.push(context, PageRouteBuilder(pageBuilder:
-        (BuildContext context, Animation animation,
-        Animation secondaryAnimation) {
-      return ScaleTransition(
-          scale: animation,
-          alignment: Alignment.center,
-          child: SettingPage());
-    }));
-  }
-
-
-  void jump2(context){
-    Navigator.push(context, PageRouteBuilder(pageBuilder:
-        (BuildContext context, Animation animation,
-        Animation secondaryAnimation) {
-      return FadeTransition(
-          opacity: animation,
-          child: SettingPage());
-    }));
-  }
-
-  void jump3(context){
-    Navigator.push(context, PageRouteBuilder(pageBuilder:
-        (BuildContext context, Animation animation,
-        Animation secondaryAnimation) {
-      return RotationTransition(
-          alignment: Alignment.center,
-          turns: animation,
-          child: SettingPage());
-    }));
-  }
-
-  void jump4(context){
-    Navigator.push(context, PageRouteBuilder(pageBuilder:
-        (BuildContext context, Animation animation,
-        Animation secondaryAnimation) {
-      return SlideTransition(
-          position: animation,
-          child: SettingPage());
-    }));
-  }
-
   _buildMenuList() {
     List<Widget> items = [];
-    List<Widget>.generate(titles.length, (index) {
-      items.add(_buildItem(titles[index], imgPath[index], index));
+    menus.forEach((title, imgpath) {
+      items.add(_buildItem(title, imgpath));
     });
-    return Padding(
-      padding: EdgeInsets.only(top: 10.0),
-      child: Wrap(
-        children: items,
-      ),
+    return Wrap(
+      children: items,
     );
   }
 
@@ -305,8 +221,8 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin{
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    print('My build');
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('我的'),
         centerTitle: true,
@@ -314,7 +230,7 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin{
         elevation: 0.0,
         actions: <Widget>[
           Consumer<LoginProvider>(
-            builder: (context,LoginProvider provider,_){
+            builder: (context, LoginProvider provider, _) {
               return FlatButton(
                 onPressed: () {
                   if (provider.isLogin) {
@@ -339,6 +255,9 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin{
           children: <Widget>[
             _buildMyInfo(),
             _buildMenu(),
+            Divider(
+              height: 0.5,
+            ),
             _buildMenuList(),
           ],
         ),
@@ -346,27 +265,23 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin{
     );
   }
 
-  _showModifyHeader(context) {
+  _showModifyHeader(context) async {
     showModalBottomSheet(
         context: context,
         builder: (context) {
           return BottomPhotoView(() {
-            pickHeader(ImageSource.camera);
+            ImagePicker.pickImage(source: ImageSource.camera).then((file) {
+              setState(() {
+                _header = file;
+              });
+            });
           }, () {
-            pickHeader(ImageSource.gallery);
+            ImagePicker.pickImage(source: ImageSource.gallery).then((file) {
+              setState(() {
+                _header = file;
+              });
+            });
           });
         });
   }
-
-  Future pickHeader(ImageSource source) async {
-    ImagePicker.pickImage(source: source).then((file) {
-      setState(() {
-        _header = file;
-      });
-    });
-  }
-
-
-
-
 }

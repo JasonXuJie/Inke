@@ -17,7 +17,7 @@ class HttpManager {
     var option = BaseOptions(
       baseUrl: ApiService.juheBaseUrl,
       connectTimeout: 30000,
-      receiveTimeout: 3000,
+      receiveTimeout: 30000,
       //headers:
     );
     _dio = Dio(option);
