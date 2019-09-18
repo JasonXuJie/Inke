@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/config/app_config.dart';
 import 'package:Inke/config/route_config.dart';
-import 'package:Inke/util/route_util.dart';
 import 'dart:async';
 import 'package:Inke/util/shared_util.dart';
 import 'package:Inke/config/shared_key.dart';
@@ -25,9 +24,9 @@ class SplashPage extends StatelessWidget {
               callBack: () {
                 bool isFirst = Provider.of<FirstProvider>(context).isFirst;
                 if (isFirst) {
-                  RouteUtil.popAndPushByNamed(context, RouteConfig.guideName);
+                  RouteUtil.pushReplacementNamed(context, RouteConfig.guideName);
                 } else {
-                  RouteUtil.popAndPushByNamed(context, RouteConfig.mainName);
+                  RouteUtil.pushReplacementNamed(context, RouteConfig.mainName);
                 }
               },
             ),
@@ -57,9 +56,9 @@ class SplashPage extends StatelessWidget {
     Future.delayed(const Duration(seconds: 3), () {
       bool isFirst = SharedUtil.getInstance().get(SharedKey.isFirst, true);
       if (isFirst) {
-        RouteUtil.popAndPushByNamed(context, RouteConfig.guideName);
+        RouteUtil.pushReplacementNamed(context, RouteConfig.guideName);
       } else {
-        RouteUtil.popAndPushByNamed(context, RouteConfig.mainName);
+        RouteUtil.pushReplacementNamed(context, RouteConfig.mainName);
       }
     });
   }

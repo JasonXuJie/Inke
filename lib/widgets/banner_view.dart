@@ -1,9 +1,9 @@
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:Inke/module_movie/page_movie_details.dart';
-import 'package:Inke/util/route_util.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
 import 'package:Inke/util/image_util.dart';
+import 'package:Inke/config/route_config.dart';
 
 
 class BannerView extends StatelessWidget {
@@ -41,7 +41,7 @@ class BannerView extends StatelessWidget {
     if (itemData is MovieListSubject) {
       return GestureDetector(
         onTap: () {
-          RouteUtil.pushByWidget(context, MovieDetailsPage(data: itemData,));
+          RouteUtil.pushWidget(context, MovieDetailsPage(data: itemData,));
         },
         child:loadNetworkImage(itemData.images.medium,fit: BoxFit.fill),
       );

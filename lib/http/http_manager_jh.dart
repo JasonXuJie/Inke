@@ -2,20 +2,20 @@ import 'package:dio/dio.dart';
 import 'package:Inke/config/app_config.dart';
 import 'package:Inke/http/api.dart';
 
-class HttpManager {
+class JhHttpManager {
   static var httpManager;
   static Dio _dio;
 
-  static HttpManager getInstance() {
+  static JhHttpManager getInstance() {
     if (httpManager == null) {
-      httpManager = HttpManager();
+      httpManager = JhHttpManager();
     }
     return httpManager;
   }
 
-  HttpManager() {
+  JhHttpManager() {
     var option = BaseOptions(
-      baseUrl: ApiService.juheBaseUrl,
+      baseUrl: Api.juheBaseUrl,
       connectTimeout: 30000,
       receiveTimeout: 30000,
       //headers:

@@ -54,6 +54,8 @@ dependencies:
   url_launcher: ^5.1.0
   #微信分享 https://github.com/OpenFlutter/fluwx
   fluwx: ^1.0.3
+  #Lottie在Flutter上的实现
+  fluttie: ^0.5.0
 
 
 
@@ -117,6 +119,10 @@ flutter:
    - images/img_search.png
    - images/none.png
    - images/logo.png
+   - images/two_floor_bg.png
+   - images/two_level_bg.jpeg
+   - images/banner.json
+   - images/loading.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

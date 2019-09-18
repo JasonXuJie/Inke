@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:Inke/http/api.dart';
 import 'package:Inke/widgets/loading_view.dart';
 import 'package:Inke/bean/dream_result_entity.dart';
-import 'package:Inke/http/http_manager_afd.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:Inke/widgets/text.dart';
 
@@ -15,22 +14,6 @@ class _State extends State<DreamPage> {
   var _searchValue;
   DreamResultEntity _data;
   var _isSubmit = false;
-
-  _requestData() async {
-    var response = await HttpManager.getInstance().get(ApiService.getDream,
-        params: {
-          'key': ApiService.dreamKey,
-          'keyword': _searchValue,
-          'rows': 20,
-          'page': 1
-        });
-    //print(response);
-    //print(response is String);
-    //print(response is Map);
-    setState(() {
-      _data = DreamResultEntity.fromJson(response);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,22 +40,22 @@ class _State extends State<DreamPage> {
               onChanged: (String value) {
                 _searchValue = value;
               },
-              onSubmitted: (String value) {
+              onSubmitted: (String value) async{
+                 _data = await Api.getDream(_searchValue);
                 setState(() {
                   _isSubmit = true;
                 });
-                _requestData();
               },
             ),
           ),
           RaisedButton(
             textColor: Colors.white,
             padding: const EdgeInsets.all(0.0),
-            onPressed: () {
+            onPressed: () async{
+               _data = await Api.getDream(_searchValue);
               setState(() {
                 _isSubmit = true;
               });
-              _requestData();
             },
             child: Container(
               width: MediaQuery.of(context).size.width / 3,

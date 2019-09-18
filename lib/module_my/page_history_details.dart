@@ -5,7 +5,6 @@ import 'package:Inke/config/app_config.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:Inke/bean/history_detail_result_entity.dart';
-import 'package:Inke/http/http_manager_jh.dart';
 import 'package:Inke/widgets/text.dart';
 
 class HistoryDetailsPage extends StatefulWidget {
@@ -23,13 +22,6 @@ class _State extends State<HistoryDetailsPage> with TickerProviderStateMixin {
   TabController _controller;
   bool _isShow = false;
 
-  Future<HistoryDetailResult> _requestData() async {
-    var response = await HttpManager.getInstance().get(
-        ApiService.getHistoryDetails,
-        params: {'key': ApiService.historyKey, 'e_id': widget.e_id});
-    return HistoryDetailResultEntity.fromJson(response).result[0];
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +30,7 @@ class _State extends State<HistoryDetailsPage> with TickerProviderStateMixin {
         centerTitle: true,
       ),
       body: FutureBuilder<HistoryDetailResult>(
-        future: _requestData(),
+        future: Api.getHistoryDetail(widget.e_id),
         builder: (BuildContext context,
             AsyncSnapshot<HistoryDetailResult> snapshot) {
           switch (snapshot.connectionState) {

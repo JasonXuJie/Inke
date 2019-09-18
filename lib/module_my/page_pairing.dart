@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/widgets//loading_view.dart';
-import 'dart:async';
 import 'package:Inke/config/app_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:Inke/http/api.dart';
 import 'package:Inke/widgets/bottom_picker_view.dart';
 import 'package:Inke/bean/pairing_result_entity.dart';
-import 'package:Inke/http/http_manager_afd.dart';
 import 'package:Inke/util/toast.dart';
-class PairingPage extends StatefulWidget {
 
+class PairingPage extends StatefulWidget {
   final bool flag;
 
   PairingPage({Key key, @required this.flag}) : super(key: key);
@@ -156,37 +154,15 @@ class _State extends State<PairingPage> {
     );
   }
 
-  Future<PairingResultEntity> _requestConstellactionPairing() async {
-    var response = await HttpManager.getInstance().get(ApiService.getPairing,
-        params: {
-          'key': ApiService.pairingKey,
-          'xingzuo1': _value1,
-          'xingzuo2': _value2
-        });
-    print(response);
-    return PairingResultEntity.fromJson(response);
-  }
-
-  Future<PairingResultEntity> _requestChineseZodiac() async {
-    var response =
-        await HttpManager.getInstance().get(ApiService.getChinesePairing, params: {
-      'key': ApiService.chinesePairingKey,
-      'shengxiao1': _value1,
-      'shengxiao2': _value2,
-    });
-    print(response);
-    return PairingResultEntity.fromJson(response);
-  }
-
   _buildContainer() {
     if (submit) {
       return Expanded(
           child: FutureBuilder<PairingResultEntity>(
               future: widget.flag == true
-                  ? _requestConstellactionPairing()
-                  : _requestChineseZodiac(),
-              builder:
-                  (BuildContext context, AsyncSnapshot<PairingResultEntity> snapshot) {
+                  ? Api.getConstellactionPairing(_value1, _value2)
+                  : Api.getChineseZodiac(_value1, _value2),
+              builder: (BuildContext context,
+                  AsyncSnapshot<PairingResultEntity> snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
                   case ConnectionState.waiting:
@@ -267,17 +243,20 @@ class _State extends State<PairingPage> {
     await showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return PickerView(data: list,callBack: (item){
-            if (isValueSelect) {
-              setState(() {
-                _value1 = item;
-              });
-            } else {
-              setState(() {
-                _value2 = item;
-              });
-            }
-          },);
+          return PickerView(
+            data: list,
+            callBack: (item) {
+              if (isValueSelect) {
+                setState(() {
+                  _value1 = item;
+                });
+              } else {
+                setState(() {
+                  _value2 = item;
+                });
+              }
+            },
+          );
         });
   }
 }

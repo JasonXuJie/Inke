@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/util/route_util.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:Inke/widgets/text.dart';
 import 'package:Inke/widgets/loading_view.dart';
 import 'package:Inke/http/api.dart';
 import 'dart:async';
 import 'package:Inke/bean/news_result_entity.dart';
-import 'package:Inke/http/http_manager_jh.dart';
 import 'package:Inke/util/image_util.dart';
 import 'package:Inke/widgets/widget_my_future.dart';
 
@@ -29,8 +27,7 @@ class _PageState extends State<NewsPage> with AutomaticKeepAliveClientMixin {
       child: Scaffold(
           appBar: AppBar(
             title: GestureDetector(
-              onTap: () =>
-                  RouteUtil.pushByNamed(context, RouteConfig.searchName),
+              onTap: () => RouteUtil.pushNamed(context, RouteConfig.searchName),
               child: Container(
                 alignment: Alignment.center,
                 margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
@@ -101,7 +98,7 @@ class _ViewState extends State<NewsList> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     super.build(context);
     return FutureBuilderWidget<NewsResultEntity>(
-      loadFuture: _requestData(),
+      loadFuture: Api.getNewsList(widget.value),
       loadingWidget: LoadingView(),
       buildDataWidget: _DataWidget(
         onRefresh: _onRefresh,
@@ -110,12 +107,6 @@ class _ViewState extends State<NewsList> with AutomaticKeepAliveClientMixin {
         setState(() {});
       },
     );
-  }
-
-  Future<NewsResultEntity> _requestData() async {
-    var response = await HttpManager.getInstance().get(ApiService.getNewsList,
-        params: {'type': widget.value, 'key': ApiService.newsKey});
-    return NewsResultEntity.fromJson(response);
   }
 
   Future<void> _onRefresh() async {

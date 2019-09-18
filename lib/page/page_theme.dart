@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/util/route_util.dart';
 import 'package:Inke/config/app_config.dart';
+import 'package:Inke/config/route_config.dart';
 
 class ThemePage extends StatefulWidget {
   @override

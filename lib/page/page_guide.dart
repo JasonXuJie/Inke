@@ -1,6 +1,5 @@
 import 'package:Inke/provider/first_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:Inke/util/route_util.dart';
 import 'package:Inke/config/app_config.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:provider/provider.dart';
@@ -59,7 +58,7 @@ class _State extends State<GuidePage> with SingleTickerProviderStateMixin {
                     BorderSide(color: AppColors.colorPrimary),
                     onPressed: () {
                       Provider.of<FirstProvider>(context).setFirst(false);
-                      RouteUtil.popAndPushByNamed(
+                      RouteUtil.pushReplacementNamed(
                           context, RouteConfig.mainName);
                      //getIt<NavigateService>().pushNamed('/Main');
 

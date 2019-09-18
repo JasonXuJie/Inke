@@ -3,11 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:Inke/http/api.dart';
 import 'package:Inke/widgets/loading_view.dart';
 import 'package:Inke/widgets/dialog_choose_city.dart';
-import 'package:Inke/util/route_util.dart';
 import 'package:Inke/bean/city_result_entity.dart';
-import 'package:Inke/http/http_manager.dart';
 import 'package:Inke/provider/city_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:Inke/config/route_config.dart';
 
 class CityPage extends StatelessWidget {
   @override
@@ -21,14 +20,9 @@ class CityPage extends StatelessWidget {
     );
   }
 
-  Future<CityResultEntity> _getCity() async {
-    var response = await HttpManager.getInstance().get(ApiService.getCityList);
-    return CityResultEntity.fromJson(response);
-  }
-
   _renderBody() {
     return FutureBuilder<CityResultEntity>(
-      future: _getCity(),
+      future: Api.getCityList(),
       builder:
           (BuildContext context, AsyncSnapshot<CityResultEntity> snapshot) {
         switch (snapshot.connectionState) {

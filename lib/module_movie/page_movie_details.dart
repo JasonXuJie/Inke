@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/http/api.dart';
-import 'package:Inke/util/route_util.dart';
 import 'package:Inke/bean/movie_detail_result_entity.dart';
-import 'package:Inke/http/http_manager.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
 import 'package:Inke/util/screen_util.dart';
 import 'package:Inke/config/app_config.dart';
@@ -10,10 +8,11 @@ import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:Inke/bean/still_result_entity.dart';
 import 'package:Inke/bean/comment_result_entity.dart';
 import 'package:Inke/config/route_config.dart';
-import 'package:Inke/widgets//base_widget.dart';
 import 'package:like_button/like_button.dart';
 import 'dart:ui';
 import 'package:Inke/util/image_util.dart';
+import 'package:Inke/widgets/shimmer_view.dart';
+import 'package:Inke/widgets/text.dart';
 
 class MovieDetailsPage extends StatefulWidget {
   final MovieListSubject data;
@@ -38,20 +37,9 @@ class _State extends State<MovieDetailsPage> {
   }
 
   _requestData() async {
-    ///获取详情数据
-    var detailResponse = await HttpManager.getInstance()
-        .get(ApiService.movieDetailsUrl(widget.data.id));
-    _detailData = MovieDetailResultEntity.fromJson(detailResponse);
-
-    ///获取剧照
-    var stillResponse = await HttpManager.getInstance()
-        .get(ApiService.moviePhotosUrl(widget.data.id, 6));
-    _stillData = StillResultEntityEntity.fromJson(stillResponse);
-
-    ///获取评论区
-    var commentResponse = await HttpManager.getInstance()
-        .get(ApiService.movieCommentsUrl(widget.data.id, 0, 8));
-    _commentData = CommentResultEntity.fromJson(commentResponse);
+    _detailData = await Api.getMovieDetails(widget.data.id);
+    _stillData = await Api.getMovieStill(widget.data.id, 6);
+    _commentData = await Api.getComments(widget.data.id);
     if (mounted) {
       setState(() {});
     }
@@ -156,26 +144,8 @@ class _State extends State<MovieDetailsPage> {
         ),
       );
     } else {
-      print('_buildBody else');
       return SliverToBoxAdapter(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            BaseWidget.buildShimmer(context),
-            BaseWidget.buildShimmer(context),
-            BaseWidget.buildShimmer(context),
-            BaseWidget.buildShimmer(context),
-            BaseWidget.buildShimmer(context),
-            BaseWidget.buildShimmer(context),
-            BaseWidget.buildShimmer(context),
-            BaseWidget.buildShimmer(context),
-            BaseWidget.buildShimmer(context),
-            BaseWidget.buildShimmer(context, width: 300.0),
-            BaseWidget.buildShimmer(context, width: 200.0),
-            BaseWidget.buildShimmer(context, width: 100.0),
-            BaseWidget.buildShimmer(context, width: 50.0),
-          ],
-        ),
+        child: ShimmerView(),
       );
     }
   }
@@ -294,7 +264,7 @@ class _State extends State<MovieDetailsPage> {
         children: <Widget>[
           Text(
             '我来评分:',
-            style: TextStyle(color: AppColors.color_fc3, fontSize: 16.0),
+            style: TextStyles.fc3Normal16,
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10.0),
@@ -330,10 +300,7 @@ class _State extends State<MovieDetailsPage> {
             padding: const EdgeInsets.only(bottom: 10.0),
             child: Text(
               '剧情介绍',
-              style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold),
+              style: TextStyles.black15Bold,
             ),
           ),
           Padding(
@@ -394,6 +361,7 @@ class _State extends State<MovieDetailsPage> {
         itemCount: data.length,
         itemBuilder: (BuildContext context, int position) {
           return Container(
+            margin: const EdgeInsets.only(right: 10.0),
             child: GestureDetector(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -404,9 +372,7 @@ class _State extends State<MovieDetailsPage> {
                     padding: const EdgeInsets.only(top: 5.0),
                     child: Text(
                       data[position].name,
-                      style: TextStyle(
-                        fontSize: 13.0,
-                      ),
+                      style: TextStyles.blackNormal14,
                     ),
                   ),
                 ],
@@ -428,10 +394,7 @@ class _State extends State<MovieDetailsPage> {
             padding: const EdgeInsets.only(left: 10.0),
             child: Text(
               '演职人员',
-              style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold),
+              style: TextStyles.black15Bold,
             ),
           ),
           Container(
@@ -474,7 +437,7 @@ class _State extends State<MovieDetailsPage> {
               children: <Widget>[
                 Text(
                   '全部剧照',
-                  style: TextStyle(fontSize: 14.0, color: AppColors.color_ff),
+                  style: TextStyles.ffNormal14,
                 ),
                 Container(
                   color: AppColors.color_ff,
@@ -484,7 +447,7 @@ class _State extends State<MovieDetailsPage> {
                 ),
                 Text(
                   '$photoCount张',
-                  style: TextStyle(fontSize: 12, color: AppColors.color_ff),
+                  style: TextStyles.ffNormal12,
                 )
               ],
             ),
@@ -499,10 +462,7 @@ class _State extends State<MovieDetailsPage> {
             padding: const EdgeInsets.only(bottom: 10.0),
             child: Text(
               '剧照',
-              style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold),
+              style: TextStyles.black15Bold,
             ),
           ),
           SingleChildScrollView(
@@ -548,9 +508,7 @@ class _State extends State<MovieDetailsPage> {
                               children: <Widget>[
                                 Text(
                                   itemData.author.name,
-                                  style: TextStyle(
-                                      fontSize: 12.0,
-                                      color: AppColors.color_66),
+                                  style: TextStyles.c6Nromal12,
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 4.0),
@@ -580,8 +538,7 @@ class _State extends State<MovieDetailsPage> {
                           children: <Widget>[
                             Text(
                               itemData.createdAt,
-                              style: TextStyle(
-                                  fontSize: 12.0, color: AppColors.color_66),
+                              style: TextStyles.c6Nromal12,
                             ),
                           ],
                         )

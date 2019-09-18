@@ -3,14 +3,13 @@ import 'package:Inke/widgets//loading_view.dart';
 import 'package:Inke/http/api.dart';
 import 'dart:async';
 import 'package:Inke/bean/movie_list_result_entity.dart';
-import 'package:Inke/http/http_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:Inke/provider/city_provider.dart';
 import 'package:Inke/widgets/widget_refresh.dart';
 import 'package:Inke/module_movie/page_movie_details.dart';
 import 'package:Inke/widgets/text.dart';
 import 'package:Inke/util/image_util.dart';
-import 'package:Inke/util/route_util.dart';
+import 'package:Inke/config/route_config.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart' hide RefreshIndicator;
 
 class MoreMoviesPage extends StatefulWidget {
@@ -21,16 +20,6 @@ class MoreMoviesPage extends StatefulWidget {
 class _State extends State<MoreMoviesPage> with SingleTickerProviderStateMixin {
   TabController _controller;
   MovieListEntity data;
-
-  Future<MovieListEntity> _requestCommingSoon(cityName) async {
-    var response = await HttpManager.getInstance()
-        .get(ApiService.getCommingSoonMovie, params: {
-      'city': cityName,
-      'start': '0',
-      'count': '20',
-    });
-    return MovieListEntity.fromJson(response);
-  }
 
   Future<void> _onRefresh() async {
     setState(() {});
@@ -94,7 +83,7 @@ class _State extends State<MoreMoviesPage> with SingleTickerProviderStateMixin {
       builder: (context, CityProvider provider, _) {
         if (data == null) {
           return FutureBuilder<MovieListEntity>(
-            future: _requestCommingSoon(provider.name),
+            future: Api.getCommingSoon(provider.name),
             builder: (BuildContext context,
                 AsyncSnapshot<MovieListEntity> snapshot) {
               switch (snapshot.connectionState) {
@@ -140,10 +129,11 @@ class _TopState extends State<TopList> {
   var _refreshController = RefreshController();
   List<MovieListSubject> data = [];
   var start = 0;
+
   @override
   void initState() {
     super.initState();
-    _requestTop250(start).then((movie) {
+    Api.getTop250(start).then((movie) {
       setState(() {
         data = movie.subjects;
       });
@@ -160,8 +150,6 @@ class _TopState extends State<TopList> {
         enablePullDown: true,
         onRefresh: _onRefresh,
         onLoading: _onLoading,
-        header: MaterialClassicHeader(),
-        footer: _buildFooter(),
         controller: _refreshController,
         child: GridView.builder(
             itemCount: data.length,
@@ -177,64 +165,30 @@ class _TopState extends State<TopList> {
     }
   }
 
-  _buildHeader(context, mode) {
-    // return new ClassicIndicator(
-    //   mode: mode,
-    //   height: 40.0,
-    //   releaseText: '松开手刷新',
-    //   refreshingText: '刷新中',
-    //   completeText: '刷新完成',
-    //   failedText: '刷新失败',
-    //   idleText: '下拉刷新',
-    // );
-  }
-
-  _buildFooter() {
-    return ClassicFooter(
-      failedText: '加载失败',
-      idleText: '无加载',
-      loadingText: '加载中...',
-      noDataText: '再无更多数据...',
-    );
-  }
-
   ///下拉刷新
   _onRefresh() {
     start = 0;
-    _requestTop250(start).then((movie) {
+    Api.getTop250(start).then((movie) {
       setState(() {
         data = movie.subjects;
       });
       _refreshController.refreshCompleted();
-      //_refreshController.sendBack(up, RefreshStatus.completed);
-      //_refreshController.sendBack(false, RefreshStatus.canRefresh);
     });
   }
 
   //上拉加载
   _onLoading() {
     start += 20;
-    _requestTop250(start).then((movie) {
+    Api.getTop250(start).then((movie) {
       if (movie.subjects.length == 0) {
         _refreshController.loadNoData();
-        //_refreshController.sendBack(up, RefreshStatus.noMore);
       } else {
         setState(() {
           data.addAll(movie.subjects);
         });
         _refreshController.loadComplete();
-        //_refreshController.sendBack(up, RefreshStatus.canRefresh);
       }
     });
-  }
-
-  Future<MovieListEntity> _requestTop250(int start) async {
-    var response =
-        await HttpManager.getInstance().get(ApiService.getTop250, params: {
-      'start': '$start',
-      'count': '20',
-    });
-    return MovieListEntity.fromJson(response);
   }
 
   _buildItem(context, MovieListSubject itemData) {
@@ -244,7 +198,7 @@ class _TopState extends State<TopList> {
     });
     return InkWell(
       onTap: () {
-        RouteUtil.pushByWidget(
+        RouteUtil.pushWidget(
             context,
             MovieDetailsPage(
               data: itemData,
@@ -317,7 +271,7 @@ class CommingSoonList extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
       child: InkWell(
         onTap: () {
-          RouteUtil.pushByWidget(
+          RouteUtil.pushWidget(
               context,
               MovieDetailsPage(
                 data: itemData,

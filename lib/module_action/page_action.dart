@@ -1,8 +1,6 @@
 import 'package:Inke/provider/city_provider.dart';
-import 'package:Inke/widgets/text.dart';
 import 'package:flutter/material.dart';
 import 'package:Inke/config/app_config.dart';
-import 'package:Inke/util/route_util.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:Inke/event/event_scroll_top.dart';
 import 'package:Inke/util/event_util.dart';
@@ -13,7 +11,6 @@ import 'package:Inke/http/api.dart';
 import 'dart:async';
 import 'package:Inke/widgets/loading_view.dart';
 import 'package:Inke/bean/action_result_entity.dart';
-import 'package:Inke/http/http_manager.dart';
 import 'package:Inke/widgets/widget_refresh.dart';
 
 class ActionFragment extends StatefulWidget {
@@ -198,7 +195,7 @@ class _ActionState extends State<ActionFragment>
           case 0:
             break;
           case 1:
-            RouteUtil.pushByNamed(context, RouteConfig.cityName);
+            RouteUtil.pushNamed(context, RouteConfig.cityName);
             break;
         }
       },
@@ -206,10 +203,18 @@ class _ActionState extends State<ActionFragment>
         PopupMenuItem<int>(
           value: 0,
           child: Row(
-            children: <Widget>[Icon(Icons.scanner), SizedBox(width: 10,),Text('扫一扫')],
+            children: <Widget>[
+              Icon(Icons.scanner),
+              SizedBox(
+                width: 10,
+              ),
+              Text('扫一扫')
+            ],
           ),
         ),
-        PopupMenuDivider(height: 1.0,),
+        PopupMenuDivider(
+          height: 1.0,
+        ),
         PopupMenuItem<int>(
           value: 1,
           child: Consumer<CityProvider>(
@@ -217,7 +222,9 @@ class _ActionState extends State<ActionFragment>
               return Row(
                 children: <Widget>[
                   Icon(Icons.location_city),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Text(provider.name)
                 ],
               );
@@ -267,12 +274,6 @@ class _ViewState extends State<EventList> with AutomaticKeepAliveClientMixin {
     super.dispose();
   }
 
-  Future<ActionResultEntity> _requestAction(cityId, dateType) async {
-    var response = await HttpManager.getInstance().get(ApiService.GET_EVENTS,
-        params: {'loc': cityId, 'day_type': dateType, 'type': widget.type});
-    return ActionResultEntity.fromJson(response);
-  }
-
   Future<void> _onRefresh() async {
     setState(() {
       _cityId = null;
@@ -297,7 +298,7 @@ class _ViewState extends State<EventList> with AutomaticKeepAliveClientMixin {
           _cityId = provider.id;
           _dateType = dateType.dateType;
           return FutureBuilder<ActionResultEntity>(
-            future: _requestAction(_cityId, _dateType),
+            future: Api.getActionsList(_cityId, _dateType, widget.type),
             builder: (BuildContext context,
                 AsyncSnapshot<ActionResultEntity> snapshot) {
               switch (snapshot.connectionState) {

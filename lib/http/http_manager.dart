@@ -15,7 +15,7 @@ class HttpManager {
 
   HttpManager() {
     var option = BaseOptions(
-      baseUrl: ApiService.doubanBaseUrl,
+      baseUrl: Api.doubanBaseUrl,
       connectTimeout: 30000,
       receiveTimeout: 30000,
       //headers:

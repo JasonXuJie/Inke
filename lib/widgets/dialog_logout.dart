@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/config/app_config.dart';
-import 'package:Inke/util/route_util.dart';
-
-
+import 'package:Inke/config/route_config.dart';
 
 typedef void OnLogoutCallBack();
 
 class LogoutDialog extends Dialog {
-
   final OnLogoutCallBack callBack;
 
   LogoutDialog(this.callBack);
@@ -32,11 +29,10 @@ class LogoutDialog extends Dialog {
               child: Text(
                 '提示',
                 style: const TextStyle(
-                  color: Colors.red,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.none
-                ),
+                    color: Colors.red,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.none),
               ),
             ),
             Expanded(
@@ -56,7 +52,7 @@ class LogoutDialog extends Dialog {
                 children: <Widget>[
                   FlatButton(
                     onPressed: () {
-                        RouteUtil.pop(context);
+                      RouteUtil.pop(context);
                     },
                     child: Text(
                       '取消',
@@ -69,13 +65,11 @@ class LogoutDialog extends Dialog {
                   FlatButton(
                     onPressed: () {
                       callBack();
-
                     },
                     child: Text(
                       '确定',
                       style: const TextStyle(
-                          color: AppColors.colorPrimary,
-                          fontSize: 16.0),
+                          color: AppColors.colorPrimary, fontSize: 16.0),
                     ),
                   ),
                 ],

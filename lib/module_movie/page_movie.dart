@@ -1,20 +1,23 @@
 import 'package:Inke/config/app_config.dart';
 import 'package:Inke/provider/city_provider.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'
+    hide RefreshIndicator, RefreshIndicatorState;
 import 'package:Inke/http/api.dart';
 import 'package:Inke/widgets/banner_view.dart';
 import 'package:provider/provider.dart';
 import 'package:Inke/widgets/dialog_loading.dart';
-import 'package:Inke/util/route_util.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
-import 'package:Inke/http/http_manager.dart';
 import 'package:Inke/util/image_util.dart';
 import 'package:Inke/widgets/widget_refresh.dart';
 import 'package:Inke/util/toast.dart';
 import 'package:Inke/widgets/text.dart';
 import 'package:Inke/module_movie/page_movie_details.dart';
 import 'package:Inke/widgets/dialog_feed_back.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:Inke/widgets/refresh_helper.dart';
+import 'package:fluttie/fluttie.dart';
+import 'package:Inke/widgets/loading_view.dart';
 
 class MovieFragment extends StatefulWidget {
   @override
@@ -25,21 +28,10 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin {
   var _cityName;
   List<MovieListEntity> dataList;
 
+  RefreshController controller = RefreshController();
+
   @override
   bool get wantKeepAlive => true;
-
-  Future<List<MovieListEntity>> _requestMovies(cityName) async {
-    List<MovieListEntity> datas = [];
-    var hotResponse = await HttpManager.getInstance().get(ApiService.getMovies,
-        params: {'city': cityName, 'start': '0', 'count': '15'});
-    var hotMovies = MovieListEntity.fromJson(hotResponse);
-    datas.add(hotMovies);
-    var moreResponse = await HttpManager.getInstance().get(ApiService.getMovies,
-        params: {'city': cityName, 'start': '16', 'count': '25'});
-    var moreMovies = MovieListEntity.fromJson(moreResponse);
-    datas.add(moreMovies);
-    return datas;
-  }
 
   Future<void> _onRefresh() async {
     setState(() {
@@ -56,14 +48,15 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin {
           return _buildBody(dataList[0].subjects, dataList[1].subjects);
         } else {
           _cityName = provider.name;
+          print(_cityName);
           return FutureBuilder<List<MovieListEntity>>(
-            future: _requestMovies(_cityName),
+            future: Api.getHomeList(_cityName),
             builder: (BuildContext context,
                 AsyncSnapshot<List<MovieListEntity>> snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                 case ConnectionState.waiting:
-                  return LoadingDialog(text: '加载中....');
+                  return LoadingAnimView();
                   break;
                 default:
                   if (snapshot.hasError) {
@@ -87,60 +80,85 @@ class _State extends State<MovieFragment> with AutomaticKeepAliveClientMixin {
 
   _buildBody(
       List<MovieListSubject> hotMovies, List<MovieListSubject> moreMovies) {
-    return RefreshIndicator(
-      onRefresh: _onRefresh,
-      child: CustomScrollView(
-        slivers: <Widget>[
-          SliverToBoxAdapter(
-              child: Stack(
-            children: <Widget>[
-              BannerView(
-                dataList: hotMovies.take(4).toList(),
-              ),
-              _buildButton(Alignment.topLeft, Consumer<CityProvider>(
-                  builder: (context, CityProvider provider, _) {
-                return Text(
-                  provider.name,
-                  style: TextStyles.whiteNormal14,
-                );
-              }), () {
-                RouteUtil.pushByNamed(context, RouteConfig.cityName);
-              }, l: 15.0, t: 50.0),
-              _buildButton(
-                  Alignment.topRight,
-                  loadAssetImage('img_search', width: 25.0, height: 25.0),
-                  () => RouteUtil.pushByNamed(context, RouteConfig.searchName),
-                  t: 50.0,
-                  r: 15.0),
-            ],
-          )),
-           SliverToBoxAdapter(
-            child: RedPacketBanner(),
-          ),
-          SliverToBoxAdapter(
-            child: _buildTitle('热门电影', () {
-              RouteUtil.pushByNamed(context, RouteConfig.moreHotMoviesName);
-            }),
-          ),
-          SliverToBoxAdapter(
-            child: HotMovieList(movieList: hotMovies),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-            sliver: FunView(),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.only(top: 10.0),
-            sliver: SliverToBoxAdapter(
-              child: _buildTitle('更多电影', () {
-                RouteUtil.pushByNamed(context, RouteConfig.moreMoviesName);
+    return RefreshConfiguration.copyAncestor(
+      context: context,
+      enableScrollWhenTwoLevel: true,
+      maxOverScrollExtent: 120,
+      child: SmartRefresher(
+        controller: controller,
+        enableTwoLevel: true,
+        enablePullDown: true,
+        onRefresh: () async {
+          _onRefresh();
+          controller.refreshCompleted();
+        },
+        onTwoLevel: () {
+          RouteUtil.pushNamed(context, RouteConfig.twoFloorName)
+              .whenComplete(() {
+            controller.twoLevelComplete();
+          });
+        },
+        header: TwoFloorHeader(),
+        child: CustomScrollView(
+          shrinkWrap: true,
+          slivers: <Widget>[
+            SliverToBoxAdapter(
+                child: Stack(
+              children: <Widget>[
+                BannerView(
+                  dataList: hotMovies.take(4).toList(),
+                ),
+                _buildButton(Alignment.topLeft, Consumer<CityProvider>(
+                    builder: (context, CityProvider provider, _) {
+                  return Text(
+                    provider.name,
+                    style: TextStyles.whiteNormal14,
+                  );
+                }), () {
+                  RouteUtil.pushNamed(context, RouteConfig.cityName);
+                }, l: 15.0, t: 50.0),
+                _buildButton(
+                    Alignment.topRight,
+                    loadAssetImage('img_search', width: 25.0, height: 25.0),
+                    () => RouteUtil.pushNamed(context, RouteConfig.searchName),
+                    t: 50.0,
+                    r: 15.0),
+              ],
+            )),
+            SliverToBoxAdapter(
+              child: Banner(),
+            ),
+            SliverToBoxAdapter(
+              child: _buildTitle('热门电影', () {
+                RouteUtil.pushNamed(context, RouteConfig.moreHotMoviesName);
               }),
             ),
-          ),
-          MoreMovieList(
-            movieList: moreMovies,
-          ),
-        ],
+            SliverToBoxAdapter(
+              child: HotMovieList(movieList: hotMovies),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              sliver: FunView(),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.only(top: 10.0),
+              sliver: SliverToBoxAdapter(
+                child: _buildTitle('更多电影', () {
+                  RouteUtil.pushNamed(context, RouteConfig.moreMoviesName);
+                }),
+              ),
+            ),
+            MoreMovieList(
+              movieList: moreMovies,
+            ),
+            // SliverPadding(
+            //   padding: const EdgeInsets.only(top: 15),
+            //   sliver: SliverToBoxAdapter(
+            //     child:  TabMore(),
+            //   ),
+            // ),
+          ],
+        ),
       ),
     );
   }
@@ -259,16 +277,48 @@ class FunView extends StatelessWidget {
   }
 }
 
-class RedPacketBanner extends StatelessWidget {
+class Banner extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => BannerState();
+}
+
+class BannerState extends State<Banner> {
+  FluttieAnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    prepare();
+  }
+
+  void prepare() async {
+    final instance = Fluttie();
+    final lottie = await instance.loadAnimationFromAsset('images/banner.json');
+    controller = await instance.prepareAnimation(lottie,
+        repeatCount: RepeatCount.infinite());
+    setState(() {
+      controller.start();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 20.0),
       child: GestureDetector(
         onTap: () => Toast.show('活动已结束！明年再来吧～～～'),
-        child: loadAssetImage('banner', format: 'jpeg', fit: BoxFit.cover),
+        child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 150.0,
+            child: FluttieAnimation(controller)),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
   }
 }
 
@@ -343,7 +393,7 @@ class MoreMovieList extends StatelessWidget {
       child: InkWell(
         child: item,
         onTap: () {
-          RouteUtil.pushByWidget(
+          RouteUtil.pushWidget(
               context,
               MovieDetailsPage(
                 data: subject,
@@ -379,7 +429,7 @@ class HotMovieList extends StatelessWidget {
           }).toList(),
           InkWell(
             onTap: () {
-              RouteUtil.pushByNamed(context, RouteConfig.moreHotMoviesName);
+              RouteUtil.pushNamed(context, RouteConfig.moreHotMoviesName);
             },
             child: Container(
               width: 130,
@@ -448,7 +498,7 @@ class HotMovieList extends StatelessWidget {
       child: InkWell(
         child: _item,
         onTap: () {
-          RouteUtil.pushByWidget(
+          RouteUtil.pushWidget(
               context,
               MovieDetailsPage(
                 data: subjects,

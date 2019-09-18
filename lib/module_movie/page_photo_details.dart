@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/http/http_manager.dart';
 import 'package:Inke/http/api.dart';
 import 'package:Inke/bean/still_result_entity.dart';
 import 'package:photo_view/photo_view.dart';
@@ -39,8 +38,7 @@ class _State extends State<PhotoPage> with SingleTickerProviderStateMixin {
   }
 
   _requestData() async {
-    var response = await HttpManager.getInstance().get(ApiService.moviePhotosUrl(widget.arguments['id'], widget.arguments['count']));
-    _data = StillResultEntityEntity.fromJson(response);
+    _data = await Api.getMovieStill(widget.arguments['id'], widget.arguments['count']);
     setState(() {
 
     });

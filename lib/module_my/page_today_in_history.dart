@@ -3,11 +3,10 @@ import 'package:Inke/http/api.dart';
 import 'dart:async';
 import 'package:Inke/widgets/loading_view.dart';
 import 'package:Inke/bean/history_list_result_entity.dart';
-import 'package:Inke/http/http_manager_jh.dart';
 import 'package:Inke/widgets/widget_my_future.dart';
 import 'package:Inke/util/image_util.dart';
 import 'package:Inke/module_my/page_history_details.dart';
-import 'package:Inke/util/route_util.dart';
+import 'package:Inke/config/route_config.dart';
 
 class TodayInHistoryPage extends StatefulWidget {
   @override
@@ -15,16 +14,8 @@ class TodayInHistoryPage extends StatefulWidget {
 }
 
 class _State extends State<TodayInHistoryPage> {
-  var date = DateTime.now();
 
-  Future<HistoryListEntity> _requestData() async {
-    var response = await HttpManager.getInstance().get(ApiService.getTodayList,
-        params: {
-          'key': ApiService.historyKey,
-          'date': '${date.month}/${date.day}'
-        });
-    return HistoryListEntity.fromJson(response);
-  }
+  final date = DateTime.now();
 
   Future<void> _onRefresh() async {
     setState(() {});
@@ -49,7 +40,7 @@ class _State extends State<TodayInHistoryPage> {
             ),
             SliverToBoxAdapter(
               child: FutureBuilderWidget(
-                loadFuture: _requestData(),
+                loadFuture: Api.getHistoryList('${date.month}/${date.day}'),
                 loadingWidget: LoadingView(),
                 defaultErrorCallback: () {
                   setState(() {});
@@ -93,7 +84,7 @@ class HistoryList extends StatelessWidget {
           ),
           trailing: Icon(Icons.arrow_right),
           onTap: () {
-            RouteUtil.pushByWidget(
+            RouteUtil.pushWidget(
                 context,
                 HistoryDetailsPage(
                   e_id: itemData.eId,

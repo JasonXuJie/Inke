@@ -2,20 +2,20 @@ import 'package:dio/dio.dart';
 import 'package:Inke/config/app_config.dart';
 import 'package:Inke/http/api.dart';
 
-class HttpManager {
+class AfdHttpManager {
   static var httpManager;
   static Dio _dio;
 
-  static HttpManager getInstance() {
+  static AfdHttpManager getInstance() {
     if (httpManager == null) {
-      httpManager = HttpManager();
+      httpManager = AfdHttpManager();
     }
     return httpManager;
   }
 
-  HttpManager() {
+  AfdHttpManager() {
     var option = BaseOptions(
-      baseUrl: ApiService.afandaBaseUrl,
+      baseUrl: Api.afandaBaseUrl,
       connectTimeout: 30000,
       receiveTimeout: 30000,
       //headers:

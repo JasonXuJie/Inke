@@ -3,15 +3,14 @@ import 'package:Inke/http/api.dart';
 import 'dart:async';
 import 'package:Inke/widgets/loading_view.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
-import 'package:Inke/http/http_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:Inke/provider/city_provider.dart';
 import 'package:Inke/widgets/widget_refresh.dart';
 import 'package:Inke/module_movie//page_movie_details.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:Inke/util/route_util.dart';
 import 'package:Inke/util/image_util.dart';
 import 'package:Inke/widgets/text.dart';
+import 'package:Inke/config/route_config.dart';
 
 class MoreHotMoviesPage extends StatefulWidget {
   @override
@@ -21,22 +20,6 @@ class MoreHotMoviesPage extends StatefulWidget {
 class _State extends State<MoreHotMoviesPage> {
   // AsyncMemoizer<MovieListEntity> _memoizer = AsyncMemoizer();
   MovieListEntity data;
-
-  Future<MovieListEntity> _requestMoreHotMovies(cityName) async {
-    var response =
-        await HttpManager.getInstance().get(ApiService.getMovies, params: {
-      'city': cityName,
-      'start': '16',
-      'count': '20',
-    });
-    return MovieListEntity.fromJson(response);
-  }
-
-//  Future<MovieListEntity> _requestOnce(cityName) async {
-//    return _memoizer.runOnce(() async {
-//      return _requestMoreHotMovies(cityName);
-//    });
-//  }
 
   Future<void> _onRefresh() async {
     setState(() {
@@ -55,7 +38,7 @@ class _State extends State<MoreHotMoviesPage> {
           Consumer<CityProvider>(builder: (context, CityProvider provider, _) {
         if (data == null) {
           return FutureBuilder<MovieListEntity>(
-              future: _requestMoreHotMovies(provider.name),
+              future: Api.getMoreHotMovieList(provider.name),
               builder: (BuildContext context,
                   AsyncSnapshot<MovieListEntity> snapshot) {
                 switch (snapshot.connectionState) {
@@ -123,7 +106,7 @@ class MoreHotMoviesList extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: () {
-          RouteUtil.pushByWidget(
+          RouteUtil.pushWidget(
               context,
               MovieDetailsPage(
                 data: data,

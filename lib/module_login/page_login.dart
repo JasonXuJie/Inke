@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/util/route_util.dart';
 import 'package:Inke/util/string_util.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:provider/provider.dart';
@@ -94,7 +93,7 @@ class _State extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      onPressed: () => RouteUtil.pushByNamed(
+                      onPressed: () => RouteUtil.pushNamed(
                           context, RouteConfig.registerName))),
               Expanded(
                   child: Align(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/util/route_util.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:Inke/module_my/page_my_setting.dart';
 import 'dart:async';
@@ -87,7 +86,7 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin {
                       GestureDetector(
                         onTap: () {
                           if (!provider.isLogin) {
-                            RouteUtil.pushByNamed(
+                            RouteUtil.pushNamed(
                                 context, RouteConfig.loginName);
                           }
                         },
@@ -112,10 +111,10 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           _buildMenuBtn('img_menu_two', '星座配对', () {
-            RouteUtil.pushByWidget(context, PairingPage(flag: true));
+            RouteUtil.pushWidget(context, PairingPage(flag: true));
           }),
           _buildMenuBtn('img_menu_three', '生肖配对', () {
-            RouteUtil.pushByWidget(context, PairingPage(flag: false));
+            RouteUtil.pushWidget(context, PairingPage(flag: false));
           }),
         ],
       ),
@@ -153,19 +152,19 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin {
             onTap: () {
               switch (label) {
                 case '历史上的今天':
-                  RouteUtil.pushByNamed(context, RouteConfig.todayName);
+                  RouteUtil.pushNamed(context, RouteConfig.todayName);
                   break;
                 case '周公解梦':
-                  RouteUtil.pushByNamed(context, RouteConfig.dreamName);
+                  RouteUtil.pushNamed(context, RouteConfig.dreamName);
                   break;
                 case '反馈':
-                  RouteUtil.pushByNamed(context, RouteConfig.feedBackName);
+                  RouteUtil.pushNamed(context, RouteConfig.feedBackName);
                   break;
                 case '设置':
-                  RouteUtil.pushByNamed(context, RouteConfig.settingName);
+                  RouteUtil.pushNamed(context, RouteConfig.settingName);
                   break;
                 case '关于App':
-                  RouteUtil.pushByNamed(context, RouteConfig.stepName);
+                  RouteUtil.pushNamed(context, RouteConfig.stepName);
                   break;
                 case '百度一下':
                   if (Platform.isAndroid) {
@@ -234,10 +233,10 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin {
               return FlatButton(
                 onPressed: () {
                   if (provider.isLogin) {
-                    RouteUtil.pushByWidget(
+                    RouteUtil.pushWidget(
                         context, MyInfoSettingPage(name: name));
                   } else {
-                    RouteUtil.pushByNamed(context, RouteConfig.loginName);
+                    RouteUtil.pushNamed(context, RouteConfig.loginName);
                   }
                 },
                 child: Text(

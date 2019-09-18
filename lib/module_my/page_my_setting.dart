@@ -4,9 +4,9 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:Inke/config/shared_key.dart';
 import 'package:Inke/util/shared_util.dart';
-import 'package:Inke/util/route_util.dart';
 import 'package:Inke/widgets/bottom_picker_view.dart';
 import 'package:Inke/util/toast.dart';
+import 'package:Inke/config/route_config.dart';
 class MyInfoSettingPage extends StatefulWidget {
 
   var name;

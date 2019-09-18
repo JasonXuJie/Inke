@@ -13,6 +13,12 @@ class TextStyles {
     color: Colors.black,
   );
 
+
+   static const TextStyle black15Bold = TextStyle(
+                  color: Colors.black,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold);
+
   static const TextStyle blackBold16 = TextStyle(
     color: Colors.black,
     fontWeight: FontWeight.bold,
@@ -96,6 +102,16 @@ class TextStyles {
   static const TextStyle whiteNormal14 =
       TextStyle(color: Colors.white, fontSize: 14);
 
-  static const TextStyle orangeBold11 =
-       TextStyle(color: Colors.orangeAccent, fontSize: 11.0,fontWeight: FontWeight.bold);
+  static const TextStyle orangeBold11 = TextStyle(
+      color: Colors.orangeAccent, fontSize: 11.0, fontWeight: FontWeight.bold);
+
+  static const TextStyle c6Nromal12 =
+      TextStyle(fontSize: 12.0, color: AppColors.color_66);
+
+  static const TextStyle ffNormal14 = TextStyle(fontSize: 14.0, color: AppColors.color_ff);
+
+   static const TextStyle ffNormal12 = TextStyle(fontSize: 12.0, color: AppColors.color_ff);
+
+   static const TextStyle fc3Normal16 = TextStyle(color: AppColors.color_fc3, fontSize: 16.0);
+
 }
