@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/util/image_util.dart';
 import 'package:Inke/widgets/text.dart';
-import 'package:Inke/config/app_config.dart';
+import 'package:Inke/config/colors.dart';
 
 ///比如服务器出错，网络异常等，可以手动进行刷新
 class RefreshWidget extends StatelessWidget {

@@ -94,7 +94,7 @@ class _State extends State<LoginPage> {
                         ),
                       ),
                       onPressed: () => RouteUtil.pushNamed(
-                          context, RouteConfig.registerName))),
+                          context, RouteName.registerName))),
               Expanded(
                   child: Align(
                     alignment: Alignment.bottomCenter,

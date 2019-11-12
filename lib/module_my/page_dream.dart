@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/http/api.dart';
-import 'package:Inke/widgets/loading_view.dart';
+import 'package:Inke/widgets/loading.dart';
 import 'package:Inke/bean/dream_result_entity.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:Inke/widgets/text.dart';

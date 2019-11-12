@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/http/api.dart';
-import 'package:Inke/widgets/loading_view.dart';
-import 'package:Inke/config/app_config.dart';
+import 'package:Inke/widgets/loading.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:Inke/bean/history_detail_result_entity.dart';
 import 'package:Inke/widgets/text.dart';
+import 'package:Inke/util/image_util.dart';
+import 'package:Inke/widgets/future_builder.dart';
 
 class HistoryDetailsPage extends StatefulWidget {
   final String e_id;
@@ -29,22 +30,12 @@ class _State extends State<HistoryDetailsPage> with TickerProviderStateMixin {
         title: Text(widget.title),
         centerTitle: true,
       ),
-      body: FutureBuilder<HistoryDetailResult>(
-        future: Api.getHistoryDetail(widget.e_id),
-        builder: (BuildContext context,
-            AsyncSnapshot<HistoryDetailResult> snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.waiting:
-              return LoadingView();
-              break;
-            default:
-              if (snapshot.hasData && snapshot.data != null) {
-                return _buildContent(snapshot.data);
-              }
+      body:FutureContainer<HistoryDetailResult>(
+          future: Api.getHistoryDetail(widget.e_id),
+          dataWidget: (HistoryDetailResult data){
+            return _buildContent(data);
           }
-        },
-      ),
+      )
     );
   }
 
@@ -118,7 +109,7 @@ class _State extends State<HistoryDetailsPage> with TickerProviderStateMixin {
     data.picUrl.forEach((picurl) {
       var image = GestureDetector(
         child: FadeInImage.assetNetwork(
-          placeholder: AppImgPath.mainPath + 'app_icon.png',
+          placeholder: mainPath + 'app_icon.png',
           image: picurl.url,
           width: MediaQuery.of(context).size.width,
           height: 300.0,

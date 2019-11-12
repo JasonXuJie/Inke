@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/widgets/dialog_logout.dart';
+import 'package:Inke/module_my/dialog_logout.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:Inke/provider/login_provider.dart';
@@ -242,7 +242,7 @@ class _State extends State<SettingPage> {
         builder: (context) {
           return LogoutDialog(() {
             Provider.of<LoginProvider>(context).hasLogin(false);
-            RouteUtil.pushNamedAndRemoveUntil(context, RouteConfig.mainName);
+            RouteUtil.pushNamedAndRemoveUntil(context, RouteName.mainName);
           });
         });
   }

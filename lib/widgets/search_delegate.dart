@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/widgets/loading_view.dart';
+import 'package:Inke/widgets/loading.dart';
 import 'package:Inke/widgets/text.dart';
 class SearchBarDelegate extends SearchDelegate<String> {
 

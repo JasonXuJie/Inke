@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/config/app_config.dart';
+import 'package:Inke/config/colors.dart';
 import 'package:Inke/bean/city_result_entity.dart';
 
 

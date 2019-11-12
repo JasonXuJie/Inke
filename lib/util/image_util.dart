@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:Inke/config/app_config.dart';
+
+
+const String mainPath = 'assets/images/';
+const String loadingPath = 'assets/images/img_loading.jpeg';
+const String loadingErrorPath = 'assets/images/img_loading_error.png';
 
 ///加载本地资源图片
 Widget loadAssetImage(String name,{double width,double height,String format,BoxFit fit}){
@@ -49,7 +53,7 @@ Widget loadFadeInNetImage(String url,{String placeholder:"none",double width,dou
 
 
 String getImgPath(String name,{String format = 'png'}){
-    return AppImgPath.mainPath+'$name.${format ?? 'png'}';
+    return mainPath+'$name.${format ?? 'png'}';
 }
 
 

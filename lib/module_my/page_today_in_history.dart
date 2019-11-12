@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/http/api.dart';
 import 'dart:async';
-import 'package:Inke/widgets/loading_view.dart';
 import 'package:Inke/bean/history_list_result_entity.dart';
-import 'package:Inke/widgets/widget_my_future.dart';
 import 'package:Inke/util/image_util.dart';
 import 'package:Inke/module_my/page_history_details.dart';
 import 'package:Inke/config/route_config.dart';
+import 'package:Inke/widgets/future_builder.dart';
 
 class TodayInHistoryPage extends StatefulWidget {
   @override
@@ -14,7 +13,6 @@ class TodayInHistoryPage extends StatefulWidget {
 }
 
 class _State extends State<TodayInHistoryPage> {
-
   final date = DateTime.now();
 
   Future<void> _onRefresh() async {
@@ -39,15 +37,11 @@ class _State extends State<TodayInHistoryPage> {
               pinned: true,
             ),
             SliverToBoxAdapter(
-              child: FutureBuilderWidget(
-                loadFuture: Api.getHistoryList('${date.month}/${date.day}'),
-                loadingWidget: LoadingView(),
-                defaultErrorCallback: () {
-                  setState(() {});
-                },
-                buildDataWidget: _DataWidget(),
-              ),
-            )
+                child: FutureContainer<HistoryListEntity>(
+                    future: Api.getHistoryList('${date.month}/${date.day}'),
+                    dataWidget: (HistoryListEntity data) {
+                      return HistoryList(data: data.result);
+                    }))
           ],
         ),
       ),
@@ -97,12 +91,5 @@ class HistoryList extends StatelessWidget {
         )
       ],
     );
-  }
-}
-
-class _DataWidget extends DataWidget<HistoryListEntity> {
-  @override
-  Widget buildContainer(HistoryListEntity data) {
-    return HistoryList(data: data.result);
   }
 }

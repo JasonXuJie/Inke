@@ -1,17 +1,15 @@
 import 'package:Inke/provider/provider_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:Inke/config/app_config.dart';
+import 'package:Inke/config/colors.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:Inke/util/shared_util.dart';
 import 'package:provider/provider.dart';
 import 'package:Inke/util/service_locator.dart';
-import 'package:Inke/util/navigate_service.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:Inke/util/fluwx_util.dart';
 import 'package:Inke/widgets/refresh_helper.dart';
 
-import 'package:Inke/test/scroll_test_debug.dart';
 
 void main() async {
   Provider.debugCheckInvalidValueType = null;
@@ -30,6 +28,7 @@ class InkeApp extends StatelessWidget {
     return MultiProvider(
         providers: providers,
         child: OKToast(
+            dismissOtherOnShow: true,
             backgroundColor: Colors.black54,
             position: ToastPosition.bottom,
             radius: 20.0,
@@ -44,12 +43,11 @@ class InkeApp extends StatelessWidget {
                     primarySwatch: Colors.blue,
                     primaryColor: AppColors.colorPrimary,
                     scaffoldBackgroundColor:
-                        AppColors.windowBackground, //默认全局背景色
+                        AppColors.white, //默认全局背景色
                   ),
-                  //home: Lottie(),
                   routes: Router.routes,
                   onGenerateRoute: Router.generateRoute,
-                  initialRoute: RouteConfig.splashName,
+                  initialRoute: RouteName.splashName,
                   onUnknownRoute: Router.unknownRoute),
             )));
   }

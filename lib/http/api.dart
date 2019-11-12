@@ -12,6 +12,10 @@ import 'package:Inke/bean/city_result_entity.dart';
 import 'package:Inke/http/http_manager_jh.dart';
 import 'package:Inke/http/http_manager_afd.dart';
 import 'package:Inke/http/http_manager.dart';
+import 'dart:io';
+import 'dart:isolate';
+import 'package:flutter/foundation.dart';
+import 'package:dio/dio.dart';
 class Api {
   ///豆瓣Api
   static const doubanBaseUrl = 'https://douban.uieee.com/v2/';
@@ -130,32 +134,31 @@ class Api {
   }
 
   ///新闻列表
-  static Future<NewsResultEntity> getNewsList(String type) async {
-    final response = await JhHttpManager.getInstance().get(
-        getNewsList,
+  static Future<NewsResultEntity> getNewsList(String type)async{
+     dynamic response = await JhHttpManager.getInstance().get(
+        getNewsListUrl,
         params: {'type': type, 'key': newsKey});
-    return NewsResultEntity.fromJson(response);
+     return compute(ParsingUtil.parsingNews,response);
   }
 
   ///活动列表
-  static Future<ActionResultEntity> getActionsList(
-      String cityId, String dateType, String type) async {
+  static Future<ActionResultEntity> getActionList(String cityId, String dateType, String type)async{
     final response = await HttpManager.getInstance().get(getActionListUrl,
         params: {'loc': cityId, 'day_type': dateType, 'type': type});
-    return ActionResultEntity.fromJson(response);
+    return compute(ParsingUtil.parsingActions,response);
   }
 
   ///首页列表
-  static Future<List<MovieListEntity>> getHomeList(String cityName) async {
+  static Future<List<MovieListEntity>> getHomeList(String cityName)async{
     List<MovieListEntity> datas = [];
     final hotResponse = await HttpManager.getInstance().get(
         getMovies,
         params: {'city': cityName, 'start': '0', 'count': '15'});
-    datas.add(MovieListEntity.fromJson(hotResponse));
+    datas.add(await compute(ParsingUtil.parsingMovies,hotResponse));
     final moreResponse = await HttpManager.getInstance().get(
         getMovies,
         params: {'city': cityName, 'start': '16', 'count': '26'});
-    datas.add(MovieListEntity.fromJson(moreResponse));
+    datas.add(await compute(ParsingUtil.parsingMovies,moreResponse));
     return datas;
   }
 
@@ -219,4 +222,24 @@ class Api {
         await HttpManager.getInstance().get(getCityListUrl);
     return CityResultEntity.fromJson(response);
   }
+}
+
+
+class ParsingUtil{
+
+
+
+  static MovieListEntity parsingMovies(dynamic response){
+    return MovieListEntity.fromJson(response);
+  }
+
+  static NewsResultEntity parsingNews(dynamic response){
+    return NewsResultEntity.fromJson(response);
+  }
+
+
+  static ActionResultEntity parsingActions(dynamic response){
+    return ActionResultEntity.fromJson(response);
+  }
+
 }

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:Inke/http/api.dart';
-import 'package:Inke/widgets/loading_view.dart';
 import 'package:Inke/widgets/dialog_choose_city.dart';
 import 'package:Inke/bean/city_result_entity.dart';
 import 'package:Inke/provider/city_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:Inke/config/route_config.dart';
+import 'package:Inke/widgets/future_builder.dart';
 
 class CityPage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,35 +17,19 @@ class CityPage extends StatelessWidget {
         title: Text('城市选择'),
         centerTitle: true,
       ),
-      body: _renderBody(),
-    );
-  }
-
-  _renderBody() {
-    return FutureBuilder<CityResultEntity>(
-      future: Api.getCityList(),
-      builder:
-          (BuildContext context, AsyncSnapshot<CityResultEntity> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-          case ConnectionState.waiting:
-            return LoadingView();
-            break;
-          default:
-            if (snapshot.hasError) {
-              return Text('${snapshot.error.toString()}');
-            } else {
+      body: FutureContainer<CityResultEntity>(
+          future: Api.getCityList(),
+          dataWidget: (CityResultEntity data){
               return GridView.count(
                 padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
                 crossAxisCount: 3,
                 mainAxisSpacing: 5.0,
                 crossAxisSpacing: 5.0,
                 childAspectRatio: 3.0,
-                children: _renderItems(snapshot.data.locs, context),
+                children: _renderItems(data.locs, context),
               );
-            }
-        }
-      },
+          }
+      ),
     );
   }
 

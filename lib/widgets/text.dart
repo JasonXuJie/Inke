@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/config/app_config.dart';
+import 'package:Inke/config/colors.dart';
 
 class TextStyles {
+
   static const TextStyle textMain12 = TextStyle(
     fontSize: 12.0,
     color: AppColors.colorPrimary,
@@ -113,5 +114,11 @@ class TextStyles {
    static const TextStyle ffNormal12 = TextStyle(fontSize: 12.0, color: AppColors.color_ff);
 
    static const TextStyle fc3Normal16 = TextStyle(color: AppColors.color_fc3, fontSize: 16.0);
+
+   static const TextStyle whiteBold14 = TextStyle( color: Colors.white, fontSize: 14.0, decoration: TextDecoration.none, fontWeight: FontWeight.bold);
+
+
+
+
 
 }

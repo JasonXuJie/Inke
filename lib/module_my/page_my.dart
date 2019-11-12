@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/config/route_config.dart';
 import 'package:Inke/module_my/page_my_setting.dart';
-import 'dart:async';
 import 'dart:io';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'page_pairing.dart';
 import 'package:Inke/util/shared_util.dart';
 import 'package:Inke/config/shared_key.dart';
-import 'package:Inke/widgets/bottom_photo_view.dart';
+import 'package:Inke/module_my/view_photo_from.dart';
 import 'package:provider/provider.dart';
 import 'package:Inke/provider/login_provider.dart';
 import 'package:Inke/widgets/bottom_clipper.dart';
@@ -22,8 +20,8 @@ class MyIndex extends StatefulWidget {
 }
 
 class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin {
-  var methodChannel = const MethodChannel('com.jason.myfluttertest/module_my');
-  var webChannel = const MethodChannel('com.jason.myfluttertest/web');
+
+
   File _header;
 
   final menus = {
@@ -31,9 +29,6 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin {
     '周公解梦': 'menu_list_two',
     '反馈': 'menu_list_three',
     '设置': 'menu_list_four',
-    '关于App': 'menu_list_five',
-    '百度一下': 'menu_list_six',
-    '关于我': 'menu_list_seven'
   };
 
   var name;
@@ -87,7 +82,7 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin {
                         onTap: () {
                           if (!provider.isLogin) {
                             RouteUtil.pushNamed(
-                                context, RouteConfig.loginName);
+                                context, RouteName.loginName);
                           }
                         },
                         child: Text(
@@ -152,31 +147,17 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin {
             onTap: () {
               switch (label) {
                 case '历史上的今天':
-                  RouteUtil.pushNamed(context, RouteConfig.todayName);
+                  RouteUtil.pushNamed(context, RouteName.todayName);
                   break;
                 case '周公解梦':
-                  RouteUtil.pushNamed(context, RouteConfig.dreamName);
+                  RouteUtil.pushNamed(context, RouteName.dreamName);
                   break;
                 case '反馈':
-                  RouteUtil.pushNamed(context, RouteConfig.feedBackName);
+                  RouteUtil.pushNamed(context, RouteName.feedBackName);
                   break;
                 case '设置':
-                  RouteUtil.pushNamed(context, RouteConfig.settingName);
+                  RouteUtil.pushNamed(context, RouteName.settingName);
                   break;
-                case '关于App':
-                  RouteUtil.pushNamed(context, RouteConfig.stepName);
-                  break;
-                case '百度一下':
-                  if (Platform.isAndroid) {
-                    go2Web();
-                  }
-                  break;
-                case '关于我':
-                  if (Platform.isAndroid) {
-                    go2AboutMe();
-                  }
-                  break;
-                default:
               }
             },
           ),
@@ -198,24 +179,6 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  Future<Null> go2AboutMe() async {
-    try {
-      final String result = await methodChannel.invokeMethod('go2AboutMe');
-      print(result);
-    } on PlatformException catch (e) {
-      print(e.message);
-    }
-  }
-
-  Future<Null> go2Web() async {
-    try {
-      var url = 'https://www.baidu.com';
-      final String result = await webChannel.invokeMethod('go2Web', url);
-      print(result);
-    } on PlatformException catch (e) {
-      print(e.message);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -236,7 +199,7 @@ class _State extends State<MyIndex> with AutomaticKeepAliveClientMixin {
                     RouteUtil.pushWidget(
                         context, MyInfoSettingPage(name: name));
                   } else {
-                    RouteUtil.pushNamed(context, RouteConfig.loginName);
+                    RouteUtil.pushNamed(context, RouteName.loginName);
                   }
                 },
                 child: Text(

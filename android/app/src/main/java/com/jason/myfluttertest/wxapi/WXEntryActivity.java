@@ -2,12 +2,12 @@ package com.jason.myfluttertest.wxapi;
 
 import android.os.Bundle;
 
-import com.jarvan.fluwx.wxapi.FluwxWXEntryActivity;
+//import com.jarvan.fluwx.wxapi.FluwxWXEntryActivity;
+//extends FluwxWXEntryActivity
+public class WXEntryActivity  {
 
-public class WXEntryActivity extends FluwxWXEntryActivity {
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//    }
 }

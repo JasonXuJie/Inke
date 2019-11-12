@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/http/api.dart';
 import 'dart:async';
-import 'package:Inke/widgets/loading_view.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
 import 'package:provider/provider.dart';
 import 'package:Inke/provider/city_provider.dart';
-import 'package:Inke/widgets/widget_refresh.dart';
 import 'package:Inke/module_movie//page_movie_details.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:Inke/util/image_util.dart';
 import 'package:Inke/widgets/text.dart';
 import 'package:Inke/config/route_config.dart';
+import 'package:Inke/widgets/future_builder.dart';
 
 class MoreHotMoviesPage extends StatefulWidget {
   @override
@@ -18,12 +17,13 @@ class MoreHotMoviesPage extends StatefulWidget {
 }
 
 class _State extends State<MoreHotMoviesPage> {
-  // AsyncMemoizer<MovieListEntity> _memoizer = AsyncMemoizer();
+
+
   MovieListEntity data;
 
   Future<void> _onRefresh() async {
     setState(() {
-      //_memoizer = AsyncMemoizer();
+
     });
   }
 
@@ -37,29 +37,16 @@ class _State extends State<MoreHotMoviesPage> {
       body:
           Consumer<CityProvider>(builder: (context, CityProvider provider, _) {
         if (data == null) {
-          return FutureBuilder<MovieListEntity>(
-              future: Api.getMoreHotMovieList(provider.name),
-              builder: (BuildContext context,
-                  AsyncSnapshot<MovieListEntity> snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                  case ConnectionState.waiting:
-                    return LoadingView();
-                    break;
-                  default:
-                    if (snapshot.hasError) {
-                      return RefreshWidget(callback: () {
-                        setState(() {});
-                      });
-                    } else {
-                      data = snapshot.data;
-                      return RefreshIndicator(
-                        onRefresh: _onRefresh,
-                        child: MoreHotMoviesList(data: data.subjects),
-                      );
-                    }
-                }
-              });
+          return FutureContainer<MovieListEntity>(
+            future: Api.getMoreHotMovieList(provider.name),
+            dataWidget: (MovieListEntity data){
+              this.data = data;
+              return RefreshIndicator(
+                onRefresh: _onRefresh,
+                child: MoreHotMoviesList(data: data.subjects),
+              );
+            },
+          );
         } else {
           return RefreshIndicator(
             onRefresh: _onRefresh,

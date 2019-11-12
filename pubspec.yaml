@@ -44,8 +44,6 @@ dependencies:
   event_bus: ^1.1.0
   #监听网络状态
   connectivity: ^0.4.3+1
-  #获取设备信息
-  device_info: ^0.4.0+1
   #将类与依赖解耦 1.注册服务 2.依赖注入
   get_it: ^1.0.3+2
   #状态管理
@@ -53,7 +51,7 @@ dependencies:
   # 启动URL的插件 https://github.com/flutter/plugins/tree/master/packages/url_launcher
   url_launcher: ^5.1.0
   #微信分享 https://github.com/OpenFlutter/fluwx
-  fluwx: ^1.0.3
+  #fluwx: ^1.0.3
   #Lottie在Flutter上的实现
   fluttie: ^0.5.0
 
@@ -82,47 +80,8 @@ flutter:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
   assets:
-   - images/app_icon.png
-   - images/img_scan.png
-   - images/img_header.png
-   - images/img_menu_one.png
-   - images/img_menu_two.png
-   - images/img_menu_three.png
-   - images/img_right_arrow.png
-   - images/menu_list_one.png
-   - images/menu_list_two.png
-   - images/menu_list_three.png
-   - images/menu_list_four.png
-   - images/menu_list_five.png
-   - images/menu_list_six.png
-   - images/menu_list_seven.png
-   - images/img_guide_one.png
-   - images/img_guide_two.png
-   - images/img_guide_three.png
-   - images/img_guide_four.png
-   - images/nav_movie.png
-   - images/nav_action.png
-   - images/nav_music.png
-   - images/nav_my.png
-   - images/qq_area.png
-   - images/qq_friend.png
-   - images/weixin_friendcycle.png
-   - images/weixin_friend.png
-   - images/nav_movie_selected.png
-   - images/nav_action_selected.png
-   - images/nav_music_selected.png
-   - images/nav_my_selected.png
-   - images/history_bg.jpeg
-   - images/banner.jpeg
-   - images/img_loading.jpeg
-   - images/img_loading_error.png
-   - images/img_search.png
-   - images/none.png
-   - images/logo.png
-   - images/two_floor_bg.png
-   - images/two_level_bg.jpeg
-   - images/banner.json
-   - images/loading.json
+   - assets/images/
+   - assets/json/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:Inke/config/app_config.dart';
 import 'package:Inke/http/api.dart';
 
 class AfdHttpManager {
@@ -21,9 +20,7 @@ class AfdHttpManager {
       //headers:
     );
     _dio = Dio(option);
-    if (AppConfig.debug) {
-      _dio.interceptors.add(LogInterceptor(responseBody: true)); //开启日志
-    }
+    _dio.interceptors.add(LogInterceptor(responseBody: true)); //开启日志
   }
 
    get(url, {Map<String, dynamic> params}) async {

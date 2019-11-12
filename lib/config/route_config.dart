@@ -6,22 +6,20 @@ import 'package:Inke/page/page_main.dart';
 import 'package:Inke/page/page_city.dart';
 import 'package:Inke/module_my/page_feed_back.dart';
 import 'package:Inke/module_my/page_setting.dart';
-import 'package:Inke/module_movie/page_more_movies.dart';
 import 'package:Inke/page/page_search.dart';
 import 'package:Inke/module_my/page_today_in_history.dart';
 import 'package:Inke/module_movie/page_more_hot_movies.dart';
 import 'package:Inke/module_login/page_register.dart';
 import 'package:Inke/module_my/page_dream.dart';
-import 'package:Inke/page/page_theme.dart';
+import 'package:Inke/module_my/page_theme.dart';
 import 'package:Inke/page/page_not_found.dart';
 import 'package:Inke/module_movie/page_photo_details.dart';
 import 'package:Inke/page/page_web.dart';
-import 'package:Inke/page/page_app_stepper.dart';
-import 'package:Inke/page/page_two_floor.dart';
+import 'package:Inke/module_movie/page_two_floor.dart';
 import 'package:flutter/cupertino.dart';
 
-///Route Path
-class RouteConfig {
+///RouteName
+class RouteName {
   static const String splashName = 'Splash';
   static const String guideName = '/Guide';
   static const String loginName = '/Login';
@@ -32,41 +30,37 @@ class RouteConfig {
   static const String feedBackName = '/FeedBack';
   static const String dreamName = '/Dream';
   static const String todayName = '/Today';
-  static const String moreMoviesName = '/MoreMovies';
   static const String moreHotMoviesName = '/MoreHotMovies';
   static const String registerName = '/Register';
   static const String stillName = '/Still';
   static const String themeName = '/Theme';
   static const String webName = '/Web';
-  static const String stepName = '/Stepper';
   static const String twoFloorName = '/TwoFloor';
 }
 
 class Router {
   //自定义路由信息(带参数，用名字跳转)
   static Map<String, Function> paramRoutes = {
-    RouteConfig.stillName: (context, {arguments}) =>
+    RouteName.stillName: (context, {arguments}) =>
         PhotoPage(arguments: arguments),
-    RouteConfig.webName: (context, {arguments}) => WebPage(arguments: arguments)
+    RouteName.webName: (context, {arguments}) => WebPage(arguments: arguments)
   };
 
-  static Map<String, WidgetBuilder> routes = {
-    RouteConfig.splashName: (context) => SplashPage(),
-    RouteConfig.guideName: (context) => GuidePage(),
-    RouteConfig.loginName: (context) => LoginPage(),
-    RouteConfig.mainName: (context) => MainPage(),
-    RouteConfig.cityName: (context) => CityPage(),
-    RouteConfig.feedBackName: (context) => FeedBackPage(),
-    RouteConfig.settingName: (context) => SettingPage(),
-    RouteConfig.moreMoviesName: (context) => MoreMoviesPage(),
-    RouteConfig.searchName: (context) => SearchPage(),
-    RouteConfig.todayName: (context) => TodayInHistoryPage(),
-    RouteConfig.moreHotMoviesName: (context) => MoreHotMoviesPage(),
-    RouteConfig.dreamName: (context) => DreamPage(),
-    RouteConfig.registerName: (context) => RegisterPage(),
-    RouteConfig.themeName: (context) => ThemePage(),
-    RouteConfig.stepName: (context) => AppStepperPage(),
-    RouteConfig.twoFloorName: (context) => TwoFloorPage()
+  static Map<String, WidgetBuilder>  routes = {
+    RouteName.splashName: (context) => SplashPage(),
+    RouteName.guideName: (context) => GuidePage(),
+    RouteName.loginName: (context) => LoginPage(),
+    RouteName.mainName: (context) => MainPage(),
+    RouteName.cityName: (context) => CityPage(),
+    RouteName.feedBackName: (context) => FeedBackPage(),
+    RouteName.settingName: (context) => SettingPage(),
+    RouteName.searchName: (context) => SearchPage(),
+    RouteName.todayName: (context) => TodayInHistoryPage(),
+    RouteName.moreHotMoviesName: (context) => MoreHotMoviesPage(),
+    RouteName.dreamName: (context) => DreamPage(),
+    RouteName.registerName: (context) => RegisterPage(),
+    RouteName.themeName: (context) => ThemePage(),
+    RouteName.twoFloorName: (context) => TwoFloorPage()
   };
 
   static Route<dynamic> unknownRoute(RouteSettings settings) {

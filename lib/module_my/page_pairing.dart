@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/widgets//loading_view.dart';
-import 'package:Inke/config/app_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:Inke/http/api.dart';
-import 'package:Inke/widgets/bottom_picker_view.dart';
+import 'package:Inke/module_my//view_picker.dart';
 import 'package:Inke/bean/pairing_result_entity.dart';
 import 'package:Inke/util/toast.dart';
+import 'package:Inke/util/image_util.dart';
+import 'package:Inke/widgets/future_builder.dart';
 
 class PairingPage extends StatefulWidget {
   final bool flag;
@@ -100,7 +100,7 @@ class _State extends State<PairingPage> {
                   ),
                 ),
                 Image.asset(
-                  AppImgPath.mainPath + 'app_icon.png',
+                  mainPath + 'app_icon.png',
                   width: 50.0,
                   height: 50.0,
                 ),
@@ -157,36 +157,20 @@ class _State extends State<PairingPage> {
   _buildContainer() {
     if (submit) {
       return Expanded(
-          child: FutureBuilder<PairingResultEntity>(
+          child: FutureContainer<PairingResultEntity>(
               future: widget.flag == true
                   ? Api.getConstellactionPairing(_value1, _value2)
                   : Api.getChineseZodiac(_value1, _value2),
-              builder: (BuildContext context,
-                  AsyncSnapshot<PairingResultEntity> snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                  case ConnectionState.waiting:
-                    return LoadingView();
-                    break;
-                  default:
-                    {
-                      if (snapshot.hasError) {
-                        return Center(
-                          child: Text('${snapshot.error.toString()}'),
-                        );
-                      } else {
-                        if (snapshot.data.result == null) {
-                          return Center(
-                            child: Text('暂无数据'),
-                          );
-                        } else {
-                          return _buildConstellationContent(
-                              snapshot.data.result);
-                        }
-                      }
-                    }
+              dataWidget: (PairingResultEntity data) {
+                if (data.result == null) {
+                  return Center(
+                    child: Text('暂无数据'),
+                  );
+                } else {
+                  return _buildConstellationContent(data.result);
                 }
-              }));
+              })
+          );
     } else {
       return Container();
     }

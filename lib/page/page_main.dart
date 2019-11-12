@@ -4,7 +4,7 @@ import 'package:Inke/module_action/page_action.dart';
 import 'package:Inke/module_my/page_my.dart';
 import 'package:Inke/module_news/page_news.dart';
 import 'package:Inke/util/image_util.dart';
-import 'package:Inke/config/app_config.dart';
+import 'package:Inke/config/colors.dart';
 import 'package:Inke/util/toast.dart';
 
 class MainPage extends StatefulWidget {
@@ -15,38 +15,26 @@ class MainPage extends StatefulWidget {
 class _State extends State<MainPage> {
   int _currentIndex = 0;
   final List<String> titles = ['电影', '活动', '资讯', '我的'];
-  var tabImages;
+  var tabImages = [
+    [
+      loadAssetImage('nav_movie', width: 25.0, height: 25.0),
+      loadAssetImage('nav_movie_selected', width: 25.0, height: 25.0),
+    ],
+    [
+      loadAssetImage('nav_action', width: 25.0, height: 25.0),
+      loadAssetImage('nav_action_selected', width: 25.0, height: 25.0),
+    ],
+    [
+      loadAssetImage('nav_music', width: 25.0, height: 25.0),
+      loadAssetImage('nav_music_selected', width: 25.0, height: 25.0),
+    ],
+    [
+      loadAssetImage('nav_my', width: 25.0, height: 25.0),
+      loadAssetImage('nav_my_selected', width: 25.0, height: 25.0),
+    ]
+  ];
   final _pageController = PageController();
   int firstTime = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _init();
-  }
-
-  void _init() {
-    if (tabImages == null) {
-      tabImages = [
-        [
-          loadAssetImage('nav_movie', width: 25.0, height: 25.0),
-          loadAssetImage('nav_movie_selected', width: 25.0, height: 25.0),
-        ],
-        [
-          loadAssetImage('nav_action', width: 25.0, height: 25.0),
-          loadAssetImage('nav_action_selected', width: 25.0, height: 25.0),
-        ],
-        [
-          loadAssetImage('nav_music', width: 25.0, height: 25.0),
-          loadAssetImage('nav_music_selected', width: 25.0, height: 25.0),
-        ],
-        [
-          loadAssetImage('nav_my', width: 25.0, height: 25.0),
-          loadAssetImage('nav_my_selected', width: 25.0, height: 25.0),
-        ]
-      ];
-    }
-  }
 
   Image _getTabIcon(int index) {
     if (index == _currentIndex) {

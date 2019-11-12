@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:Inke/widgets/text.dart';
 import 'package:Inke/util/image_util.dart';
-import 'package:Inke/page/page_two_floor.dart';
+import 'package:Inke/module_movie/page_two_floor.dart';
 
 ///全局配置刷新控件
 class RefreshConfig extends StatelessWidget {

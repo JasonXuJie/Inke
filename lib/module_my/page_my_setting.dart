@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:Inke/widgets/dialog_loading.dart';
+import 'package:Inke/widgets/loading.dart';
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:Inke/config/shared_key.dart';
 import 'package:Inke/util/shared_util.dart';
-import 'package:Inke/widgets/bottom_picker_view.dart';
+import 'package:Inke/module_my/view_picker.dart';
 import 'package:Inke/util/toast.dart';
 import 'package:Inke/config/route_config.dart';
 class MyInfoSettingPage extends StatefulWidget {
 
-  var name;
+  final name;
 
-  MyInfoSettingPage({Key key, @required this.name})
-      : super(key: key);
+  MyInfoSettingPage({Key key, @required this.name}): super(key: key);
+
 
   @override
   _State createState() => _State();
@@ -23,6 +23,7 @@ class _State extends State<MyInfoSettingPage> {
   final TextEditingController _nameController = TextEditingController();
   List<String> gender = ['男', '女'];
   var _selectGender;
+  var name;
 
   @override
   void initState() {
@@ -62,7 +63,7 @@ class _State extends State<MyInfoSettingPage> {
                   fontSize: 18.0,
                 ),
                 onChanged: (String value) {
-                  widget.name = value;
+                  name = value;
                 },
                 decoration: InputDecoration.collapsed(
                     hintText: '请输入昵称',
@@ -117,16 +118,16 @@ class _State extends State<MyInfoSettingPage> {
   }
 
   void submit(context) {
-    if (widget.name.isEmpty) {
+    if (name.isEmpty) {
       Toast.show('请填写数据');
       return;
     }
     _showLoading(context);
-    SharedUtil.getInstance().put(SharedKey.USER_NAME, widget.name);
+    SharedUtil.getInstance().put(SharedKey.USER_NAME, name);
     Future.delayed(Duration(seconds: 2), () {
       Navigator.of(context).pop();
       if (Navigator.canPop(context)) {
-        List<String> info = [widget.name];
+        List<String> info = [name];
         RouteUtil.pop(context, result: info);
       }
     });

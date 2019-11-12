@@ -3,7 +3,7 @@ import 'package:Inke/http/api.dart';
 import 'package:Inke/bean/movie_detail_result_entity.dart';
 import 'package:Inke/bean/movie_list_result_entity.dart';
 import 'package:Inke/util/screen_util.dart';
-import 'package:Inke/config/app_config.dart';
+import 'package:Inke/config/colors.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:Inke/bean/still_result_entity.dart';
 import 'package:Inke/bean/comment_result_entity.dart';
@@ -98,7 +98,7 @@ class _State extends State<MovieDetailsPage> {
                         onTap: () {
                           if (_detailData != null) {
                             RouteUtil.pushNamedByArgs(
-                                context, RouteConfig.webName, {
+                                context, RouteName.webName, {
                               'title': widget.data.title,
                               'url': _detailData.mobileUrl
                             });
@@ -378,7 +378,7 @@ class _State extends State<MovieDetailsPage> {
                 ],
               ),
               onTap: () {
-                RouteUtil.pushNamedByArgs(context, RouteConfig.webName,
+                RouteUtil.pushNamedByArgs(context, RouteName.webName,
                     {'title': data[position].name, 'url': data[position].alt});
               },
             ),
@@ -423,7 +423,7 @@ class _State extends State<MovieDetailsPage> {
     widget.add(FlatButton(
         padding: const EdgeInsets.all(0),
         onPressed: () {
-          RouteUtil.pushNamedByArgs(context, RouteConfig.stillName,
+          RouteUtil.pushNamedByArgs(context, RouteName.stillName,
               {'id': _detailData.id, 'count': photoCount});
         },
         child: ClipRRect(

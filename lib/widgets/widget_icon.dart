@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:Inke/util/image_util.dart';
-import 'package:Inke/config/app_config.dart';
 
 
 typedef void OnAnimEndCallBack();
