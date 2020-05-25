@@ -19,6 +19,7 @@ class _State extends State<GuidePage> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
     _tabController = TabController(length: 4, initialIndex: 0, vsync: this);
   }
 
