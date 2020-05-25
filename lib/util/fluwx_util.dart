@@ -1,7 +1,7 @@
 //import 'package:fluwx/fluwx.dart' as fluwx;
 import 'package:Inke/util/image_util.dart';
 
-class FluWx {
+class FluWxUtil {
   ///初始化
   static initFluwx() async {
 //    await fluwx.registerWxApi(
@@ -9,23 +9,20 @@ class FluWx {
 //        doOnAndroid: true,
 //        doOnIOS: true,
 //        );
-//    var result = await fluwx.isWeChatInstalled();
-   // print("初始化$result");
   }
 
   ///分享至朋友
   static share(String url, String title, bool isFriend,
       {String description = "这是一条分享"}) {
-//    fluwx.WeChatScene scene =
-//        isFriend ? fluwx.WeChatScene.SESSION : fluwx.WeChatScene.TIMELINE;
-//
-//    ///true为到朋友，false为朋友圈
-//    fluwx.share(fluwx.WeChatShareWebPageModel(
-//        webPage: url,
-//        title: title,
+    ///会话或者朋友圈
+    //fluwx.WeChatScene scene = isFriend ? fluwx.WeChatScene.SESSION : fluwx.WeChatScene.TIMELINE;
+    ///true为到朋友，false为朋友圈
+//    fluwx.shareToWeChat(fluwx.WeChatShareWebPageModel(
+//        url,
 //        description: description,
+//        title: title,
 //        scene: scene,
-//        thumbnail: getImgPath('logo'),
-//        transaction: "hh"));
+//        thumbnail: fluwx.WeChatImage.asset(getImgPath('logo'))
+//    ));
   }
 }

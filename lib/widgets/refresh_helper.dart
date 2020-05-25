@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:Inke/widgets/text.dart';
 import 'package:Inke/util/image_util.dart';
-import 'package:Inke/module_movie/page_two_floor.dart';
+import 'package:Inke/modules/movie/page_two_floor.dart';
 
 ///全局配置刷新控件
 class RefreshConfig extends StatelessWidget {
@@ -50,7 +50,6 @@ class TwoFloorHeader extends StatelessWidget {
         alignment: Alignment.topCenter,
       )),
       twoLevelWidget: Container(),
-
       ///如果这里设置了第二楼控件，会出现底部的bottomNavigation还是存在的情况，只能在onTwoLevel监听中进行页面跳转才不会出现这种情况
       //twoLevelWidget: TwoFloorPage(),
     );

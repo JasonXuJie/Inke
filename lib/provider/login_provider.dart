@@ -1,15 +1,14 @@
-import 'package:Inke/provider/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:Inke/config/shared_key.dart';
-import 'package:Inke/util/shared_util.dart';
+import 'package:flustars/flustars.dart';
 
-class LoginProvider with ChangeNotifier{
+class LoginProvider extends ChangeNotifier{
 
 
   bool _isLogin;
 
   LoginProvider(){
-    _isLogin = SharedUtil.getInstance().get(SharedKey.isLogin, false);
+    _isLogin = SpUtil.getBool(SharedKey.isLogin,defValue: false);
   }
 
 
@@ -17,7 +16,7 @@ class LoginProvider with ChangeNotifier{
 
   void hasLogin(bool flag){
     _isLogin = flag;
-    SharedUtil.getInstance().put(SharedKey.isLogin, flag);
+    SpUtil.putBool(SharedKey.isLogin, flag);
     notifyListeners();
 
   }

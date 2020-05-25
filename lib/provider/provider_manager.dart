@@ -1,11 +1,12 @@
 import 'package:provider/provider.dart';
 import 'package:Inke/provider/city_provider.dart';
-import 'package:Inke/provider/first_provider.dart';
 import 'package:Inke/provider/login_provider.dart';
+import 'package:Inke/provider/date_provider.dart';
+import 'package:provider/single_child_widget.dart';
 
 
-List<SingleChildCloneableWidget> providers = [
-  Provider<CityProvider>.value(value: CityProvider()),
-  Provider<FirstProvider>.value(value: FirstProvider()),
-  Provider<LoginProvider>.value(value: LoginProvider()),
+List<SingleChildWidget> providers = [
+  ChangeNotifierProvider(create: (_)=>CityProvider()),
+  ChangeNotifierProvider(create: (_)=>LoginProvider()),
+  ChangeNotifierProvider(create: (_)=>DateType())
 ];
